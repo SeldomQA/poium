@@ -22,7 +22,7 @@ from .page_objects import PageElement
 from .page_objects import PageElements
 
 
-__author__ = "defnngj"
+__author__ = "fnngj"
 
 __version__ = "0.1"
 
