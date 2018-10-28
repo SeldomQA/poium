@@ -5,38 +5,32 @@
 #### Installation
 ------------
 
+download install:
 ```shell
-$ git clone https://github.com/defnngj/selenium_page_objects
-$ cd page-objects
 $ python setup.py install
+```
+
+pip install:
+```
+pip install -i https://testpypi.python.org/pypi selenium-page-objects
 ```
 
 #### Quick Example
 -------------
 ```python
 from page_objects import PageObject, PageElement
-from selenium import webdriver
 
 class LoginPage(PageObject):
     username = PageElement(id_='username')
-    password = PageElement(name='password')
+    password = PageElement(id_='password')
     login = PageElement(css='input[type="submit"]')
 
-driver = webdriver.Chrome()
-driver.root_uri = "http://example.com"
-page = LoginPage(driver)
-page.get("/login")
-page.username = 'secret'
-page.password = 'squirrel'
-assert page.username.text == 'secret'
-page.login.click()
 ```
 
 #### Time Out Example
 -------------
 ```python
 from page_objects import PageObject, PageElement
-from selenium import webdriver
 
 class BaiduPage(PageObject):
     search_input = PageElement(id_='kw', time_out=3)
