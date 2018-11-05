@@ -24,7 +24,7 @@ from .page_objects import PageElements
 
 __author__ = "fnngj"
 
-__version__ = "0.1"
+__version__ = "0.1.1"
 
 '''
 0.1 version update:

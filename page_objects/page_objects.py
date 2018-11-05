@@ -70,7 +70,7 @@ class PageElement(object):
     Page Elements act as property descriptors for their Page Object, you can get
     and set them as normal attributes.
     """
-    def __init__(self, context=False, time_out=None, **kwargs):
+    def __init__(self, context=False, time_out=None, describe=None, **kwargs):
         if time_out is None:
             self.time_out = 5
         else:

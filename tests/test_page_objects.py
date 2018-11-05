@@ -193,5 +193,12 @@ class TestTimeOut:
         assert elem.locator == (By.CSS_SELECTOR, 'foo')
 
 
+class TestDescribe:
+
+    def test_setting_describe(self):
+        elem = PageElement(name='wd', describe="this is search input")
+        assert elem.locator == (By.NAME, 'wd')
+
+
 if __name__ == '__main__':
     pytest.main(["-v", "-s", "test_page_objects.py"])

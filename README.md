@@ -17,6 +17,7 @@ pip install -i https://testpypi.python.org/pypi selenium-page-objects
 
 #### Quick Example
 -------------
+简单的例子：
 ```python
 from page_objects import PageObject, PageElement
 
@@ -29,6 +30,7 @@ class LoginPage(PageObject):
 
 #### Time Out Example
 -------------
+设置元素超时时间：
 ```python
 from page_objects import PageObject, PageElement
 
@@ -37,8 +39,26 @@ class BaiduPage(PageObject):
     search_button = PageElement(id_='su', time_out=10)
 ```
 
+#### setting Describe Example
+-------------
+设置元素描述：
+```python
+
+class LoginPage(PageObject):
+    """
+    登录page类
+    """
+    username = PageElement(css='#loginAccount', describe="用户名")
+    password = PageElement(css='#loginPwd', describe="密码")
+    login_button = PageElement(css='#login_btn', describe="登录按钮")
+    user_info = PageElement(css="a.nav_user_name > span", describe="用户信息")
+
+```
+describe 参数并无实际意义，当你页面元素很多时，用它来增加可读性。
+
 #### Elements Example
 -------------
+定义一组元素（完整的例子）：
 ```python
 from page_objects import PageObject, PageElement, PageElements
 from selenium import webdriver
