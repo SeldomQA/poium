@@ -12,7 +12,7 @@ $ python setup.py install
 
 pip install:
 ```
-pip install -i https://testpypi.python.org/pypi selenium-page-objects
+$ pip install -i https://test.pypi.org/simple/ selenium-page-objects
 ```
 
 #### Quick Example
