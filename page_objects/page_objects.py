@@ -38,6 +38,15 @@ class PageObject:
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
 
+    def run_script(self, js=None):
+        """
+        run JavaScript script
+        """
+        if js is None:
+            raise ValueError("Please input js script")
+        else:
+            self.driver.execute_script(js)
+
 
 class PageElement(object):
     """
