@@ -47,6 +47,17 @@ class PageObject:
         else:
             self.driver.execute_script(js)
 
+    def window_scroll(self, width=None, height=None):
+        """
+        Setting width and height of window scroll bar.
+        """
+        if width is None:
+            width = "0"
+        if height is None:
+            height = "0"
+        js = "window.scrollTo({w},{h});".format(w=width, h=height)
+        self.run_script(js)
+
 
 class PageElement(object):
     """
