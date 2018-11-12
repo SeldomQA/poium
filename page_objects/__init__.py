@@ -20,14 +20,16 @@
 from .page_objects import PageObject
 from .page_objects import PageElement
 from .page_objects import PageElements
-
+from .select import PageSelect
 
 __author__ = "fnngj"
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 '''
 0.1 version update:
 * page object based on selenium.
 
+0.1.3 version update:
+* add class PageSelect
 '''

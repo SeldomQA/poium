@@ -1,6 +1,6 @@
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.by import By
 from time import sleep
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 
 # Map PageElement constructor arguments to webdriver locator enums
@@ -74,9 +74,9 @@ class PageElement(object):
         Use this link text locator
     :param partial_link_text:    `str`
         Use this partial link text locator
-    :param tag_name:    `str`
+    :param tag:    `str`
         Use this tag name locator
-    :param class_name:    `str`
+    :param class_:    `str`
         Use this class locator
     :param context: `bool`
         This element is expected to be called with context
@@ -168,4 +168,5 @@ class PageElements(PageElement):
 
 # Backwards compatibility with previous versions that used factory methods
 page_element = PageElement
-multi_page_element = PageElements
+page_elements = PageElements
+
