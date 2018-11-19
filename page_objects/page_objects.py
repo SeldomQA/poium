@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep as sleep
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -37,6 +37,7 @@ class PageObject:
         """
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
+        self.driver.implicitly_wait(5)
 
     def run_script(self, js=None):
         """
