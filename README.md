@@ -35,8 +35,8 @@ class LoginPage(PageObject):
 from page_objects import PageObject, PageElement
 
 class BaiduPage(PageObject):
-    search_input = PageElement(id_='kw', time_out=3)
-    search_button = PageElement(id_='su', time_out=10)
+    search_input = PageElement(id_='kw', timeout=3)
+    search_button = PageElement(id_='su', timeout=10)
 ```
 
 #### setting Describe Example
