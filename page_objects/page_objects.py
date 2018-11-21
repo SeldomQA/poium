@@ -1,4 +1,4 @@
-from time import sleep as sleep
+from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -58,6 +58,56 @@ class PageObject:
             height = "0"
         js = "window.scrollTo({w},{h});".format(w=width, h=height)
         self.run_script(js)
+
+    def witch_to_frame(self, frame_reference):
+        """
+        Switches focus to the specified frame, by id, name, or webelement.
+        """
+        self.driver.witch_to.frame(frame_reference)
+
+    def witch_to_frame_out(self):
+        """
+        Switches focus to the parent context.
+        Corresponding relationship with switch_to_frame () method.
+        """
+        self.driver.switch_to.parent_frame()
+
+    def accept_alert(self):
+        """
+        Accept warning box.
+        """
+        self.driver.switch_to.alert.accept()
+
+    def dismiss_alert(self):
+        """
+        Dismisses the alert available.
+        """
+        self.driver.switch_to.alert.dismiss()
+
+    @property
+    def get_alert_text(self):
+        """
+        Get warning box prompt information.
+        """
+        self.driver.switch_to.alert.text
+
+    @property
+    def get_title(self):
+        """
+        Get window title.
+        Usage:
+        driver.get_title()
+        """
+        return self.driver.title
+
+    @property
+    def get_url(self):
+        """
+        Get the URL address of the current page.
+        Usage:
+        driver.get_url()
+        """
+        return self.driver.current_url
 
 
 class PageElement(object):
