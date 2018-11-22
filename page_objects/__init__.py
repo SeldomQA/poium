@@ -21,6 +21,8 @@ from .page_objects import PageObject
 from .page_objects import PageElement
 from .page_objects import PageElements
 from .select import PageSelect
+from .wait import PageWait
+
 
 __author__ = "fnngj"
 
