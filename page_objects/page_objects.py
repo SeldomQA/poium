@@ -63,7 +63,7 @@ class PageObject:
         """
         Switches focus to the specified frame, by id, name, or webelement.
         """
-        self.driver.witch_to.frame(frame_reference)
+        self.driver.switch_to.frame(frame_reference)
 
     def witch_to_frame_out(self):
         """
