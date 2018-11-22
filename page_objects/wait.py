@@ -14,7 +14,10 @@ class PageWait(object):
 
         for i in range(timeout):
             if elm is not None:
-                break
+                if elm.is_displayed() is True:
+                    break
+                else:
+                    sleep(1)
             else:
                 sleep(1)
         else:
