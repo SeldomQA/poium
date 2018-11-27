@@ -26,7 +26,7 @@ from .wait import PageWait
 
 __author__ = "fnngj"
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 '''
 0.1 version update:
