@@ -1,6 +1,7 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 # Map PageElement constructor arguments to webdriver locator enums
@@ -59,13 +60,13 @@ class PageObject:
         js = "window.scrollTo({w},{h});".format(w=width, h=height)
         self.run_script(js)
 
-    def witch_to_frame(self, frame_reference):
+    def switch_to_frame(self, frame_reference):
         """
         Switches focus to the specified frame, by id, name, or webelement.
         """
         self.driver.switch_to.frame(frame_reference)
 
-    def witch_to_frame_out(self):
+    def switch_to_frame_out(self):
         """
         Switches focus to the parent context.
         Corresponding relationship with switch_to_frame () method.
@@ -108,6 +109,28 @@ class PageObject:
         driver.get_url()
         """
         return self.driver.current_url
+
+    def move_to_element(self, elem):
+        """
+        Moving the mouse to the middle of an element
+        """
+        ActionChains(self.driver).move_to_element(elem).perform()
+
+    def context_click(self, elem):
+        """
+        Performs a context-click (right click) on an element.
+        """
+        ActionChains(self.driver).context_click(elem).perform()
+
+    def drag_and_drop_by_offset(self, elem, x, y):
+        """
+        Holds down the left mouse button on the source element,
+           then moves to the target offset and releases the mouse button.
+        :param elem: The element to mouse down.
+        :param x: X offset to move to.
+        :param y: Y offset to move to.
+        """
+        ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
 
 
 class PageElement(object):
