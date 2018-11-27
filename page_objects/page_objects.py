@@ -2,7 +2,7 @@ from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
-
+from selenium.common.exceptions import StaleElementReferenceException
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -131,6 +131,28 @@ class PageObject:
         :param y: Y offset to move to.
         """
         ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
+
+    def refresh_element(self, elem, timeout=10):
+        """
+        Refreshes the current page, retrieve elements.
+        """
+        try:
+            timeout_int = int(timeout)
+        except TypeError:
+            raise ValueError("Type 'timeout' error, must be type int() ")
+
+        for i in range(timeout_int):
+            if elem is not None:
+                try:
+                    elem
+                except StaleElementReferenceException:
+                    self.driver.refresh()
+                else:
+                    break
+            else:
+                sleep(1)
+        else:
+            raise TimeoutError("stale element reference: element is not attached to the page document.")
 
 
 class PageElement(object):

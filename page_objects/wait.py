@@ -8,11 +8,11 @@ class PageWait(object):
         wait webelement display
         """
         try:
-            int(timeout)
+            timeout_int = int(timeout)
         except TypeError:
             raise ValueError("Type 'timeout' error, must be type int() ")
 
-        for i in range(timeout):
+        for i in range(timeout_int):
             if elm is not None:
                 if elm.is_displayed() is True:
                     break
