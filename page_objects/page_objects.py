@@ -199,7 +199,7 @@ class PageElement(object):
             raise KeyError("Please use a locator：'id_'、'name'、'class_'、'css'、'xpath'、'link_text'、'partial_link_text'.")
         self.has_context = bool(context)
 
-    def wait(self, context):
+    def get_element(self, context):
         try:
             return context.find_element(*self.locator)
         except NoSuchElementException:
@@ -207,8 +207,8 @@ class PageElement(object):
 
     def find(self, context):
         for i in range(self.time_out):
-            if self.wait(context) is not None:
-                return self.wait(context)
+            if self.get_element(context) is not None:
+                return self.get_element(context)
             else:
                 sleep(1)
         else:
