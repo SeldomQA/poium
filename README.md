@@ -1,4 +1,4 @@
-### selenium_page_objects
+### selenium-page-objects
 
 基于 selenium 的 Page objects 设计模式测试库。
 
