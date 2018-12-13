@@ -99,7 +99,7 @@ class PageObject:
         """
         Get warning box prompt information.
         """
-        self.driver.switch_to.alert.text
+        return self.driver.switch_to.alert.text
 
     @property
     def get_title(self):
