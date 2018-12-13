@@ -1,11 +1,13 @@
 from time import sleep
 from selenium.webdriver.common.by import By
+from appium.webdriver.common.mobileby import MobileBy
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
+    # selenium
     'css': By.CSS_SELECTOR,
     'id_': By.ID,
     'name': By.NAME,
@@ -14,6 +16,15 @@ LOCATOR_LIST = {
     'partial_link_text': By.PARTIAL_LINK_TEXT,
     'tag': By.TAG_NAME,
     'class_': By.CLASS_NAME,
+    # appium
+    'ios_uiautomation': MobileBy.IOS_UIAUTOMATION,
+    'ios_predicate': MobileBy.IOS_PREDICATE,
+    'ios_class_chain': MobileBy.IOS_CLASS_CHAIN,
+    'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
+    'android_viewtag': MobileBy.ANDROID_VIEWTAG,
+    'accessibility_id': MobileBy.ACCESSIBILITY_ID,
+    'image': MobileBy.IMAGE,
+    'custom': MobileBy.CUSTOM,
 }
 
 
