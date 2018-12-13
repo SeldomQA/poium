@@ -9,13 +9,13 @@ with open('page_objects/__init__.py', 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
 
-with open("README.md", "r") as fh:
+with open("README.md", "r",encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name='selenium_page_objects',
     version=version,
-    url='https://github.com/defnngj/selenium_page_objects',
+    url='https://github.com/defnngj/selenium-page-objects',
     license='BSD',
     author='fnngj',
     author_email='fnngj@126.com',
