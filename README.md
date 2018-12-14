@@ -13,7 +13,7 @@ $ python setup.py install
 
 pip install:
 ```
-$ pip install -i https://test.pypi.org/simple/ selenium-page-objects
+$ pip install selenium-page-objects
 ```
 
 #### 使用文档：
