@@ -24,7 +24,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['selenium', 'Appium-Python-Client'],
+    install_requires=['selenium>=3.14.1', 'Appium-Python-Client==0.30'],
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X',
@@ -32,7 +32,6 @@ setup(
         'Topic :: Software Development :: Testing',
         'Topic :: Software Development :: Libraries',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
