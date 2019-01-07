@@ -26,7 +26,7 @@ from .wait import PageWait
 
 __author__ = "fnngj"
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 '''
 0.1 version update:
@@ -43,4 +43,7 @@ __version__ = "0.2.1"
 
 0.2.1 version update:
 * adding appium support
+
+0.2.2 version update:
+To better fit the project, update the name is poium.
 '''

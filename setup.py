@@ -13,13 +13,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='selenium_page_objects',
+    name='poium',
     version=version,
-    url='https://github.com/defnngj/selenium-page-objects',
+    url='https://github.com/defnngj/poium',
     license='BSD',
     author='fnngj',
     author_email='fnngj@126.com',
-    description='page object based on selenium.',
+    description='Selenium/appium-based Page Objects test library.',
     long_description=long_description,
     packages=find_packages(),
     include_package_data=True,
