@@ -84,6 +84,26 @@ class PageObject:
         """
         self.driver.switch_to.parent_frame()
 
+    def switch_to_app(self):
+        """
+        appium API
+        Switch to native app.
+        """
+        self.driver.switch_to.context('NATIVE_APP')
+
+    def switch_to_web(self, context=None):
+        """
+        appium API
+        Switch to web view.
+        """
+        if context is not None:
+            self.driver.switch_to.context(context)
+        else:
+            all_context = self.driver.contexts
+            for context in all_context:
+                if "WEBVIEW" in context:
+                    self.driver.switch_to.context(context)
+
     def accept_alert(self):
         """
         Accept warning box.
