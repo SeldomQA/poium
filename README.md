@@ -19,22 +19,10 @@ pip install:
 $ pip install poium
 ```
 
-#### 例子对比：
+#### 简单例子：
 
-原生selenium实现百度搜索设置。
-```python
-from selenium import webdriver
 
-dr = webdriver.Chrome()
-dr.get("https://www.baidu.com")
-
-dr.find_element_by_id("kw").send_keys("poium")
-dr.find_element_by_id("kw").click()
-
-dr.quit()
-```
-
-使用poium实现百度搜索设置。
+使用poium实现百度搜索。
 
 ```python
 
