@@ -26,7 +26,7 @@ from .wait import PageWait
 
 __author__ = "fnngj"
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 '''
 0.1 version update:
@@ -46,4 +46,7 @@ __version__ = "0.2.2"
 
 0.2.2 version update:
 To better fit the project, update the name is poium.
+
+0.2.3 version update:
+* adding javascript operating api
 '''
