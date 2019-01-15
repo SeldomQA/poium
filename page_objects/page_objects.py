@@ -91,9 +91,9 @@ class PageObject:
         Get element attribute, Only support css positioning
         :return:
         """
-        js = 'document.querySelector("{css}").getAttribute("{attr}");'.format(css=css_selector,
-                                                                              attr=attribute)
-        self.run_script(js)
+        js = 'return document.querySelector("{css}").getAttribute("{attr}");'.format(
+            css=css_selector, attr=attribute)
+        return self.driver.execute_script(js)
 
     def js_set_attribute(self, css_selector, attribute, type_):
         """
