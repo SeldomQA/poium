@@ -71,6 +71,13 @@ class PageObject:
         js = "window.scrollTo({w},{h});".format(w=width, h=height)
         self.run_script(js)
 
+    def display_element(self, elem):
+        """
+        Display hidden elements，Only support css positioning
+        """
+        js = 'document.querySelector("{css}").style.display = "block";'.format(css=elem)
+        self.run_script(js)
+
     def switch_to_frame(self, frame_reference):
         """
         Switches focus to the specified frame, by id, name, or webelement.
