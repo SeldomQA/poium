@@ -71,11 +71,58 @@ class PageObject:
         js = "window.scrollTo({w},{h});".format(w=width, h=height)
         self.run_script(js)
 
-    def display_element(self, elem):
+    def js_display(self, css_selector):
         """
-        Display hidden elements，Only support css positioning
+        Display hidden elements, Only support css positioning
         """
-        js = 'document.querySelector("{css}").style.display = "block";'.format(css=elem)
+        js = 'document.querySelector("{css}").style.display = "block";'.format(css=css_selector)
+        self.run_script(js)
+
+    def js_remove_attribute(self, css_selector, attribute):
+        """
+        Remove element attribute, Only support css positioning
+        """
+        js = 'document.querySelector("{css}").removeAttribute("{attr}");'.format(css=css_selector,
+                                                                                 attr=attribute)
+        self.run_script(js)
+
+    def js_get_attribute(self, css_selector, attribute):
+        """
+        Get element attribute, Only support css positioning
+        :return:
+        """
+        js = 'document.querySelector("{css}").getAttribute("{attr}");'.format(css=css_selector,
+                                                                              attr=attribute)
+        self.run_script(js)
+
+    def js_set_attribute(self, css_selector, attribute, type_):
+        """
+        Setting element attribute, Only support css positioning
+        """
+        js = 'document.querySelector("{css}").setAttribute("{attr}", "{type}");'.format(css=css_selector,
+                                                                                        attr=attribute,
+                                                                                        type=type_)
+        self.run_script(js)
+
+    def js_click(self, css_selector):
+        """
+        Click element, Only support css positioning
+        """
+        js = 'document.querySelector("{css}").click();'.format(css=css_selector)
+        self.run_script(js)
+
+    def js_input(self, css_selector, value):
+        """
+        Simulates typing into the element. Only support css positioning
+        """
+        js = 'document.querySelector("{css}").value = "{value}";'.format(css=css_selector, value=value)
+        self.run_script(js)
+
+    def js_clear(self, css_selector):
+        """
+        Clears the text if it's a text entry element, Only support css positioning
+        """
+        js = 'document.querySelector("{css}").value = "";'.format(css=css_selector)
         self.run_script(js)
 
     def switch_to_frame(self, frame_reference):
