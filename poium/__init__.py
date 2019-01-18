@@ -17,7 +17,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .page_objects import PageObject
+from .poium import Page
 from .page_objects import PageElement
 from .page_objects import PageElements
 from .select import PageSelect

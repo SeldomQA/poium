@@ -1,8 +1,8 @@
 from selenium import webdriver
-from page_objects import PageWait, PageObject, PageElement
+from poium import Page, PageWait, PageElement
 
 
-class MailPage(PageObject):
+class MailPage(Page):
     frame = PageElement(css="div#loginDiv > iframe")
     user = PageElement(name="email")
 

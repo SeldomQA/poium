@@ -1,9 +1,9 @@
-from page_objects import PageSelect, PageObject, PageElement
+from poium import Page, PageSelect, PageElement
 from selenium import webdriver
 from time import sleep
 
 
-class SelectPage(PageObject):
+class SelectPage(Page):
     elm = PageElement(xpath="//select")
 
 

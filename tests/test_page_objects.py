@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 from selenium.common.exceptions import NoSuchElementException
 
-from page_objects import PageObject, PageElement, PageElements
+from poium import Page, PageElement, PageElements
 
 
 @pytest.fixture()
@@ -21,7 +21,7 @@ class TestConstructor:
     def test_page_element(self):
         elem_id = PageElement(id_='id')
         elem_name = PageElement(name='name')
-        elem_class = PageElement(class_='class')
+        elem_class = PageElement(class_name='class')
         elem_tag = PageElement(tag='input')
         elem_link_text = PageElement(link_text='this_is_link')
         elem_partial_link_text = PageElement(partial_link_text='is_link')
@@ -50,7 +50,7 @@ class TestConstructor:
 class TestGet:
 
     def test_get_element_with_context(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElement(css='bar', context=True)
 
         page = TestPage(webdriver)
@@ -60,7 +60,7 @@ class TestGet:
         assert res == elem.find_element.return_value
 
     def test_get_not_found(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElement(id_='bar')
 
         page = TestPage(webdriver)
@@ -71,7 +71,7 @@ class TestGet:
         assert PageElement(css='bar').__get__(None, None) is None
 
     def test_get_multi(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elems = PageElements(css='foo')
 
         webdriver.find_elements.return_value = ["XXX", "YYY"]
@@ -80,7 +80,7 @@ class TestGet:
         assert webdriver.find_elements.called_once_with(By.CSS_SELECTOR, 'foo')
 
     def test_get_multi_not_found(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elems = PageElements(css='foo')
 
         webdriver.find_elements.side_effect = NoSuchElementException
@@ -91,7 +91,7 @@ class TestGet:
 class TestSet:
 
     def test_set_descriptors(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem1 = PageElement(css='foo')
 
         page = TestPage(webdriver)
@@ -102,7 +102,7 @@ class TestSet:
         elem.send_keys.assert_called_once_with('XXX')
 
     def test_cannot_set_with_context(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElement(css='foo', context=True)
 
         page = TestPage(webdriver)
@@ -111,7 +111,7 @@ class TestSet:
         assert "doesn't support elements with context" in e.value.args[0]
 
     def test_cannot_set_not_found(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElement(css='foo')
 
         page = TestPage(webdriver)
@@ -122,7 +122,7 @@ class TestSet:
         assert "element not found" in e.value.args[0]
 
     def test_set_multi(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elems = PageElements(css='foo')
 
         page = TestPage(webdriver)
@@ -135,7 +135,7 @@ class TestSet:
         elem2.send_keys.assert_called_once_with('XXX')
 
     def test_cannot_set_multi_with_context(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElements(css='foo', context=True)
 
         page = TestPage(webdriver)
@@ -144,7 +144,7 @@ class TestSet:
         assert "doesn't support elements with context" in e.value.args[0]
 
     def test_cannot_set_multi_not_found(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             test_elem = PageElements(css='foo')
 
         page = TestPage(webdriver)
@@ -158,28 +158,28 @@ class TestSet:
 class TestRootURI:
 
     def test_from_constructor(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             pass
 
         page = TestPage(webdriver, url="http://example.com")
         assert page.root_uri == 'http://example.com'
 
     def test_from_webdriver(self):
-        class TestPage(PageObject):
+        class TestPage(Page):
             pass
         webdriver = mock.Mock(spec=WebDriver, url="http://example.com/foo")
         page = TestPage(webdriver)
         assert page.root_uri == 'http://example.com/foo'
 
     def test_get(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             pass
         page = TestPage(webdriver, url="http://example.com")
         page.get('/foo/bar')
         assert webdriver.get.called_once_with("http://example.com/foo/bar")
 
     def test_get_no_root(self, webdriver):
-        class TestPage(PageObject):
+        class TestPage(Page):
             pass
         page = TestPage(webdriver)
         page.get('/foo/bar')
@@ -189,7 +189,7 @@ class TestRootURI:
 class TestTimeOut:
 
     def test_setting_time_out(self):
-        elem = PageElement(css='foo', time_out=10)
+        elem = PageElement(css='foo', timeout=10)
         assert elem.locator == (By.CSS_SELECTOR, 'foo')
 
 

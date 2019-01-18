@@ -1,9 +1,9 @@
-from page_objects import PageObject
+from poium import Page
 from selenium import webdriver
 from time import sleep
 
 
-class BaiduPage(PageObject):
+class BaiduPage(Page):
     search_input = "#kw"
     search_button = "#su"
 

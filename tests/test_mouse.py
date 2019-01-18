@@ -1,14 +1,14 @@
-from page_objects import PageObject, PageElement, PageElements
+from poium import Page, PageElement, PageElements
 from selenium import webdriver
 from time import sleep
 
 
-class BaiduPage(PageObject):
+class BaiduPage(Page):
     setting = PageElement(css='div#u1 > a.pf')
     search_setting = PageElement(css=".setpref")
 
 
-class JSPage(PageObject):
+class JSPage(Page):
     frame = PageElement(id_="iframe")
     date = PageElement(id_="appDate")
     year_mouth_data = PageElements(css=".dwwo", describe="小时")
