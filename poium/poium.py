@@ -1,7 +1,8 @@
 from time import sleep
-from page_objects import PageObject
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
+
+from .page_objects import PageObject
 
 
 class Page(PageObject):
