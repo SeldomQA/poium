@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
-with open('page_objects/__init__.py', 'rb') as f:
+with open('poium/__init__.py', 'rb') as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
 
