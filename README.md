@@ -2,8 +2,9 @@
 
 基于 selenium/appium 的 Page Objects 设计模式测试库。
 
-* 支持大部分selenium/appium API。
-* 封装元素定位操作，以及少量原生API，同时并不影响原生API的使用。
+* 提供了一组基于JavaScript API，实现部分selenium 不支持的操作。
+* 完全兼容原生selenium/appium API。
+* 对Selenium/appium部分API做了封装，使操作更简单。
 
 #### Installation
 ------------
@@ -27,11 +28,11 @@ $ pip install poium
 ```python
 
 # baidu_page.py
-from page_objects import PageObject, PageElement
+from poium import Page, PageElement
 
-class BaiduIndexPage(PageObject):
-    search_input = PageElement(id_='kw', describe="搜索输入框")
-    search_button = PageElement(id_='su', describe="搜索按钮")
+class BaiduIndexPage(Page):
+    search_input = PageElement(css='#kw', timeout=5, describe="搜索输入框")
+    search_button = PageElement(css='#su', timeout=5, describe="搜索按钮")
 
 
 # test_baidu.py
