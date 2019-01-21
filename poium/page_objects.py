@@ -1,9 +1,12 @@
 from time import sleep
 from selenium.webdriver.common.by import By
-from appium.webdriver.common.mobileby import MobileBy
-from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+
+from appium.webdriver.common.mobileby import MobileBy
+
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -156,7 +159,40 @@ class PageElements(PageElement):
         [elem.send_keys(value) for elem in elems]
 
 
-# Backwards compatibility with previous versions that used factory methods
-page_element = PageElement
-page_elements = PageElements
+class PageSelect(object):
+    """
+    Processing select drop-down selection box
+    """
+    def __init__(self, select_elem, value=None, text=None, index=None):
+        if value is not None:
+            Select(select_elem).select_by_value(value)
+        elif text is not None:
+            Select(select_elem).select_by_visible_text(text)
+        elif index is not None:
+            Select(select_elem).select_by_index(index)
+        else:
+            raise ValueError('"value" or "text" or "index" options can not be all empty.')
+
+
+class PageWait(object):
+
+    def __init__(self, elm, timeout=10):
+        """
+        wait webelement display
+        """
+        try:
+            timeout_int = int(timeout)
+        except TypeError:
+            raise ValueError("Type 'timeout' error, must be type int() ")
+
+        for i in range(timeout_int):
+            if elm is not None:
+                if elm.is_displayed() is True:
+                    break
+                else:
+                    sleep(1)
+            else:
+                sleep(1)
+        else:
+            raise TimeoutError("Timeout, element invisible")
 
