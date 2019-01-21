@@ -1,37 +1,41 @@
 from poium import Page, PageElement, PageElements
-from selenium import webdriver
 from time import sleep
 
 
 class BaiduPage(Page):
     setting = PageElement(css='div#u1 > a.pf')
     search_setting = PageElement(css=".setpref")
+    search_setting_hint = "#sugConf th"
 
 
 class JSPage(Page):
     frame = PageElement(id_="iframe")
     date = PageElement(id_="appDate")
-    year_mouth_data = PageElements(css=".dwwo", describe="小时")
+    year_mouth_data = PageElements(css=".dwwo")
 
 
-def test_move_to_element():
-    """测试鼠标悬停"""
-    dr = webdriver.Chrome()
-
-    page = BaiduPage(dr)
+def test_move_to_element(browser):
+    """
+    测试鼠标悬停
+    :param browser:
+    :return:
+    """
+    page = BaiduPage(browser)
     page.get("https://www.baidu.com")
-
     page.move_to_element(page.setting)
     page.search_setting.click()
+    sleep(2)
+    hint = page.get_text(page.search_setting_hint)
+    assert hint == "搜索框提示："
 
-    dr.quit()
 
-
-def test_drag_and_drop_by_offset():
-    """测试鼠标滑动日期控件"""
-    dr = webdriver.Chrome()
-
-    page = JSPage(dr)
+def test_drag_and_drop_by_offset(browser):
+    """
+    测试鼠标滑动日期控件
+    :param browser:
+    :return:
+    """
+    page = JSPage(browser)
     page.get("http://www.jq22.com/yanshi4976")
 
     page.switch_to_frame(page.frame)
@@ -43,5 +47,3 @@ def test_drag_and_drop_by_offset():
     sleep(2)
     page.drag_and_drop_by_offset(page.year_mouth_data[2], 0, 10)
     sleep(2)
-
-    dr.quit()

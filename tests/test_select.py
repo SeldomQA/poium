@@ -1,5 +1,4 @@
 from poium import Page, PageSelect, PageElement
-from selenium import webdriver
 from time import sleep
 
 
@@ -7,13 +6,16 @@ class SelectPage(Page):
     elm = PageElement(xpath="//select")
 
 
-def test_select():
-    """测试选择框的操作"""
-    dr = webdriver.Chrome()
-    page = SelectPage(dr)
+def test_select(browser):
+    """
+    测试选择框的操作
+    :param browser:
+    :return:
+    """
+    page = SelectPage(browser)
 
     page.get("http://www.w3school.com.cn/tiy/t.asp?f=html_select")
-    dr.switch_to.frame("i")
+    page.switch_to_frame("i")
     PageSelect(page.elm, value="saab")
     sleep(2)
     PageSelect(page.elm, index=2)
@@ -21,4 +23,3 @@ def test_select():
     PageSelect(page.elm, text="Audi")
     sleep(2)
 
-    dr.quit()
