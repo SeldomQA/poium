@@ -6,7 +6,8 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 class Page(PageObject):
     """
-    selenium/appium extend API
+    Implement the APIs with javascript,
+    and selenium/appium extension APIs。
     """
 
     def run_script(self, js=None):
@@ -20,6 +21,7 @@ class Page(PageObject):
 
     def window_scroll(self, width=None, height=None):
         """
+        JavaScript API, Only support css positioning
         Setting width and height of window scroll bar.
         """
         if width is None:
@@ -31,13 +33,15 @@ class Page(PageObject):
 
     def display(self, css_selector):
         """
-        Display hidden elements, Only support css positioning
+        JavaScript API, Only support css positioning
+        Display hidden elements
         """
         js = 'document.querySelector("{css}").style.display = "block";'.format(css=css_selector)
         self.run_script(js)
 
     def remove_attribute(self, css_selector, attribute):
         """
+        JavaScript API, Only support css positioning
         Remove element attribute, Only support css positioning
         """
         js = 'document.querySelector("{css}").removeAttribute("{attr}");'.format(css=css_selector,
@@ -46,6 +50,7 @@ class Page(PageObject):
 
     def get_attribute(self, css_selector, attribute):
         """
+        JavaScript API, Only support css positioning
         Get element attribute, Only support css positioning
         :return:
         """
@@ -53,8 +58,35 @@ class Page(PageObject):
             css=css_selector, attr=attribute)
         return self.driver.execute_script(js)
 
+    @property
+    def get_title(self):
+        """
+        JavaScript API
+        Get page title.
+        """
+        js = 'return document.title;'
+        return self.driver.execute_script(js)
+
+    @property
+    def get_url(self):
+        """
+        JavaScript API
+        Get page URL.
+        """
+        js = "return document.URL;"
+        return self.driver.execute_script(js)
+
+    def get_text(self, css_selector):
+        """
+        JavaScript API, Only support css positioning
+        Get element text, Only support css positioning
+        """
+        js = 'return document.querySelector("{css}").textContent;'.format(css=css_selector)
+        return self.driver.execute_script(js)
+
     def set_attribute(self, css_selector, attribute, type_):
         """
+        JavaScript API, Only support css positioning
         Setting element attribute, Only support css positioning
         """
         js = 'document.querySelector("{css}").setAttribute("{attr}", "{type}");'.format(css=css_selector,
@@ -64,20 +96,23 @@ class Page(PageObject):
 
     def click(self, css_selector):
         """
-        Click element, Only support css positioning
+        JavaScript API, Only support css positioning
+        Click element.
         """
         js = 'document.querySelector("{css}").click();'.format(css=css_selector)
         self.run_script(js)
 
-    def input(self, css_selector, value):
+    def set_text(self, css_selector, value):
         """
-        Simulates typing into the element. Only support css positioning
+        JavaScript API, Only support css positioning
+        Simulates typing into the element.
         """
         js = 'document.querySelector("{css}").value = "{value}";'.format(css=css_selector, value=value)
         self.run_script(js)
 
-    def js_clear(self, css_selector):
+    def clear(self, css_selector):
         """
+        JavaScript API, Only support css positioning
         Clears the text if it's a text entry element, Only support css positioning
         """
         js = 'document.querySelector("{css}").value = "";'.format(css=css_selector)
@@ -85,12 +120,14 @@ class Page(PageObject):
 
     def switch_to_frame(self, frame_reference):
         """
+        selenium API
         Switches focus to the specified frame, by id, name, or webelement.
         """
         self.driver.switch_to.frame(frame_reference)
 
     def switch_to_frame_out(self):
         """
+        selenium API
         Switches focus to the parent context.
         Corresponding relationship with switch_to_frame () method.
         """
@@ -118,12 +155,14 @@ class Page(PageObject):
 
     def accept_alert(self):
         """
+        selenium API
         Accept warning box.
         """
         self.driver.switch_to.alert.accept()
 
     def dismiss_alert(self):
         """
+        selenium API
         Dismisses the alert available.
         """
         self.driver.switch_to.alert.dismiss()
@@ -131,42 +170,28 @@ class Page(PageObject):
     @property
     def get_alert_text(self):
         """
+        selenium API
         Get warning box prompt information.
         """
         return self.driver.switch_to.alert.text
 
-    @property
-    def get_title(self):
-        """
-        Get window title.
-        Usage:
-        driver.get_title()
-        """
-        return self.driver.title
-
-    @property
-    def get_url(self):
-        """
-        Get the URL address of the current page.
-        Usage:
-        driver.get_url()
-        """
-        return self.driver.current_url
-
     def move_to_element(self, elem):
         """
+        selenium API
         Moving the mouse to the middle of an element
         """
         ActionChains(self.driver).move_to_element(elem).perform()
 
     def context_click(self, elem):
         """
+        selenium API
         Performs a context-click (right click) on an element.
         """
         ActionChains(self.driver).context_click(elem).perform()
 
     def drag_and_drop_by_offset(self, elem, x, y):
         """
+        selenium API
         Holds down the left mouse button on the source element,
            then moves to the target offset and releases the mouse button.
         :param elem: The element to mouse down.
@@ -177,6 +202,7 @@ class Page(PageObject):
 
     def refresh_element(self, elem, timeout=10):
         """
+        selenium API
         Refreshes the current page, retrieve elements.
         """
         try:
