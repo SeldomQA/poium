@@ -26,7 +26,7 @@ from .page_objects import PageWait
 
 __author__ = "fnngj"
 
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 
 '''
 0.1 version update:
@@ -49,4 +49,7 @@ To better fit the project, update the name is poium.
 
 0.2.3 version update:
 * adding javascript operating api
+
+0.3.0 version update:
+* Project code refactoring.
 '''
