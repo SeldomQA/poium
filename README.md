@@ -23,21 +23,17 @@ $ pip install poium
 #### 简单例子：
 
 
-使用poium实现百度搜索。
+支持selenium的例子。
 
 ```python
-
-# baidu_page.py
 from poium import Page, PageElement
+from selenium import webdriver
+
 
 class BaiduIndexPage(Page):
-    search_input = PageElement(css='#kw', timeout=5, describe="搜索输入框")
-    search_button = PageElement(css='#su', timeout=5, describe="搜索按钮")
+    search_input = PageElement(css='#kw')
+    search_button = PageElement(css='#su')
 
-
-# test_baidu.py
-from selenium import webdriver
-from baidu_page import BaiduIndexPage
 
 driver = webdriver.Chrome()
 
@@ -49,6 +45,39 @@ page.search_button.click()
 
 driver.quit()
 ```
+
+支持appium的例子。
+
+```python
+from poium import Page, PageElement
+from appium import webdriver
+
+class CalculatorPage(Page):
+    number_1 = PageElement(id_="com.android.calculator2:id/digit_1")
+    number_2 = PageElement(id_="com.android.calculator2:id/digit_2")
+    add = PageElement(id_="com.android.calculator2:id/op_add")
+    eq = PageElement(id_="com.android.calculator2:id/eq")
+
+# APP定义运行环境
+desired_caps = {
+    'deviceName': 'Android Emulator',
+    'automationName': 'appium',
+    'platformName': 'Android',
+    'platformVersion': '7.0',
+    'appPackage': 'com.android.calculator2',
+    'appActivity': '.Calculator',
+}
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+page = CalculatorPage(driver)
+page.number_1.click()
+page.add.click()
+page.number_2.click()
+page.eq.click()
+
+driver.quit()
+```
+
 使用poium将元素 __定位__ 与 __操作__ 分离，这将会非常有助于规模化自动化测试用例的编写与维护。
 
 #### 使用文档：
