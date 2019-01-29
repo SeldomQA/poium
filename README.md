@@ -40,7 +40,7 @@ driver = webdriver.Chrome()
 page = BaiduIndexPage(driver)
 page.get("https://www.baidu.com")
 
-page.search_input.send_keys("poium")
+page.search_input = "poium"
 page.search_button.click()
 
 driver.quit()
