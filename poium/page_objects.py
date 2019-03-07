@@ -25,6 +25,7 @@ LOCATOR_LIST = {
     'ios_class_chain': MobileBy.IOS_CLASS_CHAIN,
     'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
     'android_viewtag': MobileBy.ANDROID_VIEWTAG,
+    'android_datamatcher': MobileBy.ANDROID_DATA_MATCHER,
     'accessibility_id': MobileBy.ACCESSIBILITY_ID,
     'image': MobileBy.IMAGE,
     'custom': MobileBy.CUSTOM,
