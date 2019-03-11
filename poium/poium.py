@@ -183,6 +183,31 @@ class Page(PageObject):
         """
         ActionChains(self.driver).move_to_element(elem).perform()
 
+    def click_and_hold(self, elem):
+        """
+        selenium API
+        Holds down the left mouse button on an element.
+        """
+        ActionChains(self.driver).click_and_hold(elem).perform()
+
+    def move_by_offset(self, x, y):
+        """
+        selenium API
+        Moving the mouse to an offset from current mouse position.
+
+        :Args:
+         - x: X offset to move to, as a positive or negative integer.
+         - y: Y offset to move to, as a positive or negative integer.
+        """
+        ActionChains(self.driver).move_by_offset(x, y).perform()
+
+    def release(self):
+        """
+        selenium API
+        Releasing a held mouse button on an element.
+        """
+        ActionChains(self.driver).release().perform()
+
     def context_click(self, elem):
         """
         selenium API
