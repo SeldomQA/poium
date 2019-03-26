@@ -1,9 +1,7 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import StaleElementReferenceException
 
 from appium.webdriver.common.mobileby import MobileBy
 
@@ -93,18 +91,23 @@ class PageElement(object):
             raise ValueError("Please specify a locator")
         if len(kwargs) > 1:
             raise ValueError("Please specify only one locator")
-        k, v = next(iter(kwargs.items()))
+        self.k, self.v = next(iter(kwargs.items()))
         try:
-            self.locator = (LOCATOR_LIST[k], v)
+            self.locator = (LOCATOR_LIST[self.k], self.v)
         except KeyError:
             raise KeyError("Please use a locator：'id_'、'name'、'class_'、'css'、'xpath'、'link_text'、'partial_link_text'.")
         self.has_context = bool(context)
 
     def get_element(self, context):
         try:
-            return context.find_element(*self.locator)
+            elem = context.find_element(*self.locator)
         except NoSuchElementException:
             return None
+        else:
+            if self.k == "css":
+                script = 'document.querySelector("{css}").style.border="2px solid red"'.format(css=self.v)
+                context.execute_script(script)
+            return elem
 
     def find(self, context):
         for i in range(self.time_out):

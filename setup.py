@@ -24,7 +24,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['selenium>=3.14.1', 'Appium-Python-Client==0.39'],
+    install_requires=['selenium>=3.14.1', 'Appium-Python-Client>=0.39'],
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X',
