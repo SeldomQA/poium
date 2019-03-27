@@ -21,6 +21,7 @@ setup(
     author_email='fnngj@126.com',
     description='Selenium/appium-based Page Objects test library.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
