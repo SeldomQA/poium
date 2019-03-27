@@ -1,6 +1,8 @@
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
+from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
+from appium.webdriver.common.multi_action import MultiAction as MobileMultiAction
 
 from .page_objects import PageObject
 
@@ -248,3 +250,26 @@ class Page(PageObject):
                 sleep(1)
         else:
             raise TimeoutError("stale element reference: element is not attached to the page document.")
+
+    def top(self, elem, x, y, count):
+        """
+        appium API
+        Perform a tap action on the element
+        """
+        action = MobileTouchAction(self.driver)
+        action.tap(elem, x, y, count).perform()
+
+    def long_press(self, elem, x, y, duration):
+        """
+        appium API
+        Begin a chain with a press down that lasts `duration` milliseconds
+        """
+        action = MobileTouchAction(self.driver)
+        action.long_press(elem, x, y, duration).perform()
+
+    def swipe(self, start_x, start_y, end_x, end_y, duration):
+        """
+        appium API
+        Swipe from one point to another point, for an optional duration.
+        """
+        self.driver.swipe(start_x, start_y, end_x, end_y, duration)
