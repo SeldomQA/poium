@@ -267,7 +267,7 @@ class Page(PageObject):
         action = MobileTouchAction(self.driver)
         action.long_press(elem, x, y, duration).perform()
 
-    def swipe(self, start_x, start_y, end_x, end_y, duration):
+    def swipe(self, start_x, start_y, end_x, end_y, duration=None):
         """
         appium API
         Swipe from one point to another point, for an optional duration.
