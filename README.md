@@ -4,7 +4,8 @@
 
 * 提供了一组基于JavaScript API，实现部分selenium 不支持的操作。
 * 完全兼容原生selenium/appium API。
-* 对Selenium/appium部分API做了封装，使操作更简单。
+
+![](./poium_logo.gif)
 
 #### Installation
 ------------
