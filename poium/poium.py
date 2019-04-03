@@ -105,6 +105,14 @@ class Page(PageObject):
         js = 'document.querySelector("{css}").click();'.format(css=css_selector)
         self.run_script(js)
 
+    def click_display(self, css_selector):
+        """
+        JavaScript API, Only support css positioning
+        Click on the displayed element, otherwise skip it.
+        """
+        js = 'var elm = document.querySelector("'+css_selector+'"); if(elm != null){elm.click();}'
+        self.run_script(js)
+
     def set_text(self, css_selector, value):
         """
         JavaScript API, Only support css positioning
