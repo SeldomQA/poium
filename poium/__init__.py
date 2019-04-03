@@ -27,29 +27,3 @@ from .page_objects import PageWait
 __author__ = "fnngj"
 
 __version__ = "0.3.1"
-
-'''
-0.1 version update:
-* page object based on selenium.
-
-0.1.3 version update:
-* adding class PageSelect
-
-0.1.4 version update:
-* adding class PageWait
-
-0.1.5 version update:
-* new common mouse operations
-
-0.2.1 version update:
-* adding appium support
-
-0.2.2 version update:
-To better fit the project, update the name is poium.
-
-0.2.3 version update:
-* adding javascript operating api
-
-0.3.0 version update:
-* Project code refactoring.
-'''
