@@ -1,11 +1,14 @@
-### poium
+
+
+<img src="./poium_logo.gif"  height="150">
+
+#### poium
 
 基于 selenium/appium 的 Page Objects 设计模式测试库。
 
-* 提供了一组基于JavaScript API，实现部分selenium 不支持的操作。
 * 完全兼容原生selenium/appium API。
+* 提供了一组基于JavaScript的API，实现部分selenium 不支持的操作。
 
-![](./poium_logo.gif)
 
 #### Installation
 ------------
