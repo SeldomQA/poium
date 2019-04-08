@@ -113,6 +113,14 @@ class Page(PageObject):
         js = 'var elm = document.querySelector("'+css_selector+'"); if(elm != null){elm.click();}'
         self.run_script(js)
 
+    def clear_style(self, css_selector):
+        """
+        JavaScript API, Only support css positioning
+        Clear element styles.
+        """
+        js = 'document.querySelector("{css}").style="";'.format(css=css_selector)
+        self.run_script(js)
+
     def set_text(self, css_selector, value):
         """
         JavaScript API, Only support css positioning
