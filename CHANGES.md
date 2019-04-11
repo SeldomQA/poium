@@ -1,3 +1,7 @@
+#### 0.3.2 version update
+
+* Add a new JavaScript API
+
 
 #### 0.3.1 version update
 
