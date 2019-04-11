@@ -61,6 +61,16 @@ class Page(PageObject):
             css=css_selector, attr=attribute)
         return self.driver.execute_script(js)
 
+    def set_attribute(self, css_selector, attribute, type_):
+        """
+        JavaScript API, Only support css positioning
+        Setting element attribute, Only support css positioning
+        """
+        js = 'document.querySelector("{css}").setAttribute("{attr}", "{type}");'.format(css=css_selector,
+                                                                                        attr=attribute,
+                                                                                        type=type_)
+        self.run_script(js)
+
     @property
     def get_title(self):
         """
@@ -86,16 +96,6 @@ class Page(PageObject):
         """
         js = 'return document.querySelector("{css}").textContent;'.format(css=css_selector)
         return self.driver.execute_script(js)
-
-    def set_attribute(self, css_selector, attribute, type_):
-        """
-        JavaScript API, Only support css positioning
-        Setting element attribute, Only support css positioning
-        """
-        js = 'document.querySelector("{css}").setAttribute("{attr}", "{type}");'.format(css=css_selector,
-                                                                                        attr=attribute,
-                                                                                        type=type_)
-        self.run_script(js)
 
     def click(self, css_selector):
         """
