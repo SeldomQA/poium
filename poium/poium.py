@@ -152,6 +152,45 @@ class Page(PageObject):
         """
         self.driver.switch_to.parent_frame()
 
+    @property
+    def new_window_handle(self):
+        """
+        selenium API
+        Getting a handle to a new window.
+        """
+        original_window = self.driver.current_window_handle
+        all_handles = self.driver.window_handles
+        for handle in all_handles:
+            if handle != original_window:
+                new_handle = handle
+                break
+        else:
+            new_handle = None
+        return new_handle
+
+    @property
+    def current_window_handle(self):
+        """
+        selenium API
+        Returns the handle of the current window.
+        """
+        return self.driver.current_window_handle
+
+    @property
+    def window_handles(self):
+        """
+        selenium API
+        Returns the handles of all windows within the current session.
+        """
+        return self.driver.window_handles
+
+    def switch_to_window(self, handle):
+        """
+        selenium API
+        Switches focus to the specified window.
+        """
+        self.driver.switch_to.window(handle)
+
     def switch_to_app(self):
         """
         appium API
