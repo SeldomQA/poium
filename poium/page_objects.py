@@ -104,9 +104,8 @@ class PageElement(object):
         except NoSuchElementException:
             return None
         else:
-            if self.k == "css":
-                script = 'document.querySelector("{css}").style.border="2px solid red"'.format(css=self.v)
-                context.execute_script(script)
+            style_red = 'arguments[0].style.border="2px solid red"'
+            context.execute_script(style_red, elem)
             return elem
 
     def find(self, context):
