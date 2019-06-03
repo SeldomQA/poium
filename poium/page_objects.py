@@ -95,7 +95,7 @@ class PageElement(object):
         try:
             self.locator = (LOCATOR_LIST[self.k], self.v)
         except KeyError:
-            raise KeyError("Please use a locator：'id_'、'name'、'class_'、'css'、'xpath'、'link_text'、'partial_link_text'.")
+            raise KeyError("Please use a locator：'id_'、'name'、'class_name'、'css'、'xpath'、'link_text'、'partial_link_text'.")
         self.has_context = bool(context)
 
     def get_element(self, context):
