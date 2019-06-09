@@ -1,3 +1,8 @@
+#### 0.3.3 version update
+
+* Adds a red border to the element of the operation
+
+
 #### 0.3.2 version update
 
 * Add a new JavaScript API
