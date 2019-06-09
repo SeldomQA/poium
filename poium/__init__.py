@@ -26,4 +26,4 @@ from .page_objects import PageWait
 
 __author__ = "fnngj"
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"

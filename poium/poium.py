@@ -39,7 +39,8 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Display hidden elements
         """
-        js = 'document.querySelector("{css}").style.display = "block";'.format(css=css_selector)
+        js = """var elm = document.querySelector("{css}");
+                    elm.style.display = "block";""".format(css=css_selector)
         self.run_script(js)
 
     def remove_attribute(self, css_selector, attribute):
@@ -47,8 +48,8 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Remove element attribute, Only support css positioning
         """
-        js = 'document.querySelector("{css}").removeAttribute("{attr}");'.format(css=css_selector,
-                                                                                 attr=attribute)
+        js = """var elm = document.querySelector("{css}");
+                    elm.removeAttribute("{attr}");""".format(css=css_selector, attr=attribute)
         self.run_script(js)
 
     def get_attribute(self, css_selector, attribute):
@@ -57,18 +58,18 @@ class Page(PageObject):
         Get element attribute, Only support css positioning
         :return:
         """
-        js = 'return document.querySelector("{css}").getAttribute("{attr}");'.format(
+        js = """return document.querySelector("{css}").getAttribute("{attr}");""".format(
             css=css_selector, attr=attribute)
         return self.driver.execute_script(js)
 
-    def set_attribute(self, css_selector, attribute, type_):
+    def set_attribute(self, css_selector, attribute, value):
         """
         JavaScript API, Only support css positioning
         Setting element attribute, Only support css positioning
         """
-        js = 'document.querySelector("{css}").setAttribute("{attr}", "{type}");'.format(css=css_selector,
-                                                                                        attr=attribute,
-                                                                                        type=type_)
+        js = """var elm = document.querySelector("{css}");
+                    elm.setAttribute("{attr}", "{value}");
+                    """.format(css=css_selector, attr=attribute, value=value)
         self.run_script(js)
 
     @property
@@ -94,7 +95,7 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Get element text, Only support css positioning
         """
-        js = 'return document.querySelector("{css}").textContent;'.format(css=css_selector)
+        js = """return document.querySelector("{css}").textContent;""".format(css=css_selector)
         return self.driver.execute_script(js)
 
     def click(self, css_selector):
@@ -102,7 +103,9 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Click element.
         """
-        js = 'document.querySelector("{css}").click();'.format(css=css_selector)
+        js = """var elm = document.querySelector("{css}");
+                   elm.style.border="2px solid red";
+                   elm.click();""".format(css=css_selector)
         self.run_script(js)
 
     def click_display(self, css_selector):
@@ -110,7 +113,8 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Click on the displayed element, otherwise skip it.
         """
-        js = 'var elm = document.querySelector("'+css_selector+'"); if(elm != null){elm.click();}'
+        js = 'var elm = document.querySelector("'+css_selector+'");' \
+             ' if(elm != null){elm.style.border="2px solid red";elm.click();}'
         self.run_script(js)
 
     def clear_style(self, css_selector):
@@ -118,7 +122,9 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Clear element styles.
         """
-        js = 'document.querySelector("{css}").style="";'.format(css=css_selector)
+        js = """var elm = document.querySelector("{css}");
+                    elm.style.border="2px solid red";
+                    elm.style="";""".format(css=css_selector)
         self.run_script(js)
 
     def set_text(self, css_selector, value):
@@ -126,7 +132,9 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Simulates typing into the element.
         """
-        js = 'document.querySelector("{css}").value = "{value}";'.format(css=css_selector, value=value)
+        js = """var elm = document.querySelector("{css}");
+                    elm.style.border="2px solid red";
+                    elm.value = "{value}";""".format(css=css_selector, value=value)
         self.run_script(js)
 
     def clear(self, css_selector):
@@ -134,7 +142,9 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Clears the text if it's a text entry element, Only support css positioning
         """
-        js = 'document.querySelector("{css}").value = "";'.format(css=css_selector)
+        js = """var elm = document.querySelector("{css}");
+                    elm.style.border="2px solid red";
+                    elm.value = "";""".format(css=css_selector)
         self.run_script(js)
 
     def switch_to_frame(self, frame_reference):

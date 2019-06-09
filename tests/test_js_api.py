@@ -6,6 +6,7 @@ class BaiduPage(Page):
     search_input = "#kw"
     search_button = "#su"
     icp = "#cp"
+    search_key = ".res-gap-right16"
 
 
 def test_clear_input_click(browser):
@@ -19,6 +20,8 @@ def test_clear_input_click(browser):
     page.clear(page.search_input)
     page.set_text(page.search_input, "poium")
     page.click(page.search_button)
+    sleep(2)
+    page.click_display(page.search_key)
     sleep(2)
     assert page.get_title == "poium_百度搜索"
 
