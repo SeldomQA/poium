@@ -107,7 +107,7 @@ class PageElement(object):
             try:
                 style_red = 'arguments[0].style.border="2px solid red"'
                 context.execute_script(style_red, elem)
-            except AttributeError:
+            except BaseException:
                 return elem
             return elem
 
