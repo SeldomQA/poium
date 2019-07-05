@@ -220,6 +220,9 @@ class Page(PageObject):
             for context in all_context:
                 if "WEBVIEW" in context:
                     self.driver.switch_to.context(context)
+                    break
+            else:
+                raise NameError("No WebView found.")
 
     def accept_alert(self):
         """
