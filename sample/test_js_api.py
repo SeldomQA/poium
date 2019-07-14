@@ -1,12 +1,12 @@
-from poium import Page
+from poium import Page, CSSElement
 from time import sleep
 
 
 class BaiduPage(Page):
-    search_input = "#kw"
-    search_button = "#su"
-    icp = "#cp"
-    search_key = ".res-gap-right16"
+    search_input = CSSElement("#kw", describe="百度搜索框")
+    search_button = CSSElement("#su", describe="百度按钮")
+    icp = CSSElement("#cp", describe="备案信息")
+    search_key = CSSElement(".res-gap-right16", describe="")
 
 
 def test_clear_input_click(browser):

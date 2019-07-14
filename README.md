@@ -9,25 +9,24 @@
 * 完全兼容原生selenium/appium API。
 * 提供了一组基于JavaScript的API，实现部分selenium 不支持的操作。
 
-
 #### Installation
 ------------
 
 download install:
 
 ```shell
-$ python setup.py install
+> python setup.py install
 ```
 
 pip install:
+
+```shell
+> pip install poium
 ```
-$ pip install poium
-```
 
-#### 简单例子：
+#### 简单例子
 
-
-支持selenium的例子。
+* 支持Selenium的例子。
 
 ```python
 from poium import Page, PageElement
@@ -35,8 +34,8 @@ from selenium import webdriver
 
 
 class BaiduIndexPage(Page):
-    search_input = PageElement(css='#kw')
-    search_button = PageElement(css='#su')
+    search_input = PageElement(name='wd')
+    search_button = PageElement(id_='su')
 
 
 driver = webdriver.Chrome()
@@ -50,7 +49,30 @@ page.search_button.click()
 driver.quit()
 ```
 
-支持appium的例子。
+* 还提供了一套JavaScript封装的API。
+
+```python
+from poium import Page, CSSElement
+from selenium import webdriver
+
+
+class BaiduIndexPage(Page):
+    search_input = CSSElement(css='#kw')
+    search_button = CSSElement(css='#su')
+
+
+driver = webdriver.Chrome()
+
+page = BaiduIndexPage(driver)
+page.get("https://www.baidu.com")
+
+page.set_text(page.search_input, "poium")
+page.click(page.search_button)
+
+driver.quit()
+```
+
+* 支持appium的例子。
 
 ```python
 from poium import Page, PageElement
@@ -84,11 +106,11 @@ driver.quit()
 
 使用poium将元素 __定位__ 与 __操作__ 分离，这将会非常有助于规模化自动化测试用例的编写与维护。
 
-#### 使用文档：
+#### 使用文档
 
 请阅读 [wiki](https://github.com/defnngj/poium/wiki)
 
-#### 项目历史：
+#### 项目历史
 
 参考项目：https://github.com/eeaston/page-objects
 
