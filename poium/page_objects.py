@@ -53,6 +53,15 @@ class PageObject:
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
 
+    def run_script(self, js=None):
+        """
+        run JavaScript script
+        """
+        if js is None:
+            raise ValueError("Please input js script")
+        else:
+            self.driver.execute_script(js)
+
 
 class PageElement(object):
     """
@@ -77,8 +86,8 @@ class PageElement(object):
         This element is expected to be called with context
     Page Elements are used to access elements on a page. The are constructed
     using this factory method to specify the locator for the element.
-        >> from page_objects import PageObject, PageElement
-        >> class MyPage(PageObject):
+        >> from page import Page, PageElement
+        >> class MyPage(Page):
                 elem1 = PageElement(css='div.myclass')
                 elem2 = PageElement(id_='foo')
                 elem_with_context = PageElement(name='bar', context=True)
@@ -144,8 +153,8 @@ class PageElement(object):
 class PageElements(PageElement):
     """
     Like `PageElement` but returns multiple results.
-    >> from page_objects import PageObject, PageElements
-    >> class MyPage(PageObject):
+    >> from page import Page, PageElements
+    >> class MyPage(Page):
             all_table_rows = PageElements(tag='tr')
             elem2 = PageElement(id_='foo')
             elem_with_context = PageElement(tag='tr', context=True)
@@ -163,6 +172,23 @@ class PageElements(PageElement):
         if not elems:
             raise ValueError("Can't set value, no elements found")
         [elem.send_keys(value) for elem in elems]
+
+
+class CSSElement(object):
+    """
+    Only CSS selectors are supported.
+    Please see help: http://www.w3school.com.cn/cssref/css_selectors.asp
+    >> from page_objects import Page, CSSElements
+    >> class MyPage(Page):
+            input = CSSElements('.s_ipt')
+            button = PageElement('#su')
+    """
+
+    def __init__(self, css, describe=None):
+        self.css = css
+
+    def __call__(self):
+        return self.css
 
 
 class PageSelect(object):

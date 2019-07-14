@@ -13,15 +13,6 @@ class Page(PageObject):
     and selenium/appium extension APIs。
     """
 
-    def run_script(self, js=None):
-        """
-        run JavaScript script
-        """
-        if js is None:
-            raise ValueError("Please input js script")
-        else:
-            self.driver.execute_script(js)
-
     def window_scroll(self, width=None, height=None):
         """
         JavaScript API, Only support css positioning
@@ -40,7 +31,7 @@ class Page(PageObject):
         Display hidden elements
         """
         js = """var elm = document.querySelector("{css}");
-                    elm.style.display = "block";""".format(css=css_selector)
+                    elm.style.display = "block";""".format(css=css_selector())
         self.run_script(js)
 
     def remove_attribute(self, css_selector, attribute):
@@ -49,7 +40,7 @@ class Page(PageObject):
         Remove element attribute, Only support css positioning
         """
         js = """var elm = document.querySelector("{css}");
-                    elm.removeAttribute("{attr}");""".format(css=css_selector, attr=attribute)
+                    elm.removeAttribute("{attr}");""".format(css=css_selector(), attr=attribute)
         self.run_script(js)
 
     def get_attribute(self, css_selector, attribute):
@@ -59,7 +50,7 @@ class Page(PageObject):
         :return:
         """
         js = """return document.querySelector("{css}").getAttribute("{attr}");""".format(
-            css=css_selector, attr=attribute)
+            css=css_selector(), attr=attribute)
         return self.driver.execute_script(js)
 
     def set_attribute(self, css_selector, attribute, value):
@@ -69,7 +60,7 @@ class Page(PageObject):
         """
         js = """var elm = document.querySelector("{css}");
                     elm.setAttribute("{attr}", "{value}");
-                    """.format(css=css_selector, attr=attribute, value=value)
+                    """.format(css=css_selector(), attr=attribute, value=value)
         self.run_script(js)
 
     @property
@@ -95,7 +86,7 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Get element text, Only support css positioning
         """
-        js = """return document.querySelector("{css}").textContent;""".format(css=css_selector)
+        js = """return document.querySelector("{css}").textContent;""".format(css=css_selector())
         return self.driver.execute_script(js)
 
     def click(self, css_selector):
@@ -105,7 +96,7 @@ class Page(PageObject):
         """
         js = """var elm = document.querySelector("{css}");
                    elm.style.border="2px solid red";
-                   elm.click();""".format(css=css_selector)
+                   elm.click();""".format(css=css_selector())
         self.run_script(js)
 
     def click_display(self, css_selector):
@@ -113,7 +104,7 @@ class Page(PageObject):
         JavaScript API, Only support css positioning
         Click on the displayed element, otherwise skip it.
         """
-        js = 'var elm = document.querySelector("'+css_selector+'");' \
+        js = 'var elm = document.querySelector("'+css_selector()+'");' \
              ' if(elm != null){elm.style.border="2px solid red";elm.click();}'
         self.run_script(js)
 
@@ -124,7 +115,7 @@ class Page(PageObject):
         """
         js = """var elm = document.querySelector("{css}");
                     elm.style.border="2px solid red";
-                    elm.style="";""".format(css=css_selector)
+                    elm.style="";""".format(css=css_selector())
         self.run_script(js)
 
     def set_text(self, css_selector, value):
@@ -134,7 +125,7 @@ class Page(PageObject):
         """
         js = """var elm = document.querySelector("{css}");
                     elm.style.border="2px solid red";
-                    elm.value = "{value}";""".format(css=css_selector, value=value)
+                    elm.value = "{value}";""".format(css=css_selector(), value=value)
         self.run_script(js)
 
     def clear(self, css_selector):
@@ -144,7 +135,7 @@ class Page(PageObject):
         """
         js = """var elm = document.querySelector("{css}");
                     elm.style.border="2px solid red";
-                    elm.value = "";""".format(css=css_selector)
+                    elm.value = "";""".format(css=css_selector())
         self.run_script(js)
 
     def switch_to_frame(self, frame_reference):

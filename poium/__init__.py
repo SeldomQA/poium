@@ -22,7 +22,7 @@ from .page_objects import PageElement
 from .page_objects import PageElements
 from .page_objects import PageSelect
 from .page_objects import PageWait
-
+from .page_objects import CSSElement
 
 __author__ = "fnngj"
 
