@@ -57,8 +57,8 @@ from selenium import webdriver
 
 
 class BaiduIndexPage(Page):
-    search_input = CSSElement(css='#kw')
-    search_button = CSSElement(css='#su')
+    search_input = CSSElement('#kw')
+    search_button = CSSElement('#su')
 
 
 driver = webdriver.Chrome()
