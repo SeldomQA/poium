@@ -26,7 +26,7 @@ pip install:
 
 #### 简单例子
 
-* 支持Selenium的例子。
+支持Selenium的例子。
 
 ```python
 from poium import Page, PageElement
@@ -49,7 +49,7 @@ page.search_button.click()
 driver.quit()
 ```
 
-* 还提供了一套JavaScript封装的API。
+还提供了一套JavaScript封装的API。
 
 ```python
 from poium import Page, CSSElement
@@ -72,7 +72,7 @@ page.click(page.search_button)
 driver.quit()
 ```
 
-* 支持appium的例子。
+支持appium的例子。
 
 ```python
 from poium import Page, PageElement
