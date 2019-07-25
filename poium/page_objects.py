@@ -1,4 +1,4 @@
-from time import sleep
+from time import sleep, ctime
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
@@ -94,7 +94,7 @@ class PageElement(object):
     Page Elements act as property descriptors for their Page Object, you can get
     and set them as normal attributes.
     """
-    def __init__(self, context=False, timeout=10, describe=None, **kwargs):
+    def __init__(self, context=False, timeout=5, describe=None, **kwargs):
         self.time_out = timeout
         if not kwargs:
             raise ValueError("Please specify a locator")
@@ -124,10 +124,8 @@ class PageElement(object):
         for i in range(self.time_out):
             if self.get_element(context) is not None:
                 return self.get_element(context)
-            else:
-                sleep(1)
         else:
-            return None
+            return self.get_element(context)
 
     def __get__(self, instance, owner, context=None):
         if not instance:
