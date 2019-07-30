@@ -1,14 +1,14 @@
-from poium import Page, PageElement, PageElements
+from poium import Page, PageElement, CSSElement, PageElements
 from time import sleep
 
 
 class BaiduPage(Page):
     setting = PageElement(css='div#u1 > a.pf')
     search_setting = PageElement(css=".setpref")
-    search_setting_hint = "#sugConf th"
+    search_setting_hint = CSSElement(css="#sugConf th")
 
 
-class JSPage(Page):
+class DataTimePage(Page):
     frame = PageElement(id_="iframe")
     date = PageElement(id_="appDate")
     year_mouth_data = PageElements(css=".dwwo")
@@ -35,7 +35,7 @@ def test_drag_and_drop_by_offset(browser):
     :param browser:
     :return:
     """
-    page = JSPage(browser)
+    page = DataTimePage(browser)
     page.get("http://www.jq22.com/yanshi4976")
 
     page.switch_to_frame(page.frame)
