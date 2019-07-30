@@ -1,10 +1,13 @@
-from time import sleep, ctime
+import logging
+from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 
 from appium.webdriver.common.mobileby import MobileBy
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -122,6 +125,7 @@ class PageElement(object):
 
     def find(self, context):
         for i in range(self.time_out):
+            logger.info("timeout {i} times, element not found!".format(i=str(i+1)))
             if self.get_element(context) is not None:
                 return self.get_element(context)
         else:
@@ -206,7 +210,7 @@ class PageSelect(object):
 
 class PageWait(object):
 
-    def __init__(self, elm, timeout=10):
+    def __init__(self, elm, timeout=3):
         """
         wait webelement display
         """
