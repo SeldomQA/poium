@@ -2,7 +2,6 @@ from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
-from appium.webdriver.common.multi_action import MultiAction as MobileMultiAction
 
 from .page_objects import PageObject
 
@@ -317,6 +316,14 @@ class Page(PageObject):
         """
         action = MobileTouchAction(self.driver)
         action.tap(elem, x, y, count).perform()
+
+    def press(self, elem, x, y, pressure):
+        """
+        appium API
+        Perform a tap action on the element
+        """
+        action = MobileTouchAction(self.driver)
+        action.press(elem, x, y, pressure).perform()
 
     def long_press(self, elem, x, y, duration):
         """
