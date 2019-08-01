@@ -26,4 +26,4 @@ from .page_objects import CSSElement
 
 __author__ = "fnngj"
 
-__version__ = "0.3.6"
+__version__ = "0.3.7"

@@ -1,3 +1,8 @@
+#### 0.3.7 version update
+
+* fix timeout bug.
+
+
 #### 0.3.6 version update
 
 * Adds CSSElement class.
