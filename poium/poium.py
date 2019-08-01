@@ -320,7 +320,7 @@ class Page(PageObject):
     def press(self, elem, x, y, pressure):
         """
         appium API
-        Perform a tap action on the element
+        Begin a chain with a press down action at a particular element or point
         """
         action = MobileTouchAction(self.driver)
         action.press(elem, x, y, pressure).perform()
