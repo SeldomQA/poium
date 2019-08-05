@@ -6,8 +6,10 @@
 
 基于 selenium/appium 的 Page Objects 设计模式测试库。
 
-* 完全兼容原生selenium/appium API。
-* 提供了一组基于JavaScript的API，实现部分selenium 不支持的操作。
+* 极大的简化了Page层的元素定义。
+* 同时支持selenium和appium
+* 通过JavaScript扩展了selenium API
+* 对原生 API 无损
 
 #### Installation
 ------------
