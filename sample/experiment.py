@@ -38,7 +38,7 @@ class CSSElement(object):
 # test
 class baiduPage(Page):
     search_input = CSSElement("#kw")
-    search_button = CSSElement("#kw")
+    search_button = CSSElement("#su")
 
 
 dr = webdriver.Chrome()
