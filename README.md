@@ -1,4 +1,4 @@
-#### poium
+## poium
 ---
 
 <img src="./poium_logo.gif"  height="150">
@@ -10,7 +10,7 @@
 * 通过JavaScript扩展了selenium API
 * 对原生 API 无损
 
-#### Installation
+## Installation
 ---
 
 download install:
@@ -25,7 +25,7 @@ pip install:
 > pip install poium
 ```
 
-#### Sample
+## Sample
 
 支持Selenium的例子。
 
@@ -107,11 +107,11 @@ driver.quit()
 
 使用poium将元素 __定位__ 与 __操作__ 分离，这将会非常有助于规模化自动化测试用例的编写与维护。
 
-#### Documentation
+## Documentation
 
 请阅读 [wiki](https://github.com/defnngj/poium/wiki)
 
-#### Project History
+## Project History
 
 参考项目：https://github.com/eeaston/page-objects
 
