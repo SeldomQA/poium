@@ -1,5 +1,4 @@
 ## poium
----
 
 <img src="./poium_logo.gif"  height="150">
 
@@ -11,7 +10,6 @@
 * 对原生 API 无损
 
 ## Installation
----
 
 download install:
 

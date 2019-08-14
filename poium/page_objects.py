@@ -183,7 +183,7 @@ class CSSElement(object):
     >> from page_objects import Page, CSSElements
     >> class MyPage(Page):
             input = CSSElements('.s_ipt')
-            button = PageElement('#su')
+            button = CSSElements('#su')
     """
 
     def __init__(self, css, describe=None):
