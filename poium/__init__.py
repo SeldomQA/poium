@@ -17,12 +17,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .poium import Page
 from .page_objects import PageElement
 from .page_objects import PageElements
 from .page_objects import PageSelect
 from .page_objects import PageWait
-from .page_objects import CSSElement
+from .webdriver import Page
+from .javascript import CSSElement
 
 __author__ = "fnngj"
 

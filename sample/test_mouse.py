@@ -5,7 +5,7 @@ from time import sleep
 class BaiduPage(Page):
     setting = PageElement(css='div#u1 > a.pf')
     search_setting = PageElement(css=".setpref")
-    search_setting_hint = CSSElement(css="#sugConf th")
+    search_setting_hint = PageElement(css="#sugConf th")
 
 
 class DataTimePage(Page):
@@ -22,10 +22,10 @@ def test_move_to_element(browser):
     """
     page = BaiduPage(browser)
     page.get("https://www.baidu.com")
-    page.move_to_element(page.setting)
+    page.click_and_hold(page.setting)
     page.search_setting.click()
     sleep(2)
-    hint = page.get_text(page.search_setting_hint)
+    hint = page.search_setting_hint.text
     assert hint == "搜索框提示："
 
 

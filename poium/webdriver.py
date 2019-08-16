@@ -49,7 +49,7 @@ class Page(PageObject):
         """
         self.driver.switch_to.frame(frame_reference)
 
-    def switch_to_frame_out(self):
+    def switch_to_parent_frame(self):
         """
         selenium API
         Switches focus to the parent context.

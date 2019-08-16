@@ -48,15 +48,6 @@ class CSSElement(object):
                     elm.value = "{value}";""".format(css=self.css, value=value)
         driver.execute_script(js)
 
-    def show_text(self):
-        """
-        JavaScript API, Only support css positioning
-        show element text, Only support css positioning
-        """
-        js = """return document.querySelector("{css}").textContent;""".format(css=self.css)
-        abc = driver.execute_script(js)
-        print("show element text:", abc)
-
     def click(self):
         """
         JavaScript API, Only support css positioning
@@ -94,16 +85,6 @@ class CSSElement(object):
         js = """var elm = document.querySelector("{css}");
                     elm.removeAttribute("{attr}");""".format(css=self.css, attr=attribute)
         driver.execute_script(js)
-
-    def show_attribute(self, attribute):
-        """
-        JavaScript API, Only support css positioning
-        show element attribute, Only support css positioning
-        """
-        js = """return document.querySelector("{css}").getAttribute("{attr}");""".format(
-            css=self.css, attr=attribute)
-        attribute = driver.execute_script(js)
-        print(attribute)
 
     def set_attribute(self, attribute, value):
         """

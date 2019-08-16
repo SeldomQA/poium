@@ -5,6 +5,10 @@ from appium.webdriver.common.touch_action import TouchAction as MobileTouchActio
 
 from .page_objects import PageObject
 
+"""
+该文件已废弃；所以API 已经被拆分到了 javascript.py 和 webdriver.py 两个文件
+"""
+
 
 class Page(PageObject):
     """
