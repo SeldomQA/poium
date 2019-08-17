@@ -3,7 +3,8 @@ from time import sleep
 
 
 class SelectPage(Page):
-    elm = PageElement(xpath="//select")
+    frame = PageElement(id_="iframeResult", describe="表单")
+    elm = PageElement(xpath="//select", describe="选择框")
 
 
 def test_select(browser):
@@ -15,7 +16,7 @@ def test_select(browser):
     page = SelectPage(browser)
 
     page.get("http://www.w3school.com.cn/tiy/t.asp?f=html_select")
-    page.switch_to_frame("i")
+    page.switch_to_frame(page.frame)
     PageSelect(page.elm, value="saab")
     sleep(2)
     PageSelect(page.elm, index=2)
