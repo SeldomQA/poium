@@ -1,3 +1,8 @@
+#### 0.5.0 version update
+
+* So it reimplements the CSSElement class
+* Add logging
+
 #### 0.3.7 version update
 
 * fix timeout bug.
