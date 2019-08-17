@@ -65,8 +65,8 @@ driver = webdriver.Chrome()
 page = BaiduIndexPage(driver)
 page.get("https://www.baidu.com")
 
-page.set_text(page.search_input, "poium")
-page.click(page.search_button)
+page.search_input.set_text("poium")
+page.search_button.click()
 
 driver.quit()
 ```
