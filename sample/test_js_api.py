@@ -12,6 +12,7 @@ class BaiduPage(Page):
 
 class SoPage(Page):
     setting = CSSElement("#hd_setting", describe="搜索设置")
+    search = CSSElement("#search-button", describe="搜索按钮")
 
 
 def test_clear_input_click(browser):
@@ -72,4 +73,15 @@ def test_display(browser):
     page.setting.display()
     sleep(5)
 
+
+def test_clear_class(browser):
+    """
+    清除元素的class属性
+    :param browser: 浏览器驱动
+    :return:
+    """
+    page = SoPage(browser)
+    page.get("https://www.so.com")
+    page.search.clear_class()
+    sleep(5)
 

@@ -101,7 +101,7 @@ class CSSElement(object):
         logger.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.setAttribute("{attr}", "{value}");
-                    """.format(css=self.css,index=self.index, attr=attribute, value=value)
+                    """.format(css=self.css, index=self.index, attr=attribute, value=value)
         driver.execute_script(js)
 
     def clear_style(self):
@@ -114,3 +114,12 @@ class CSSElement(object):
                     elm.style="";""".format(css=self.css, index=self.index)
         driver.execute_script(js)
 
+    def clear_class(self):
+        """
+        JavaScript API, Only support css positioning
+        Clear element class, Only support css positioning
+        """
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
+                            elm.removeAttribute("class");""".format(css=self.css, index=self.index)
+        driver.execute_script(js)
