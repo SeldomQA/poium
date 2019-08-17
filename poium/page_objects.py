@@ -176,23 +176,6 @@ class PageElements(PageElement):
         [elem.send_keys(value) for elem in elems]
 
 
-# class CSSElement(object):
-#     """
-#     Only CSS selectors are supported.
-#     Please see help: http://www.w3school.com.cn/cssref/css_selectors.asp
-#     >> from page_objects import Page, CSSElements
-#     >> class MyPage(Page):
-#             input = CSSElements('.s_ipt')
-#             button = CSSElements('#su')
-#     """
-#
-#     def __init__(self, css, describe=None):
-#         self.css = css
-#
-#     def __call__(self):
-#         return self.css
-
-
 class PageSelect(object):
     """
     Processing select drop-down selection box
