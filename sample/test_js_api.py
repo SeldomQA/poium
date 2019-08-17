@@ -10,6 +10,10 @@ class BaiduPage(Page):
     setting_dropdown_box = CSSElement("#s_user_name_menu", describe="设置下拉框")
 
 
+class SoPage(Page):
+    setting = CSSElement("#hd_setting", describe="搜索设置")
+
+
 def test_clear_input_click(browser):
     """
     清除\输入\点击
@@ -50,10 +54,22 @@ def test_get_attribute(browser):
     """
     page = BaiduPage(browser)
     page.get("https://www.baidu.com")
+    sleep(2)
     page.search_button.remove_attribute("class")
     page.search_input.set_attribute("type", "password")
     page.search_input.set_text("abc123")
     sleep(5)
 
+
+def test_display(browser):
+    """
+    显示隐藏的元素
+    :param browser: 浏览器驱动
+    :return:
+    """
+    page = SoPage(browser)
+    page.get("https://www.so.com")
+    page.setting.display()
+    sleep(5)
 
 

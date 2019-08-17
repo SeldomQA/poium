@@ -16,8 +16,12 @@ class CSSElement(object):
 
     driver = None
 
-    def __init__(self, css, describe=None):
+    def __init__(self, css, index=None, describe=None):
         self.css = css
+        if index is None:
+            self.index = "0"
+        else:
+            self.index = str(index)
         self.desc = describe
 
     def __get__(self, instance, owner):
@@ -32,9 +36,9 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Clears the text if it's a text entry element, Only support css positioning
         """
-        js = """var elm = document.querySelector("{css}");
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style.border="2px solid red";
-                    elm.value = "";""".format(css=self.css)
+                    elm.value = "";""".format(css=self.css, index=self.index)
         driver.execute_script(js)
 
     def set_text(self, value):
@@ -43,9 +47,9 @@ class CSSElement(object):
         Simulates typing into the element.
         """
         logger.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelector("{css}");
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style.border="2px solid red";
-                    elm.value = "{value}";""".format(css=self.css, value=value)
+                    elm.value = "{value}";""".format(css=self.css, index=self.index, value=value)
         driver.execute_script(js)
 
     def click(self):
@@ -54,9 +58,9 @@ class CSSElement(object):
         Click element.
         """
         logger.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelector("{css}");
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
                    elm.style.border="2px solid red";
-                   elm.click();""".format(css=self.css)
+                   elm.click();""".format(css=self.css, index=self.index)
         driver.execute_script(js)
 
     def click_display(self):
@@ -64,6 +68,7 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Click on the displayed element, otherwise skip it.
         """
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = 'var elm = document.querySelector("' + self.css + '");' \
              ' if(elm != null){elm.style.border="2px solid red";elm.click();}'
         driver.execute_script(js)
@@ -73,8 +78,9 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Display hidden elements
         """
-        js = """var elm = document.querySelector("{css}");
-                    elm.style.display = "block";""".format(css=self.css)
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
+                    elm.style.display = "block";""".format(css=self.css, index=self.index)
         driver.execute_script(js)
 
     def remove_attribute(self, attribute):
@@ -82,8 +88,9 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Remove element attribute, Only support css positioning
         """
-        js = """var elm = document.querySelector("{css}");
-                    elm.removeAttribute("{attr}");""".format(css=self.css, attr=attribute)
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
+                    elm.removeAttribute("{attr}");""".format(css=self.css, index=self.index, attr=attribute)
         driver.execute_script(js)
 
     def set_attribute(self, attribute, value):
@@ -91,9 +98,10 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Setting element attribute, Only support css positioning
         """
-        js = """var elm = document.querySelector("{css}");
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.setAttribute("{attr}", "{value}");
-                    """.format(css=self.css, attr=attribute, value=value)
+                    """.format(css=self.css,index=self.index, attr=attribute, value=value)
         driver.execute_script(js)
 
     def clear_style(self):
@@ -101,8 +109,8 @@ class CSSElement(object):
         JavaScript API, Only support css positioning
         Clear element styles.
         """
-        js = """var elm = document.querySelector("{css}");
-                    elm.style.border="2px solid red";
-                    elm.style="";""".format(css=self.css)
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
+                    elm.style="";""".format(css=self.css, index=self.index)
         driver.execute_script(js)
 
