@@ -123,3 +123,13 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                             elm.removeAttribute("class");""".format(css=self.css, index=self.index)
         driver.execute_script(js)
+
+    def inner_text(self, text):
+        """
+        JavaScript API, Only support css positioning
+        The innerText property sets the text content of the specified element, Only support css positioning
+        """
+        logger.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{index}];
+                                    elm.innerText="{text}";""".format(css=self.css, index=self.index, text=text)
+        driver.execute_script(js)
