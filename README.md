@@ -11,16 +11,16 @@
 
 ## Installation
 
-download install:
-
-```shell
-> python setup.py install
-```
-
 pip install:
 
 ```shell
 > pip install poium
+```
+
+If you want to keep up with the latest version, you can install with github repository url:
+
+```shell
+> pip install -U git+https://github.com/defnngj/poium.git@master
 ```
 
 ## Sample
