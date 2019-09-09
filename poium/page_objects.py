@@ -124,8 +124,8 @@ class PageElement(object):
             return elem
 
     def find(self, context):
-        for i in range(self.time_out):
-            logger.info("timeout {i} times, element not found!".format(i=str(i+1)))
+        for i in range(1, self.time_out):
+            logger.info("{n} times search, {elm} ".format(n=i, elm=self.locator))
             if self.get_element(context) is not None:
                 return self.get_element(context)
         else:
