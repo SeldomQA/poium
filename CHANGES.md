@@ -1,3 +1,9 @@
+#### 0.5.1 version update
+
+* Adding new methods
+* Optimize log outputg
+
+
 #### 0.5.0 version update
 
 * So it reimplements the CSSElement class
