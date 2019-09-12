@@ -1,3 +1,5 @@
+import os
+import time
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
@@ -95,6 +97,20 @@ class Page(PageObject):
         Switches focus to the specified window.
         """
         self.driver.switch_to.window(handle)
+
+    def screenshots(self, path=None, filename=None):
+        """
+        selenium API
+        Saves a screenshots of the current window to a PNG image file
+        :param path: The path to save the file
+        :param filename: The file name
+        """
+        if path is None:
+            path = os.getcwd()
+        if filename is None:
+            filename = str(time.time()).split(".")[0] + ".png"
+        file_path = os.path.join(path, filename)
+        self.driver.save_screenshot(file_path)
 
     def switch_to_app(self):
         """
