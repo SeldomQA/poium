@@ -3,6 +3,7 @@ from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
+from common.exceptions import PageSelectException
 
 from appium.webdriver.common.mobileby import MobileBy
 
@@ -188,7 +189,7 @@ class PageSelect(object):
         elif index is not None:
             Select(select_elem).select_by_index(index)
         else:
-            raise ValueError('"value" or "text" or "index" options can not be all empty.')
+            raise PageSelectException('"value" or "text" or "index" options can not be all empty.')
 
 
 class PageWait(object):
