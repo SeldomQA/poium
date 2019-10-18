@@ -28,3 +28,17 @@ class PageSelectException(PoiumException):
     Thrown when using a select box error
     """
     pass
+
+
+class PageElementError(PoiumException):
+    """
+    Raises an error using the PagElement class
+    """
+    pass
+
+
+class FindElementTypesError(PoiumException):
+    """
+    Find element types Error
+    """
+    pass

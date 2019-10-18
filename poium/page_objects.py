@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 from common.exceptions import PageSelectException
+from common.exceptions import PageElementError
+from common.exceptions import FindElementTypesError
 
 from appium.webdriver.common.mobileby import MobileBy
 
@@ -108,7 +110,7 @@ class PageElement(object):
         try:
             self.locator = (LOCATOR_LIST[self.k], self.v)
         except KeyError:
-            raise KeyError("Please use a locator：'id_'、'name'、'class_name'、'css'、'xpath'、'link_text'、'partial_link_text'.")
+            raise FindElementTypesError("Element positioning of type '{}' is not supported. ".format(self.k))
         self.has_context = bool(context)
 
     def get_element(self, context):
@@ -146,10 +148,10 @@ class PageElement(object):
 
     def __set__(self, instance, value):
         if self.has_context:
-            raise ValueError("Sorry, the set descriptor doesn't support elements with context.")
+            raise PageElementError("Sorry, the set descriptor doesn't support elements with context.")
         elem = self.__get__(instance, instance.__class__)
         if not elem:
-            raise ValueError("Can't set value, element not found")
+            raise PageElementError("Can't set value, element not found")
         elem.send_keys(value)
 
 
@@ -170,10 +172,10 @@ class PageElements(PageElement):
 
     def __set__(self, instance, value):
         if self.has_context:
-            raise ValueError("Sorry, the set descriptor doesn't support elements with context.")
+            raise PageElementError("Sorry, the set descriptor doesn't support elements with context.")
         elems = self.__get__(instance, instance.__class__)
         if not elems:
-            raise ValueError("Can't set value, no elements found")
+            raise PageElementError("Can't set value, no elements found")
         [elem.send_keys(value) for elem in elems]
 
 
