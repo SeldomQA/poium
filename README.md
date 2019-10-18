@@ -109,6 +109,8 @@ driver.quit()
 
 请阅读 [wiki](https://github.com/defnngj/poium/wiki)
 
+poium在自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
+
 ## Project History
 
 参考项目：https://github.com/eeaston/page-objects
