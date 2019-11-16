@@ -23,7 +23,7 @@ class Page(PageObject):
             width = "0"
         if height is None:
             height = "0"
-        js = "window.scrollTo({w},{h});".format(w=width, h=height)
+        js = "window.scrollTo({w},{h});".format(w=str(width), h=(height))
         self.driver.execute_script(js)
 
     @property
