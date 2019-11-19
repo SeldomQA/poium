@@ -84,3 +84,17 @@ class PageElement(object):
         else:
             raise NameError("No corresponding element was found")
         driver(**self.kwargs).set_text(text=text)
+
+    def get_text(self):
+        """
+        get element text
+        """
+        global driver
+        for i in range(self.time_out):
+            if driver(**self.kwargs).exists:
+                break
+            else:
+                time.sleep(1)
+        else:
+            raise NameError("No corresponding element was found")
+        return driver(**self.kwargs).get_text()

@@ -7,7 +7,9 @@ LOCATOR_LIST = [
     "text",
     "nameContains",
     "label",
-    "labelContains"
+    "xpath",
+    "labelContains",
+    "className"
 ]
 
 
@@ -16,10 +18,57 @@ class Page(object):
     def __init__(self, dr):
         self.driver = dr
 
-    def native_resolution(self):
+    def bundle_id(self):
         """
-        获取屏幕原始分辨率
-        :return:
+        the session matched bundle id
+        """
+        return self.driver.bundle_id
+
+    def locked(self):
+        """
+        returns locked status, true or false
+        """
+        return self.driver.locked()
+
+    def lock(self):
+        """
+        Execute screen lock
+        """
+        return self.driver.lock()
+
+    def unlock(self):
+        """
+        unlock screen, double press home
+        """
+        return self.driver.unlock()
+
+    def battery_info(self):
+        """
+        Returns dict: (I do not known what it means)
+        """
+        return self.driver.battery_info()
+
+    def device_info(self):
+        """
+        Returns dict: (I do not known what it means)
+        """
+        return self.driver.device_info()
+
+    def app_current(self):
+        """
+        Current application information
+        """
+        return self.driver.app_current()
+
+    def set_clipboard(self):
+        """
+        set clipboard
+        """
+        self.driver.set_clipboard()
+
+    def window_size(self):
+        """
+        Gets the real resolution of the screen
         """
         multiple = self.driver.scale
         w, h = self.driver.window_size()
@@ -27,23 +76,9 @@ class Page(object):
 
     def close(self):
         """
-        关闭App
+        close App
         """
         self.driver.close()
-
-    def click(self, pos):
-        """
-        点击坐标
-        screenshots:
-            点击坐标前，是否截图
-        """
-        if type(pos) is not list:
-            raise ValueError("The argument must be a list")
-        elif type(pos[0]) is not float or type(pos[1]) is not float:
-            raise ValueError("The value of the list must be floating point")
-        elif pos[0] > 1 or pos[1] > 1:
-            raise ValueError
-        self.driver.click(pos[0], pos[1])
 
     def swipe(self, start, end, duration=0):
         """
