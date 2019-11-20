@@ -3,9 +3,9 @@ from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
-from common.exceptions import PageSelectException
-from common.exceptions import PageElementError
-from common.exceptions import FindElementTypesError
+from poium.common.exceptions import PageSelectException
+from poium.common.exceptions import PageElementError
+from poium.common.exceptions import FindElementTypesError
 
 from appium.webdriver.common.mobileby import MobileBy
 
