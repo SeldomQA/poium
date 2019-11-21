@@ -100,9 +100,9 @@ class PageElement(object):
     Page Elements act as property descriptors for their Page Object, you can get
     and set them as normal attributes.
     """
-    def __init__(self, context=False, timeout=5, debug=False, describe=None, **kwargs):
+    def __init__(self, context=False, timeout=4, log=False, describe="", **kwargs):
         self.time_out = timeout
-        self.debug = debug
+        self.log = log
         self.describe = describe
         if not kwargs:
             raise ValueError("Please specify a locator")
@@ -130,8 +130,8 @@ class PageElement(object):
 
     def find(self, context):
         for i in range(1, self.time_out):
-            if self.debug is True:
-                logger.debug("{desc}, {n} times search, {elm} ".format(desc=self.describe, n=i, elm=self.locator))
+            if self.log is True:
+                logger.info("{desc}, {n} times search, {elm} ".format(desc=self.describe, n=i, elm=self.locator))
             if self.get_element(context) is not None:
                 return self.get_element(context)
         else:
