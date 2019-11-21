@@ -1,3 +1,8 @@
+#### 0.5.2 version update
+
+* Increase log switch
+
+
 #### 0.5.1 version update
 
 * Adding new methods
