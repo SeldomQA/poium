@@ -3,6 +3,7 @@ import time
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import NoAlertPresentException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
 
 from .page_objects import PageObject
@@ -148,6 +149,18 @@ class Page(PageObject):
         Dismisses the alert available.
         """
         self.driver.switch_to.alert.dismiss()
+
+    def alert_is_display(self):
+        """
+        selenium API
+        Determines if alert is displayed
+        """
+        try:
+            self.driver.switch_to.alert
+        except NoAlertPresentException:
+            return False
+        else:
+            return True
 
     @property
     def get_alert_text(self):
