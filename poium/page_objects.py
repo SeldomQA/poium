@@ -86,13 +86,13 @@ class PageElement(object):
         Use this partial link text locator
     :param tag:    `str`
         Use this tag name locator
-    :param class_:    `str`
+    :param class_name:    `str`
         Use this class locator
     :param context: `bool`
         This element is expected to be called with context
     Page Elements are used to access elements on a page. The are constructed
     using this factory method to specify the locator for the element.
-        >> from page import Page, PageElement
+        >> from poium import Page, PageElement
         >> class MyPage(Page):
                 elem1 = PageElement(css='div.myclass')
                 elem2 = PageElement(id_='foo')
@@ -103,6 +103,7 @@ class PageElement(object):
     def __init__(self, context=False, timeout=5, debug=False, describe=None, **kwargs):
         self.time_out = timeout
         self.debug = debug
+        self.describe = describe
         if not kwargs:
             raise ValueError("Please specify a locator")
         if len(kwargs) > 1:
@@ -130,7 +131,7 @@ class PageElement(object):
     def find(self, context):
         for i in range(1, self.time_out):
             if self.debug is True:
-                logger.debug("{n} times search, {elm} ".format(n=i, elm=self.locator))
+                logger.debug("{desc}, {n} times search, {elm} ".format(desc=self.describe, n=i, elm=self.locator))
             if self.get_element(context) is not None:
                 return self.get_element(context)
         else:
