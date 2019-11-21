@@ -1,6 +1,5 @@
-## poium
 
-<img src="./poium_logo.gif"  height="150">
+![](logo.png)
 
 基于 selenium/appium 的 Page Objects 设计模式测试库。
 
