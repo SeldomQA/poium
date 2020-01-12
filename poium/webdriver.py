@@ -66,15 +66,8 @@ class Page(PageObject):
         selenium API
         Getting a handle to a new window.
         """
-        original_window = self.driver.current_window_handle
-        all_handles = self.driver.window_handles
-        for handle in all_handles:
-            if handle != original_window:
-                new_handle = handle
-                break
-        else:
-            new_handle = None
-        return new_handle
+        all_handle = self.window_handles
+        return all_handle[-1]
 
     @property
     def current_window_handle(self):
