@@ -106,6 +106,59 @@ class Page(PageObject):
         file_path = os.path.join(path, filename)
         self.driver.save_screenshot(file_path)
 
+    def get_cookies(self):
+        """
+        Returns a set of dictionaries, corresponding to cookies visible in the current session.
+        """
+        return self.driver.get_cookies()
+
+    def get_cookie(self, name):
+        """
+        Returns information of cookie with ``name`` as an object.
+        """
+        return self.driver.get_cookie(name)
+
+    def add_cookie(self, cookie_dict):
+        """
+        Adds a cookie to your current session.
+        Usage:
+            add_cookie({'name' : 'foo', 'value' : 'bar'})
+        """
+        if isinstance(cookie_dict, dict):
+            self.driver.add_cookie(cookie_dict)
+        else:
+            raise TypeError("Wrong cookie type.")
+
+    def add_cookies(self, cookie_list):
+        """
+        Adds a cookie to your current session.
+        Usage:
+            cookie_list = [
+                {'name' : 'foo', 'value' : 'bar'},
+                {'name' : 'foo', 'value' : 'bar'}
+            ]
+            add_cookie(cookie_list)
+        """
+        if isinstance(cookie_list, list):
+            for cookie in cookie_list:
+                self.add_cookie(cookie)
+        else:
+            raise TypeError("Wrong cookie type.")
+
+    def delete_cookie(self, name):
+        """
+        Deletes a single cookie with the given name.
+        """
+        self.driver.delete_cookie(name)
+
+    def delete_all_cookies(self):
+        """
+        Delete all cookies in the scope of the session.
+        Usage:
+            self.delete_all_cookies()
+        """
+        self.driver.delete_all_cookies()
+
     def switch_to_app(self):
         """
         appium API
