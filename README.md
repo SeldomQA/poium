@@ -19,7 +19,7 @@ pip install:
 If you want to keep up with the latest version, you can install with github repository url:
 
 ```shell
-> pip install -U git+https://github.com/defnngj/poium.git@master
+> pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
 ## Sample
