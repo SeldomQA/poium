@@ -59,14 +59,14 @@ class PageObject:
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
 
-    def run_script(self, js=None):
+    def run_script(self, js=None, *args):
         """
         run JavaScript script
         """
         if js is None:
             raise ValueError("Please input js script")
         else:
-            self.driver.execute_script(js)
+            self.driver.execute_script(js, *args)
 
 
 class PageElement(object):
