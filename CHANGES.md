@@ -1,3 +1,8 @@
+#### 0.5.3 version update
+
+* bug fix
+* add cookie api
+
 #### 0.5.2 version update
 
 * Increase log switch
