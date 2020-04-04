@@ -15,7 +15,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name='poium',
     version=version,
-    url='https://github.com/defnngj/poium',
+    url='https://github.com/SeldomQA/poium',
     license='BSD',
     author='fnngj',
     author_email='fnngj@126.com',
