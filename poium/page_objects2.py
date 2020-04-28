@@ -102,15 +102,15 @@ class PageElement(object):
         for i in range(self.timeout):
             elems = Browser.driver.find_elements(by=elem[0], value=elem[1])
             if len(elems) == 1:
-                print("Find element: {by}={value} ".format(by=elem[0], value=elem[1]))
+                logger.info("Find element: {by}={value} ".format(by=elem[0], value=elem[1]))
                 break
             elif len(elems) > 1:
-                print("Find {n} elements through：{by}={value}".format(n=len(elems), by=elem[0], value=elem[1]))
+                logger.warning("Find {n} elements through：{by}={value}".format(n=len(elems), by=elem[0], value=elem[1]))
                 break
             else:
                 time.sleep(1)
         else:
-            print("Find 0 elements through：{by}={value}".format(by=elem[0], value=elem[1]))
+            logger.warning("Find 0 elements through：{by}={value}".format(by=elem[0], value=elem[1]))
 
     def __get_element(self, by, value):
         """
