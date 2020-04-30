@@ -242,13 +242,16 @@ class NewPageElement(object):
             raise KeyError("Element positioning of type '{}' is not supported.".format(self.k))
 
     def __get__(self, instance, owner):
-
         if instance is None:
             return None
 
         Browser.driver = instance.driver
         return self
 
+    def __set__(self, instance, value):
+        self.__get__(instance, instance.__class__)
+        self.send_keys(value)
+    
     def __find_element(self, elem):
         """
         Find if the element exists.
