@@ -18,6 +18,7 @@
 # under the License.
 
 from .page_objects import PageElement
+from .page_objects import NewPageElement
 from .page_objects import PageElements
 from .page_objects import PageSelect
 from .page_objects import PageWait

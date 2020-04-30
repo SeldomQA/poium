@@ -36,7 +36,11 @@ LOCATOR_LIST = {
 }
 
 
-class PageObject:
+class Browser:
+    driver = None
+
+
+class PageObject(object):
     """
     Page Object pattern.
     """
@@ -219,3 +223,135 @@ class PageWait(object):
         else:
             raise TimeoutError("Timeout, element invisible")
 
+
+class NewPageElement(object):
+    """
+    new Page element class
+    """
+
+    def __init__(self, timeout=10, describe="undefined", index=0, **kwargs):
+        self.timeout = timeout
+        self.index = index
+        self.desc = describe
+        if not kwargs:
+            raise ValueError("Please specify a locator")
+        self.kwargs = kwargs
+        self.k, self.v = next(iter(kwargs.items()))
+
+        if self.k not in LOCATOR_LIST:
+            raise KeyError("Element positioning of type '{}' is not supported.".format(self.k))
+
+    def __get__(self, instance, owner):
+
+        if instance is None:
+            return None
+
+        Browser.driver = instance.driver
+        return self
+
+    def __find_element(self, elem):
+        """
+        Find if the element exists.
+        """
+        for i in range(self.timeout):
+            elems = Browser.driver.find_elements(by=elem[0], value=elem[1])
+            if len(elems) == 1:
+                break
+            elif len(elems) > 1:
+                logger.warning("Find {n} elements through：{by}={value}".format(n=len(elems), by=elem[0], value=elem[1]))
+                break
+            else:
+                sleep(1)
+        else:
+            logger.warning("Find 0 elements through：{by}={value}".format(by=elem[0], value=elem[1]))
+
+    def __get_element(self, by, value):
+        """
+        Judge element positioning way, and returns the element.
+        """
+
+        if by == "id_":
+            self.__find_element((By.ID, value))
+            elem = Browser.driver.find_elements_by_id(value)[self.index]
+        elif by == "name":
+            self.__find_element((By.NAME, value))
+            elem = Browser.driver.find_elements_by_name(value)[self.index]
+        elif by == "class_name":
+            self.__find_element((By.CLASS_NAME, value))
+            elem = Browser.driver.find_elements_by_class_name(value)[self.index]
+        elif by == "tag":
+            self.__find_element((By.TAG_NAME, value))
+            elem = Browser.driver.find_elements_by_tag_name(value)[self.index]
+        elif by == "link_text":
+            self.__find_element((By.LINK_TEXT, value))
+            elem = Browser.driver.find_elements_by_link_text(value)[self.index]
+        elif by == "partial_link_text":
+            self.__find_element((By.PARTIAL_LINK_TEXT, value))
+            elem = Browser.driver.find_elements_by_partial_link_text(value)[self.index]
+        elif by == "xpath":
+            self.__find_element((By.XPATH, value))
+            elem = Browser.driver.find_elements_by_xpath(value)[self.index]
+        elif by == "css":
+            self.__find_element((By.CSS_SELECTOR, value))
+            elem = Browser.driver.find_elements_by_css_selector(value)[self.index]
+        else:
+            raise FindElementTypesError(
+                "Please enter the correct targeting elements,'id_/name/class_name/tag/link_text/xpath/css'.")
+
+        style_red = 'arguments[0].style.border="2px solid red"'
+        Browser.driver.execute_script(style_red, elem)
+
+        return elem
+
+    def clear(self):
+        """Clears the text if it's a text entry element."""
+        elem = self.__get_element(self.k, self.v)
+        logger.info("clear element: {}".format(self.desc))
+        elem.clear()
+
+    def send_keys(self, value):
+        """
+        Simulates typing into the element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        logger.info("send_keys element: {}".format(self.desc))
+        elem.send_keys(value)
+
+    def click(self):
+        """Clicks the element."""
+        elem = self.__get_element(self.k, self.v)
+        logger.info("click element: {}".format(self.desc))
+        elem.click()
+
+    def submit(self):
+        """Submits a form."""
+        elem = self.__get_element(self.k, self.v)
+        elem.submit()
+
+    @property
+    def tag_name(self):
+        """This element's ``tagName`` property."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.tag_name
+
+    @property
+    def text(self):
+        """Clears the text if it's a text entry element."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.text
+
+    @property
+    def size(self):
+        """The size of the element."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.size
+
+    def get_attribute(self, name):
+        """Gets the given attribute or property of the element."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.get_attribute(name)
+
+    def is_displayed(self):
+        """Whether the element is visible to a user."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.is_displayed()
