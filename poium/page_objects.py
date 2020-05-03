@@ -229,17 +229,19 @@ class NewPageElement(object):
     new Page element class
     """
 
-    def __init__(self, timeout=10, describe="undefined", index=0, **kwargs):
+    def __init__(self, timeout=5, describe="undefined", index=0, **kwargs):
         self.timeout = timeout
         self.index = index
         self.desc = describe
         if not kwargs:
             raise ValueError("Please specify a locator")
+        if len(kwargs) > 1:
+            raise ValueError("Please specify only one locator")
         self.kwargs = kwargs
         self.k, self.v = next(iter(kwargs.items()))
 
-        if self.k not in LOCATOR_LIST:
-            raise KeyError("Element positioning of type '{}' is not supported.".format(self.k))
+        if self.k not in LOCATOR_LIST.keys():
+            raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
 
     def __get__(self, instance, owner):
         if instance is None:
