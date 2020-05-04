@@ -32,7 +32,7 @@ LOCATOR_LIST = {
     'ios_class_chain': MobileBy.IOS_CLASS_CHAIN,
     'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
     'android_viewtag': MobileBy.ANDROID_VIEWTAG,
-    'android_datamatcher': MobileBy.ANDROID_DATA_MATCHER,
+    'android_data_matcher': MobileBy.ANDROID_DATA_MATCHER,
     'accessibility_id': MobileBy.ACCESSIBILITY_ID,
     'image': MobileBy.IMAGE,
     'custom': MobileBy.CUSTOM,
@@ -286,6 +286,7 @@ class NewPageElement(object):
         Judge element positioning way, and returns the element.
         """
 
+        # selenium
         if by == "id_":
             self.__find_element((By.ID, value))
             elem = Browser.driver.find_elements_by_id(value)[self.index]
@@ -310,15 +311,42 @@ class NewPageElement(object):
         elif by == "css":
             self.__find_element((By.CSS_SELECTOR, value))
             elem = Browser.driver.find_elements_by_css_selector(value)[self.index]
+
+        # appium
+        elif by == "ios_uiautomation":
+            self.__find_element((MobileBy.IOS_UIAUTOMATION, value))
+            elem = Browser.driver.find_elements_by_ios_uiautomation(value)[self.index]
+        elif by == "ios_predicate":
+            self.__find_element((MobileBy.IOS_PREDICATE, value))
+            elem = Browser.driver.find_elements_by_ios_predicate(value)[self.index]
+        elif by == "ios_class_chain":
+            self.__find_element((MobileBy.IOS_CLASS_CHAIN, value))
+            elem = Browser.driver.find_elements_by_ios_class_chain(value)[self.index]
+        elif by == "android_uiautomator":
+            self.__find_element((MobileBy.ANDROID_UIAUTOMATOR, value))
+            elem = Browser.driver.find_elements_by_android_uiautomator(value)[self.index]
+        elif by == "android_viewtag":
+            self.__find_element((MobileBy.ANDROID_VIEWTAG, value))
+            elem = Browser.driver.find_elements_by_android_viewtag(value)[self.index]
+        elif by == "android_data_matcher":
+            self.__find_element((MobileBy.ANDROID_DATA_MATCHER, value))
+            elem = Browser.driver.find_elements_by_android_data_matcher(value)[self.index]
+        elif by == "accessibility_id":
+            self.__find_element((MobileBy.ACCESSIBILITY_ID, value))
+            elem = Browser.driver.find_elements_by_accessibility_id(value)[self.index]
+        elif by == "image":
+            self.__find_element((MobileBy.IMAGE, value))
+            elem = Browser.driver.find_elements_by_image(value)[self.index]
+        elif by == "custom":
+            self.__find_element((MobileBy.CUSTOM, value))
+            elem = Browser.driver.find_elements_by_custom(value)[self.index]
         else:
             raise FindElementTypesError(
-                "Please enter the correct targeting elements,'id_/name/class_name/tag/link_text/xpath/css'.")
+                "Please enter the correct targeting elements")
 
-        try:
+        if by in ["id_", "css", "name", "xpath", "link_text", "partial_link_text", "tag", "class_name"]:
             style_red = 'arguments[0].style.border="2px solid red"'
             Browser.driver.execute_script(style_red, elem)
-        except BaseException:
-            pass
 
         return elem
 
