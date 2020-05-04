@@ -197,6 +197,8 @@ class PageSelect(object):
     """
     Processing select drop-down selection box
     """
+    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
+
     def __init__(self, select_elem, value=None, text=None, index=None):
         if value is not None:
             Select(select_elem).select_by_value(value)
@@ -209,6 +211,8 @@ class PageSelect(object):
 
 
 class PageWait(object):
+
+    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
 
     def __init__(self, elm, timeout=3):
         """
@@ -437,3 +441,50 @@ class NewPageElement(object):
                 sleep(1)
         else:
             raise TimeoutError("stale element reference: element is not attached to the page document.")
+
+    def select_by_value(self, value):
+        """
+        selenium API
+        Select all options that have a value matching the argument. That is, when given "foo" this
+           would select an option like:
+
+           <option value="foo">Bar</option>
+
+           :Args:
+            - value - The value to match against
+
+           throws NoSuchElementException If there is no option with specisied value in SELECT
+        """
+        select_elem = self.__get_element(self.k, self.v)
+        Select(select_elem).select_by_value(value)
+
+    def select_by_index(self, text):
+        """
+        selenium API
+        Select the option at the given index. This is done by examing the "index" attribute of an
+           element, and not merely by counting.
+
+           :Args:
+            - index - The option at this index will be selected
+
+           throws NoSuchElementException If there is no option with specisied index in SELECT
+        """
+        select_elem = self.__get_element(self.k, self.v)
+        Select(select_elem).select_by_index(text)
+
+    def select_by_visible_text(self, text):
+        """
+        selenium API
+        Select all options that display text matching the argument. That is, when given "Bar" this
+           would select an option like:
+
+            <option value="foo">Bar</option>
+
+           :Args:
+            - text - The visible text to match against
+
+            throws NoSuchElementException If there is no option with specisied text in SELECT
+        """
+        select_elem = self.__get_element(self.k, self.v)
+        Select(select_elem).select_by_visible_text(text)
+
