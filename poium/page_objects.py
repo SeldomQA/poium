@@ -1,4 +1,5 @@
 import logging
+import warnings
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
@@ -106,6 +107,8 @@ class PageElement(object):
     Page Elements act as property descriptors for their Page Object, you can get
     and set them as normal attributes.
     """
+    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
+
     def __init__(self, context=False, timeout=4, log=False, describe="", **kwargs):
         self.time_out = timeout
         self.log = log
@@ -173,6 +176,8 @@ class PageElements(PageElement):
             elem2 = PageElement(id_='foo')
             elem_with_context = PageElement(tag='tr', context=True)
     """
+    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
+
     def find(self, context):
         try:
             return context.find_elements(*self.locator)
@@ -305,8 +310,11 @@ class NewPageElement(object):
             raise FindElementTypesError(
                 "Please enter the correct targeting elements,'id_/name/class_name/tag/link_text/xpath/css'.")
 
-        style_red = 'arguments[0].style.border="2px solid red"'
-        Browser.driver.execute_script(style_red, elem)
+        try:
+            style_red = 'arguments[0].style.border="2px solid red"'
+            Browser.driver.execute_script(style_red, elem)
+        except BaseException:
+            pass
 
         return elem
 
