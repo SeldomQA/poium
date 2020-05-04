@@ -11,12 +11,15 @@ driver = webdriver.Chrome()
 
 page = BaiduPage(driver)
 page.get("https://www.baidu.com")
-page.login_button.click()
-page.register_link.click()
 
 # 当前窗口句柄
 current_handler = page.current_window_handle
 print(current_handler)
+
+# 打开新的注册窗口
+page.login_button.click()
+page.register_link.click()
+
 # 新窗口句柄
 new_handler = page.new_window_handle
 print(new_handler)

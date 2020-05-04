@@ -1,4 +1,5 @@
-from poium import Page, PageSelect, PageElement
+from poium import Page, PageSelect
+from poium import NewPageElement as PageElement
 from time import sleep
 
 
@@ -16,7 +17,7 @@ def test_select(browser):
     page = SelectPage(browser)
 
     page.get("http://www.w3school.com.cn/tiy/t.asp?f=html_select")
-    page.switch_to_frame(page.frame)
+    page.frame.switch_to_frame()
     PageSelect(page.elm, value="saab")
     sleep(2)
     PageSelect(page.elm, index=2)

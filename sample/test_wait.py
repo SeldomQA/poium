@@ -1,4 +1,4 @@
-from poium import Page, PageWait, PageElement
+from poium import Page, PageWait, NewPageElement as PageElement
 
 
 class MailPage(Page):
@@ -16,7 +16,7 @@ def test_page_wait(browser):
     page.get("https://mail.qq.com")
 
     PageWait(page.frame)
-    page.switch_to_frame(page.frame)
+    page.frame.switch_to_frame()
 
     PageWait(page.user)
     page.user.send_keys("user")
