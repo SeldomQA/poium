@@ -22,18 +22,23 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
+__说明__
+
+> 在 `0.6.0` 版本提供了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+
+
 ## Sample
 
 支持Selenium的例子。
 
 ```python
-from poium import Page, PageElement
+from poium import Page, NewPageElement
 from selenium import webdriver
 
 
 class BaiduIndexPage(Page):
-    search_input = PageElement(name='wd')
-    search_button = PageElement(id_='su')
+    search_input = NewPageElement(name='wd')
+    search_button = NewPageElement(id_='su')
 
 
 driver = webdriver.Chrome()
@@ -73,14 +78,14 @@ driver.quit()
 支持appium的例子。
 
 ```python
-from poium import Page, PageElement
+from poium import Page, NewPageElement
 from appium import webdriver
 
 class CalculatorPage(Page):
-    number_1 = PageElement(id_="com.android.calculator2:id/digit_1")
-    number_2 = PageElement(id_="com.android.calculator2:id/digit_2")
-    add = PageElement(id_="com.android.calculator2:id/op_add")
-    eq = PageElement(id_="com.android.calculator2:id/eq")
+    number_1 = NewPageElement(id_="com.android.calculator2:id/digit_1")
+    number_2 = NewPageElement(id_="com.android.calculator2:id/digit_2")
+    add = NewPageElement(id_="com.android.calculator2:id/op_add")
+    eq = NewPageElement(id_="com.android.calculator2:id/eq")
 
 # APP定义运行环境
 desired_caps = {

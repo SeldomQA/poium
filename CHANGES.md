@@ -1,3 +1,7 @@
+#### 0.6.0 version update
+
+* 增加 NewPageElement类，不向后兼容。
+
 #### 0.5.3 version update
 
 * bug fix
