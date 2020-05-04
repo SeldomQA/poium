@@ -393,6 +393,13 @@ class NewPageElement(object):
         elem = self.__get_element(self.k, self.v)
         return elem.size
 
+    def get_property(self, name):
+        """
+        Gets the given property of the element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        return elem.get_property(name)
+
     def get_attribute(self, name):
         """Gets the given attribute or property of the element."""
         elem = self.__get_element(self.k, self.v)
@@ -402,6 +409,19 @@ class NewPageElement(object):
         """Whether the element is visible to a user."""
         elem = self.__get_element(self.k, self.v)
         return elem.is_displayed()
+
+    def is_selected(self):
+        """Returns whether the element is selected.
+
+        Can be used to check if a checkbox or radio button is selected.
+        """
+        elem = self.__get_element(self.k, self.v)
+        return elem.is_selected()
+
+    def is_enabled(self):
+        """Returns whether the element is enabled."""
+        elem = self.__get_element(self.k, self.v)
+        return elem.is_selected()
 
     def switch_to_frame(self):
         """
@@ -516,3 +536,31 @@ class NewPageElement(object):
         select_elem = self.__get_element(self.k, self.v)
         Select(select_elem).select_by_visible_text(text)
 
+    def set_text(self, keys):
+        """
+        appium API
+        Sends text to the element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        elem.set_text(keys)
+        return self
+
+    @property
+    def location_in_view(self):
+        """
+        appium API
+        Gets the location of an element relative to the view.
+        Returns:
+            dict: The location of an element relative to the view
+        """
+        elem = self.__get_element(self.k, self.v)
+        return elem.location_in_view()
+
+    def set_value(self, value):
+        """
+        appium API
+        Set the value on this element in the application
+        """
+        elem = self.__get_element(self.k, self.v)
+        elem.set_value(value)
+        return self
