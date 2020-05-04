@@ -2,7 +2,9 @@ import logging
 from time import sleep
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 from poium.common.exceptions import PageSelectException
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
@@ -360,3 +362,70 @@ class NewPageElement(object):
         """Whether the element is visible to a user."""
         elem = self.__get_element(self.k, self.v)
         return elem.is_displayed()
+
+    def switch_to_frame(self):
+        """
+        selenium API
+        Switches focus to the specified frame
+        """
+        elem = self.__get_element(self.k, self.v)
+        Browser.driver.switch_to.frame(elem)
+
+    def move_to_element(self):
+        """
+        selenium API
+        Moving the mouse to the middle of an element
+        """
+        elem = self.__get_element(self.k, self.v)
+        ActionChains(Browser.driver).move_to_element(elem).perform()
+
+    def click_and_hold(self):
+        """
+        selenium API
+        Holds down the left mouse button on an element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        ActionChains(Browser.driver).click_and_hold(elem).perform()
+
+    def context_click(self):
+        """
+        selenium API
+        Performs a context-click (right click) on an element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        ActionChains(Browser.driver).context_click(elem).perform()
+
+    def drag_and_drop_by_offset(self, x, y):
+        """
+        selenium API
+        Holds down the left mouse button on the source element,
+           then moves to the target offset and releases the mouse button.
+        :param x: X offset to move to.
+        :param y: Y offset to move to.
+        """
+        elem = self.__get_element(self.k, self.v)
+        ActionChains(Browser.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
+
+    def refresh_element(self, timeout=10):
+        """
+        selenium API
+        Refreshes the current page, retrieve elements.
+        """
+        try:
+            timeout_int = int(timeout)
+        except TypeError:
+            raise ValueError("Type 'timeout' error, must be type int() ")
+
+        elem = self.__get_element(self.k, self.v)
+        for i in range(timeout_int):
+            if elem is not None:
+                try:
+                    elem
+                except StaleElementReferenceException:
+                    Browser.driver.refresh()
+                else:
+                    break
+            else:
+                sleep(1)
+        else:
+            raise TimeoutError("stale element reference: element is not attached to the page document.")

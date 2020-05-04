@@ -1,5 +1,6 @@
 import os
 import time
+import warnings
 from time import sleep
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
@@ -50,6 +51,8 @@ class Page(PageObject):
         selenium API
         Switches focus to the specified frame, by id, name, or webelement.
         """
+        warnings.warn("use driver.elem.switch_to_frame() instead",
+                      DeprecationWarning, stacklevel=2)
         self.driver.switch_to.frame(frame_reference)
 
     def switch_to_parent_frame(self):
@@ -221,6 +224,8 @@ class Page(PageObject):
         selenium API
         Moving the mouse to the middle of an element
         """
+        warnings.warn("use driver.elem.move_to_element() instead",
+                      DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).move_to_element(elem).perform()
 
     def click_and_hold(self, elem):
@@ -228,6 +233,8 @@ class Page(PageObject):
         selenium API
         Holds down the left mouse button on an element.
         """
+        warnings.warn("use driver.elem.click_and_hold() instead",
+                      DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).click_and_hold(elem).perform()
 
     def move_by_offset(self, x, y):
@@ -253,6 +260,8 @@ class Page(PageObject):
         selenium API
         Performs a context-click (right click) on an element.
         """
+        warnings.warn("use driver.elem.context_click() instead",
+                      DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).context_click(elem).perform()
 
     def drag_and_drop_by_offset(self, elem, x, y):
@@ -264,6 +273,8 @@ class Page(PageObject):
         :param x: X offset to move to.
         :param y: Y offset to move to.
         """
+        warnings.warn("use driver.elem.drag_and_drop_by_offset(x, y) instead",
+                      DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
 
     def refresh_element(self, elem, timeout=10):
@@ -271,6 +282,8 @@ class Page(PageObject):
         selenium API
         Refreshes the current page, retrieve elements.
         """
+        warnings.warn("use driver.elem.refresh_element() instead",
+                      DeprecationWarning, stacklevel=2)
         try:
             timeout_int = int(timeout)
         except TypeError:
