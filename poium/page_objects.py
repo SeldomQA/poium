@@ -6,6 +6,7 @@ from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import WebDriverException
 from poium.common.exceptions import PageSelectException
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
@@ -33,6 +34,8 @@ LOCATOR_LIST = {
     'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
     'android_viewtag': MobileBy.ANDROID_VIEWTAG,
     'android_data_matcher': MobileBy.ANDROID_DATA_MATCHER,
+    'android_view_matcher': MobileBy.ANDROID_VIEW_MATCHER,
+    'windows_uiautomation': MobileBy.WINDOWS_UI_AUTOMATION,
     'accessibility_id': MobileBy.ACCESSIBILITY_ID,
     'image': MobileBy.IMAGE,
     'custom': MobileBy.CUSTOM,
@@ -334,6 +337,12 @@ class NewPageElement(object):
         elif by == "accessibility_id":
             self.__find_element((MobileBy.ACCESSIBILITY_ID, value))
             elem = Browser.driver.find_elements_by_accessibility_id(value)[self.index]
+        elif by == "android_view_matcher":
+            self.__find_element((MobileBy.ANDROID_VIEW_MATCHER, value))
+            elem = Browser.driver.find_elements_by_android_view_matcher(value)[self.index]
+        elif by == "windows_uiautomation":
+            self.__find_element((MobileBy.WINDOWS_UI_AUTOMATION, value))
+            elem = Browser.driver.find_elements_by_windows_uiautomation(value)[self.index]
         elif by == "image":
             self.__find_element((MobileBy.IMAGE, value))
             elem = Browser.driver.find_elements_by_image(value)[self.index]
@@ -343,10 +352,11 @@ class NewPageElement(object):
         else:
             raise FindElementTypesError(
                 "Please enter the correct targeting elements")
-
-        if by in ["id_", "css", "name", "xpath", "link_text", "partial_link_text", "tag", "class_name"]:
+        try:
             style_red = 'arguments[0].style.border="2px solid red"'
             Browser.driver.execute_script(style_red, elem)
+        except WebDriverException:
+            pass
 
         return elem
 
