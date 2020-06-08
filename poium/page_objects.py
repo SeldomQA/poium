@@ -1,4 +1,3 @@
-import logging
 import warnings
 from time import sleep
 from selenium.webdriver.common.by import By
@@ -7,14 +6,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
+from appium.webdriver.common.mobileby import MobileBy
 from poium.common.exceptions import PageSelectException
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
+from poium.common import logging
 
-from appium.webdriver.common.mobileby import MobileBy
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -143,7 +140,7 @@ class PageElement(object):
     def find(self, context):
         for i in range(1, self.time_out):
             if self.log is True:
-                logger.info("{desc}, {n} times search, {elm} ".format(desc=self.describe, n=i, elm=self.locator))
+                logging.info("{desc}, {n} times search, {elm} ".format(desc=self.describe, n=i, elm=self.locator))
             if self.get_element(context) is not None:
                 return self.get_element(context)
         else:
@@ -267,7 +264,7 @@ class NewPageElement(object):
     def __set__(self, instance, value):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
-    
+
     def __find_element(self, elem):
         """
         Find if the element exists.
@@ -275,14 +272,19 @@ class NewPageElement(object):
         for i in range(self.timeout):
             elems = Browser.driver.find_elements(by=elem[0], value=elem[1])
             if len(elems) == 1:
+                logging.info("✅ Find element: {by}={value} ".format(
+                    by=elem[0], value=elem[1]))
                 break
             elif len(elems) > 1:
-                logger.warning("Find {n} elements through：{by}={value}".format(n=len(elems), by=elem[0], value=elem[1]))
+                logging.info("❓ Find {n} elements through: {by}={value}".format(
+                    n=len(elems), by=elem[0], value=elem[1]))
                 break
             else:
                 sleep(1)
         else:
-            logger.warning("Find 0 elements through：{by}={value}".format(by=elem[0], value=elem[1]))
+            error_msg = "❌ Find 0 elements through: {by}={value}".format(by=elem[0], value=elem[1])
+            logging.error(error_msg)
+            raise NoSuchElementException(error_msg)
 
     def __get_element(self, by, value):
         """
@@ -363,7 +365,7 @@ class NewPageElement(object):
     def clear(self):
         """Clears the text if it's a text entry element."""
         elem = self.__get_element(self.k, self.v)
-        logger.info("clear element: {}".format(self.desc))
+        logging.info("clear element: {}".format(self.desc))
         elem.clear()
 
     def send_keys(self, value):
@@ -371,18 +373,19 @@ class NewPageElement(object):
         Simulates typing into the element.
         """
         elem = self.__get_element(self.k, self.v)
-        logger.info("send_keys element: {}".format(self.desc))
+        logging.info("🖋 input element: {}".format(self.desc))
         elem.send_keys(value)
 
     def click(self):
         """Clicks the element."""
         elem = self.__get_element(self.k, self.v)
-        logger.info("click element: {}".format(self.desc))
+        logging.info("🖱 click element: {}".format(self.desc))
         elem.click()
 
     def submit(self):
         """Submits a form."""
         elem = self.__get_element(self.k, self.v)
+        logging.info("submit element: {}".format(self.desc))
         elem.submit()
 
     @property

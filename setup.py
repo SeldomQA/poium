@@ -26,7 +26,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=['selenium>=3.14.1',
-                      'Appium-Python-Client==1.0.1'],
+                      'Appium-Python-Client==1.0.1',
+                      'colorama>=0.4.3'],
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X',
