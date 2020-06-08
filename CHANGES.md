@@ -1,3 +1,7 @@
+#### 0.6.2 version update
+* 通过 colorama 实现log打印
+* 执行增加元素高亮
+
 #### 0.6.0 version update
 
 * 增加 NewPageElement类，不向后兼容。
