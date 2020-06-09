@@ -16,6 +16,15 @@ class Page(PageObject):
     and selenium/appium extension APIs。
     """
 
+    def execute_script(self, js=None, *args):
+        """
+        Execute JavaScript scripts.
+        """
+        if js is None:
+            raise ValueError("Please input js script")
+        
+        return self.driver.execute_script(js, *args)
+
     def window_scroll(self, width=None, height=None):
         """
         JavaScript API, Only support css positioning
@@ -26,7 +35,7 @@ class Page(PageObject):
         if height is None:
             height = "0"
         js = "window.scrollTo({w},{h});".format(w=str(width), h=(height))
-        self.driver.execute_script(js)
+        self.execute_script(js)
 
     @property
     def get_title(self):
@@ -35,7 +44,7 @@ class Page(PageObject):
         Get page title.
         """
         js = 'return document.title;'
-        return self.driver.execute_script(js)
+        return self.execute_script(js)
 
     @property
     def get_url(self):
@@ -44,7 +53,7 @@ class Page(PageObject):
         Get page URL.
         """
         js = "return document.URL;"
-        return self.driver.execute_script(js)
+        return self.execute_script(js)
 
     def switch_to_frame(self, frame_reference):
         """

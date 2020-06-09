@@ -70,6 +70,8 @@ class PageObject(object):
         """
         run JavaScript script
         """
+        warnings.warn("use execute_script instead",
+                      DeprecationWarning, stacklevel=2)
         if js is None:
             raise ValueError("Please input js script")
         else:
@@ -107,9 +109,9 @@ class PageElement(object):
     Page Elements act as property descriptors for their Page Object, you can get
     and set them as normal attributes.
     """
-    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
 
     def __init__(self, context=False, timeout=4, log=False, describe="", **kwargs):
+        warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
         self.time_out = timeout
         self.log = log
         self.describe = describe
