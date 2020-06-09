@@ -26,10 +26,9 @@ __说明__
 
 > 在 `0.6.0` 版本提供了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
 
-
 ## Sample
 
-支持Selenium的例子。
+#### Selenium的使用（selenium API）
 
 ```python
 from poium import Page, NewPageElement
@@ -51,8 +50,11 @@ page.search_button.click()
 
 driver.quit()
 ```
+* [selenium](https://pypi.org/project/selenium/)
 
-还提供了一套JavaScript封装的API。
+#### Selenium的使用（JavaScript API）
+
+poium还提供了一套JavaScript封装的API。
 
 ```python
 from poium import Page, CSSElement
@@ -74,6 +76,10 @@ page.search_button.click()
 
 driver.quit()
 ```
+* 只支持 `css` 定位，所以不需要指定定位方式。
+* 更多的元素操作，例如：`remove_attribute()` 、 `clear_style()` ... 等。
+
+#### appium的使用
 
 支持appium的例子。
 
@@ -107,13 +113,15 @@ page.eq.click()
 driver.quit()
 ```
 
-使用poium将元素 __定位__ 与 __操作__ 分离，这将会非常有助于规模化自动化测试用例的编写与维护。
+* [appium](https://pypi.org/project/Appium-Python-Client/)
 
 ## Documentation
 
 请阅读 [wiki](https://github.com/defnngj/poium/wiki)
 
-poium在自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
+* 在基于pytest的自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
+
+* 在基于seldom自动化测试框架的应用，请点击[这里](https://github.com/SeldomQA/seldom) 。
 
 ## Project History
 
