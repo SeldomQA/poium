@@ -1,8 +1,10 @@
 import warnings
+import platform
 from time import sleep
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
@@ -178,8 +180,6 @@ class PageElements(PageElement):
             elem2 = PageElement(id_='foo')
             elem_with_context = PageElement(tag='tr', context=True)
     """
-    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
-
     def find(self, context):
         try:
             return context.find_elements(*self.locator)
@@ -199,9 +199,9 @@ class PageSelect(object):
     """
     Processing select drop-down selection box
     """
-    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
 
     def __init__(self, select_elem, value=None, text=None, index=None):
+        warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
         if value is not None:
             Select(select_elem).select_by_value(value)
         elif text is not None:
@@ -214,9 +214,8 @@ class PageSelect(object):
 
 class PageWait(object):
 
-    warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
-
     def __init__(self, elm, timeout=3):
+        warnings.warn("use NewPageElement instead", DeprecationWarning, stacklevel=2)
         """
         wait webelement display
         """
@@ -589,3 +588,55 @@ class NewPageElement(object):
         elem = self.__get_element(self.k, self.v)
         elem.set_value(value)
         return self
+
+    def input(self, text=""):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(text)
+
+    def enter(self):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(Keys.ENTER)
+
+    def select_all(self):
+        elem = self.__get_element(self.k, self.v)
+        if platform.system().lower() == "darwin":
+            elem.send_keys(Keys.COMMAND, "a")
+        else:
+            elem.send_keys(Keys.CONTROL, "a")
+
+    def cut(self):
+        elem = self.__get_element(self.k, self.v)
+        if platform.system().lower() == "darwin":
+            elem.send_keys(Keys.COMMAND, "x")
+        else:
+            elem.send_keys(Keys.CONTROL, "x")
+
+    def copy(self):
+        elem = self.__get_element(self.k, self.v)
+        if platform.system().lower() == "darwin":
+            elem.send_keys(Keys.COMMAND, "c")
+        else:
+            elem.send_keys(Keys.CONTROL, "c")
+
+    def paste(self):
+        elem = self.__get_element(self.k, self.v)
+        if platform.system().lower() == "darwin":
+            elem.send_keys(Keys.COMMAND, "v")
+        else:
+            elem.send_keys(Keys.CONTROL, "v")
+
+    def backspace(self):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(Keys.BACKSPACE)
+
+    def delete(self):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(Keys.DELETE)
+
+    def tab(self):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(Keys.TAB)
+
+    def space(self):
+        elem = self.__get_element(self.k, self.v)
+        elem.send_keys(Keys.SPACE)
