@@ -30,6 +30,3 @@ def test_switch_windows(browser):
     page.switch_to_window(current_handler)
     page.switch_to_window(new_handler)
 
-    browser.quit()
-
-
