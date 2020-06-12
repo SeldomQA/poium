@@ -1,3 +1,6 @@
+#### 0.6.3 version update
+* add keys  操作
+
 #### 0.6.2 version update
 * 通过 colorama 实现log打印
 * 执行增加元素高亮
