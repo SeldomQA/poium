@@ -445,7 +445,7 @@ class NewPageElement(object):
     def is_enabled(self):
         """Returns whether the element is enabled."""
         elem = self.__get_element(self.k, self.v)
-        return elem.is_selected()
+        return elem.is_enabled()
 
     def switch_to_frame(self):
         """
