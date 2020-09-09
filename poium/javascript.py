@@ -146,3 +146,14 @@ class CSSElement(object):
         js = """var elm = document.querySelector("{css}");
                     elm.removeChild(elm.childNodes[{index}]);""".format(css=self.css, index=str(index))
         driver.execute_script(js)
+
+    def click_parent(self, index=0):
+        """
+        JavaScript API, Only support css positioning
+        Click the parent element of the element
+        """
+        logging.info(
+            "Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{i}];
+                    elm.parentElement.click();""".format(css=self.css, i=str(index))
+        driver.execute_script(js)
