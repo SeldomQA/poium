@@ -132,22 +132,22 @@ class CSSElement(object):
         :param text: Inserted text
         """
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                     elm.innerText="{text}";""".format(css=self.css, index=self.index, text=text)
+        js = """var elm = document.querySelectorAll("{css}")[{i}];
+                     elm.innerText="{text}";""".format(css=self.css, i=self.index, text=text)
         driver.execute_script(js)
 
-    def remove_child(self, index=0):
+    def remove_child(self, child=0):
         """
         JavaScript API, Only support css positioning
         Remove a node from the child node list
-        :param index: Index of the child node
+        :param child: child of the child node
         """
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelector("{css}");
-                    elm.removeChild(elm.childNodes[{index}]);""".format(css=self.css, index=str(index))
+        js = """var elm = document.querySelectorAll("{css}")[{i}];
+                    elm.removeChild(elm.childNodes[{child}]);""".format(css=self.css, i=self.index, child=str(child))
         driver.execute_script(js)
 
-    def click_parent(self, index=0):
+    def click_parent(self):
         """
         JavaScript API, Only support css positioning
         Click the parent element of the element
@@ -155,5 +155,5 @@ class CSSElement(object):
         logging.info(
             "Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.parentElement.click();""".format(css=self.css, i=str(index))
+                    elm.parentElement.click();""".format(css=self.css, i=self.index)
         driver.execute_script(js)
