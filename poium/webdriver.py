@@ -246,6 +246,15 @@ class Page(PageObject):
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).click_and_hold(elem).perform()
 
+    def double_click(self, elem):
+        """
+        selenium API
+        Double-clicks an element.
+        """
+        warnings.warn("use driver.elem.double_click() instead",
+                      DeprecationWarning, stacklevel=2)
+        ActionChains(self.driver).double_click(elem).perform()
+
     def move_by_offset(self, x, y):
         """
         selenium API

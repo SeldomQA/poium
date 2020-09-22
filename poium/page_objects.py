@@ -471,6 +471,14 @@ class NewPageElement(object):
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).click_and_hold(elem).perform()
 
+    def double_click(self):
+        """
+        selenium API
+        Holds down the left mouse button on an element.
+        """
+        elem = self.__get_element(self.k, self.v)
+        ActionChains(Browser.driver).double_click(elem).perform()
+
     def context_click(self):
         """
         selenium API
