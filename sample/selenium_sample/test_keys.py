@@ -6,7 +6,7 @@ class BaiduIndexPage(Page):
     search_input = NewPageElement(name='wd', describe="搜索框")
 
 
-def test_keys(browser)
+def test_keys(browser):
     page = BaiduIndexPage(browser)
     page.get("https://www.baidu.com")
 
