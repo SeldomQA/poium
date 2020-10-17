@@ -22,13 +22,15 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-__说明__
+## 版本说明
 
 > 在 `0.6.0` 版本提供了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
 
+具体差异[参考](./docs/base.md)
+
 ## Sample
 
-#### Selenium的使用（selenium API）
+### Selenium的使用（selenium API）
 
 ```python
 from poium import Page, NewPageElement
@@ -50,9 +52,10 @@ page.search_button.click()
 
 driver.quit()
 ```
+
 * [selenium](https://pypi.org/project/selenium/)
 
-#### Selenium的使用（JavaScript API）
+### Selenium的使用（JavaScript API）
 
 poium还提供了一套JavaScript封装的API。
 
@@ -76,10 +79,11 @@ page.search_button.click()
 
 driver.quit()
 ```
+
 * 只支持 `css` 定位，所以不需要指定定位方式。
 * 更多的元素操作，例如：`remove_attribute()` 、 `clear_style()` ... 等。
 
-#### appium的使用
+### appium的使用
 
 支持appium的例子。
 
