@@ -157,3 +157,20 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.parentElement.click();""".format(css=self.css, i=self.index)
         driver.execute_script(js)
+
+    def scroll(self, top=0, left=0):
+        """
+        JavaScript API, Only support css positioning
+        scroll the div element on the page
+        """
+        logging.info(
+            "Element of the current operation: {desc}".format(desc=self.desc))
+        if top is not 0:
+            js = """var elm = document.querySelectorAll("{css}")[{i}];
+                        elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
+            driver.execute_script(js)
+        if left is not 0:
+            js = """var elm = document.querySelectorAll("{css}")[{i}];
+                        elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
+
+            driver.execute_script(js)

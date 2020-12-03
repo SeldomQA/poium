@@ -1,4 +1,4 @@
-from poium import Page, CSSElement
+from poium import Page, CSSElement, NewPageElement
 from time import sleep
 
 
@@ -15,9 +15,14 @@ class SoPage(Page):
     search = CSSElement("#search-button", describe="搜索按钮")
 
 
+class RunoobPage(Page):
+    iframe = NewPageElement(css="#iframeResult")
+    div = CSSElement("html > body > div")
+
+
 def test_clear_input_click(browser):
     """
-    清除\输入\点击
+    清除/输入/点击
     :param browser: 浏览器驱动
     :return:
     """
@@ -85,3 +90,15 @@ def test_clear_class(browser):
     page.search.clear_class()
     sleep(5)
 
+
+def test_scroll(browser):
+    """
+    测试操作页面内嵌滚动条
+    :param browser: 浏览器驱动
+    :return:
+    """
+    page = RunoobPage(browser)
+    page.get("https://www.runoob.com/try/try.php?filename=tryjsref_onscroll")
+    page.iframe.switch_to_frame()
+    page.div.scroll(top=100)
+    sleep(5)
