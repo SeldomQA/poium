@@ -42,3 +42,10 @@ class FindElementTypesError(PoiumException):
     Find element types Error
     """
     pass
+
+
+class CSSFindElementError(PoiumException):
+    """
+    Find element types Error
+    """
+    pass

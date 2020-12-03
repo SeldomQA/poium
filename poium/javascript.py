@@ -1,4 +1,6 @@
 from poium.common import logging
+from poium.common.exceptions import CSSFindElementError
+from selenium.common.exceptions import JavascriptException
 
 
 class CSSElement(object):
@@ -28,15 +30,25 @@ class CSSElement(object):
         driver = instance.driver
         return self
 
+    def _execute_javascript(self, js):
+        """
+        Run the javascript script
+        """
+        try:
+            driver.execute_script(js)
+        except JavascriptException:
+            raise CSSFindElementError("Element discovery failure. ", js)
+
     def clear(self):
         """
         JavaScript API, Only support css positioning
         Clears the text if it's a text entry element, Only support css positioning
         """
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style.border="2px solid red";
                     elm.value = "";""".format(css=self.css, index=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def set_text(self, value):
         """
@@ -48,7 +60,7 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style.border="2px solid red";
                     elm.value = "{value}";""".format(css=self.css, index=self.index, value=value)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def click(self):
         """
@@ -59,7 +71,7 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                    elm.style.border="2px solid red";
                    elm.click();""".format(css=self.css, index=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def click_display(self):
         """
@@ -69,7 +81,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = 'var elm = document.querySelector("' + self.css + '");' \
              ' if(elm != null){elm.style.border="2px solid red";elm.click();}'
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def display(self):
         """
@@ -79,7 +91,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style.display = "block";""".format(css=self.css, index=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def remove_attribute(self, attribute):
         """
@@ -90,7 +102,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.removeAttribute("{attr}");""".format(css=self.css, index=self.index, attr=attribute)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def set_attribute(self, attribute, value):
         """
@@ -103,7 +115,7 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.setAttribute("{attr}", "{value}");
                     """.format(css=self.css, index=self.index, attr=attribute, value=value)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def clear_style(self):
         """
@@ -113,7 +125,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                     elm.style="";""".format(css=self.css, index=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def clear_class(self):
         """
@@ -123,7 +135,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{index}];
                      elm.removeAttribute("class");""".format(css=self.css, index=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def inner_text(self, text):
         """
@@ -134,7 +146,7 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                      elm.innerText="{text}";""".format(css=self.css, i=self.index, text=text)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def remove_child(self, child=0):
         """
@@ -145,43 +157,40 @@ class CSSElement(object):
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.removeChild(elm.childNodes[{child}]);""".format(css=self.css, i=self.index, child=str(child))
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def click_parent(self):
         """
         JavaScript API, Only support css positioning
         Click the parent element of the element
         """
-        logging.info(
-            "Element of the current operation: {desc}".format(desc=self.desc))
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.parentElement.click();""".format(css=self.css, i=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
 
     def scroll(self, top=0, left=0):
         """
         JavaScript API, Only support css positioning
         scroll the div element on the page
         """
-        logging.info(
-            "Element of the current operation: {desc}".format(desc=self.desc))
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         if top is not 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
-                        elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
-            driver.execute_script(js)
+                    elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
+            self._execute_javascript(js)
         if left is not 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
-                        elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
-
-            driver.execute_script(js)
+                    elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
+            self._execute_javascript(js)
 
     def move_to(self):
         """
         JavaScript API, Only support css positioning
         Move the mouse over the element
         """
-        logging.info(
-            "Element of the current operation: {desc}".format(desc=self.desc))
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
-        driver.execute_script(js)
+        self._execute_javascript(js)
+
