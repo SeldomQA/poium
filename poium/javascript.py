@@ -174,3 +174,14 @@ class CSSElement(object):
                         elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
 
             driver.execute_script(js)
+
+    def move_to(self):
+        """
+        JavaScript API, Only support css positioning
+        Move the mouse over the element
+        """
+        logging.info(
+            "Element of the current operation: {desc}".format(desc=self.desc))
+        js = """var elm = document.querySelectorAll("{css}")[{i}];
+                    elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
+        driver.execute_script(js)

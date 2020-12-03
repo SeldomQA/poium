@@ -8,6 +8,7 @@ class BaiduPage(Page):
     icp = CSSElement("#cp", describe="备案信息")
     search_key = CSSElement(".res-gap-right16", describe="")
     setting_dropdown_box = CSSElement("#s_user_name_menu", describe="设置下拉框")
+    setting = CSSElement("#s-usersetting-top", describe="设置")
 
 
 class SoPage(Page):
@@ -18,6 +19,19 @@ class SoPage(Page):
 class RunoobPage(Page):
     iframe = NewPageElement(css="#iframeResult")
     div = CSSElement("html > body > div")
+
+
+def test_move_to(browser):
+    """
+    鼠标悬停到元素上
+    :param browser: 浏览器驱动
+    :return:
+    """
+    page = BaiduPage(browser)
+    page.get("https://www.baidu.com")
+    page.set_window_size()
+    page.setting.move_to()
+    sleep(5)
 
 
 def test_clear_input_click(browser):

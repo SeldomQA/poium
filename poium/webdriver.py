@@ -55,6 +55,23 @@ class Page(PageObject):
         js = "return document.URL;"
         return self.execute_script(js)
 
+    def set_window_size(self, width=None, height=None):
+        """
+        selenium API
+        Sets the width and height of the current window.
+
+        :Args:
+         - width: the width in pixels to set the window to
+         - height: the height in pixels to set the window to
+
+        :Usage:
+            driver.set_window_size(800,600)
+        """
+        if width is None and height is None:
+            self.driver.maximize_window()
+        else:
+            self.driver.set_window_size(self, width, height)
+
     def switch_to_frame(self, frame_reference):
         """
         selenium API
