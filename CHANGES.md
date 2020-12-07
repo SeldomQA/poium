@@ -1,3 +1,7 @@
+#### 0.6.4 version update
+* 修复bug
+* 增加CSSElement API
+
 #### 0.6.3 version update
 * add keys  操作
 
