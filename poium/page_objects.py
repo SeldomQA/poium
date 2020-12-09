@@ -13,6 +13,8 @@ from poium.common.exceptions import PageSelectException
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
 from poium.common import logging
+from func_timeout import func_set_timeout
+from func_timeout.exceptions import FunctionTimedOut
 
 
 # Map PageElement constructor arguments to webdriver locator enums
@@ -266,12 +268,21 @@ class NewPageElement(object):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
 
+    @func_set_timeout(0.5)
+    def __elements(self, key, vlaue):
+        elems = Browser.driver.find_elements(by=key, value=vlaue)
+        return elems
+
     def __find_element(self, elem):
         """
         Find if the element exists.
         """
         for i in range(self.timeout):
-            elems = Browser.driver.find_elements(by=elem[0], value=elem[1])
+            try:
+                elems = self.__elements(elem[0], elem[1])
+            except FunctionTimedOut:
+                elems = []
+
             if len(elems) == 1:
                 logging.info("✅ Find element: {by}={value} ".format(
                     by=elem[0], value=elem[1]))
