@@ -33,13 +33,13 @@ If you want to keep up with the latest version, you can install with github repo
 ### Selenium的使用（selenium API）
 
 ```python
-from poium import Page, NewPageElement
+from poium import Page, Element
 from selenium import webdriver
 
 
 class BaiduIndexPage(Page):
-    search_input = NewPageElement(name='wd')
-    search_button = NewPageElement(id_='su')
+    search_input = Element(name='wd')
+    search_button = Element(id_='su')
 
 
 driver = webdriver.Chrome()
@@ -47,7 +47,7 @@ driver = webdriver.Chrome()
 page = BaiduIndexPage(driver)
 page.get("https://www.baidu.com")
 
-page.search_input = "poium"
+page.search_input.send_keys("poium") 
 page.search_button.click()
 
 driver.quit()

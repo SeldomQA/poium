@@ -33,15 +33,17 @@ class BaiduPage(Page):
 
 `NewPageElement`类提供了几个参数，用法非常简单。
 
+注：`NewPageElement` 也可以写为`Element`。
+
 用法：
 
 ```py
-from poium import Page, NewPageElement
+from poium import Page, Element
 
 
 class BaiduIndexPage(Page):
-    search_input = NewPageElement(name='wd', index=0, describe="百度输入框", timeout=5)
-    search_button = NewPageElement(id_='su', index=0, describe="百度搜索按钮", timeout=5)
+    search_input = Element(name='wd', index=0, describe="百度输入框", timeout=5)
+    search_button = Element(id_='su', index=0, describe="百度搜索按钮", timeout=5)
 
 ```
 
