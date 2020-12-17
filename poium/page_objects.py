@@ -44,7 +44,11 @@ LOCATOR_LIST = {
 
 
 class Browser:
+    # Default browser driver
     driver = None
+
+    # Adds a border to the action element of the operation
+    show = True
 
 
 class PageObject(object):
@@ -366,21 +370,22 @@ class NewPageElement(object):
         else:
             raise FindElementTypesError(
                 "Please enter the correct targeting elements")
-        try:
-            style_red = 'arguments[0].style.border="2px solid #FF0000"'
-            style_blue = 'arguments[0].style.border="2px solid #00FF00"'
-            style_null = 'arguments[0].style.border=""'
+        if Browser.show is True:
+            try:
+                style_red = 'arguments[0].style.border="2px solid #FF0000"'
+                style_blue = 'arguments[0].style.border="2px solid #00FF00"'
+                style_null = 'arguments[0].style.border=""'
 
-            for _ in range(2):
-                Browser.driver.execute_script(style_red, elem)
-                sleep(0.1)
+                for _ in range(2):
+                    Browser.driver.execute_script(style_red, elem)
+                    sleep(0.1)
+                    Browser.driver.execute_script(style_blue, elem)
+                    sleep(0.1)
                 Browser.driver.execute_script(style_blue, elem)
-                sleep(0.1)
-            Browser.driver.execute_script(style_blue, elem)
-            sleep(0.5)
-            Browser.driver.execute_script(style_null, elem)
-        except WebDriverException:
-            pass
+                sleep(0.5)
+                Browser.driver.execute_script(style_null, elem)
+            except WebDriverException:
+                pass
 
         return elem
 
