@@ -1,11 +1,11 @@
 from poium import Page
-from poium import NewPageElement as PageElement
+from poium import Element
 from time import sleep
 
 
 class SelectPage(Page):
-    frame = PageElement(id_="iframeResult", describe="表单")
-    select_elem = PageElement(xpath="//select", describe="选择框")
+    frame = Element(id_="iframeResult", describe="表单")
+    select_elem = Element(xpath="//select", describe="选择框")
 
 
 def test_select(browser):

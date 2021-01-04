@@ -1,4 +1,4 @@
-from poium import Page, CSSElement, NewPageElement
+from poium import Page, CSSElement, Element
 from time import sleep
 
 
@@ -17,7 +17,7 @@ class SoPage(Page):
 
 
 class RunoobPage(Page):
-    iframe = NewPageElement(css="#iframeResult")
+    iframe = Element(css="#iframeResult")
     div = CSSElement("html > body > div")
 
 

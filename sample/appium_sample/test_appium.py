@@ -1,11 +1,11 @@
-from poium import Page, NewPageElement as PageElement
+from poium import Page, Element
 
 
 class CalculatorPage(Page):
-    number_1 = PageElement(id_="com.android.calculator2:id/digit_1")
-    number_2 = PageElement(id_="com.android.calculator2:id/digit_2")
-    add = PageElement(id_="com.android.calculator2:id/op_add")
-    eq = PageElement(id_="com.android.calculator2:id/eq")
+    number_1 = Element(id_="com.android.calculator2:id/digit_1")
+    number_2 = Element(id_="com.android.calculator2:id/digit_2")
+    add = Element(id_="com.android.calculator2:id/op_add")
+    eq = Element(id_="com.android.calculator2:id/eq")
 
 
 def test_calculator(app):

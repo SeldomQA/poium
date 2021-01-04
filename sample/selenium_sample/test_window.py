@@ -1,9 +1,9 @@
-from poium import Page, NewPageElement as PageElement
+from poium import Page, Element
 
 
 class BaiduPage(Page):
-    login_button = PageElement(link_text="登录")
-    register_link = PageElement(link_text="立即注册")
+    login_button = Element(link_text="登录")
+    register_link = Element(link_text="立即注册")
 
 
 def test_switch_windows(browser):
