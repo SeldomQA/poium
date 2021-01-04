@@ -22,7 +22,7 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-## 版本说明
+## 旧版本说明
 
 > `poium < 0.6.0`版本，主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
 
@@ -34,7 +34,7 @@ If you want to keep up with the latest version, you can install with github repo
 
 ## Sample
 
-### Selenium的使用（selenium API）
+通过下面的例子，体会`Page Objects` 设计模式如此简单。
 
 ```python
 from poium import Page, Element
@@ -47,7 +47,6 @@ class BaiduIndexPage(Page):
 
 
 driver = webdriver.Chrome()
-
 page = BaiduIndexPage(driver)
 page.get("https://www.baidu.com")
 
@@ -57,75 +56,18 @@ page.search_button.click()
 driver.quit()
 ```
 
-* [selenium](https://pypi.org/project/selenium/)
 
-### Selenium的使用（JavaScript API）
+更多例子，请点击[这里](/sample) 。
 
-poium还提供了一套JavaScript封装的API。
+## Documentation
 
-```python
-from poium import Page, CSSElement
-from selenium import webdriver
+在开使用poium前，请快速阅读下面的文档。
 
-
-class BaiduIndexPage(Page):
-    search_input = CSSElement('#kw')
-    search_button = CSSElement('#su')
-
-
-driver = webdriver.Chrome()
-
-page = BaiduIndexPage(driver)
-page.get("https://www.baidu.com")
-
-page.search_input.set_text("poium")
-page.search_button.click()
-
-driver.quit()
-```
-
-* 只支持 `css` 定位，所以不需要指定定位方式。
-* 更多的元素操作，例如：`remove_attribute()` 、 `clear_style()` ... 等。
-
-### appium的使用
-
-支持appium的例子。
-
-```python
-from poium import Page, Element
-from appium import webdriver
-
-class CalculatorPage(Page):
-    number_1 = Element(id_="com.android.calculator2:id/digit_1")
-    number_2 = Element(id_="com.android.calculator2:id/digit_2")
-    add = Element(id_="com.android.calculator2:id/op_add")
-    eq = Element(id_="com.android.calculator2:id/eq")
-
-# APP定义运行环境
-desired_caps = {
-    'deviceName': 'Android Emulator',
-    'automationName': 'appium',
-    'platformName': 'Android',
-    'platformVersion': '7.0',
-    'appPackage': 'com.android.calculator2',
-    'appActivity': '.Calculator',
-}
-driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
-
-page = CalculatorPage(driver)
-page.number_1.click()
-page.add.click()
-page.number_2.click()
-page.eq.click()
-
-driver.quit()
-```
-
-* [appium](https://pypi.org/project/Appium-Python-Client/)
-
-##  Simple example
-
-请点击[这里](/sample) 。
+* [Page和Element类](/docs/page_element.md)
+* [Eelment类元素操作](docs/element_operation.md)
+* [CSSElement类](/docs/csselement.md)
+* [在Selenium中使用poium](docs/selenium_sample.md)
+* [在appium中使用poium](docs/poium_sample.md)
 
 ## Project usage
 
