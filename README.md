@@ -24,9 +24,13 @@ If you want to keep up with the latest version, you can install with github repo
 
 ## 版本说明
 
-> 在 `0.6.0` 版本提供了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+> `poium < 0.6.0`版本，主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
 
-具体差异[参考](./docs/base.md)
+[参考文档](./docs/base_old.md)
+
+> `poium>=0.6.0, <1.0.0` 版本，新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+
+[参考文档](./docs/base_0.6.0.md)
 
 ## Sample
 
@@ -119,9 +123,11 @@ driver.quit()
 
 * [appium](https://pypi.org/project/Appium-Python-Client/)
 
-## Documentation
+##  Simple example
 
-请阅读 [wiki](https://github.com/defnngj/poium/wiki)
+请点击[这里](/sample) 。
+
+## Project usage
 
 * 在基于pytest的自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
 
