@@ -276,7 +276,8 @@ class Element(object):
         return elem.is_displayed()
 
     def is_selected(self):
-        """Returns whether the element is selected.
+        """
+        Returns whether the element is selected.
 
         Can be used to check if a checkbox or radio button is selected.
         """
@@ -379,7 +380,7 @@ class Element(object):
         select_elem = self.__get_element(self.k, self.v)
         Select(select_elem).select_by_value(value)
 
-    def select_by_index(self, text):
+    def select_by_index(self, index):
         """
         selenium API
         Select the option at the given index. This is done by examing the "index" attribute of an
@@ -391,7 +392,7 @@ class Element(object):
            throws NoSuchElementException If there is no option with specisied index in SELECT
         """
         select_elem = self.__get_element(self.k, self.v)
-        Select(select_elem).select_by_index(text)
+        Select(select_elem).select_by_index(index)
 
     def select_by_visible_text(self, text):
         """
