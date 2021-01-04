@@ -88,14 +88,14 @@ driver.quit()
 支持appium的例子。
 
 ```python
-from poium import Page, NewPageElement
+from poium import Page, Element
 from appium import webdriver
 
 class CalculatorPage(Page):
-    number_1 = NewPageElement(id_="com.android.calculator2:id/digit_1")
-    number_2 = NewPageElement(id_="com.android.calculator2:id/digit_2")
-    add = NewPageElement(id_="com.android.calculator2:id/op_add")
-    eq = NewPageElement(id_="com.android.calculator2:id/eq")
+    number_1 = Element(id_="com.android.calculator2:id/digit_1")
+    number_2 = Element(id_="com.android.calculator2:id/digit_2")
+    add = Element(id_="com.android.calculator2:id/op_add")
+    eq = Element(id_="com.android.calculator2:id/eq")
 
 # APP定义运行环境
 desired_caps = {
