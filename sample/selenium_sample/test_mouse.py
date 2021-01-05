@@ -4,9 +4,9 @@ from time import sleep
 
 
 class BaiduPage(Page):
-    setting = Element(css='div#u1 > a.pf')
+    setting = Element(css='#s-usersetting-top')
     search_setting = Element(css=".setpref")
-    search_setting_hint = Element(css="#sugConf th")
+    search_setting_hint = Element(css="#sugConf > span.item-desc")
 
 
 class DataTimePage(Page):
@@ -29,7 +29,7 @@ def test_move_to_element(browser):
     page.search_setting.click()
     sleep(2)
     hint = page.search_setting_hint.text
-    assert hint == "搜索框提示："
+    assert "搜索框提示：" in hint
 
 
 def test_drag_and_drop_by_offset(browser):
