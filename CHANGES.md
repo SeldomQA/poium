@@ -1,3 +1,9 @@
+#### 1.0.0 version update
+* 移除旧的类
+* 增加Elements
+* 完善使用文档
+
+
 #### 0.6.4 version update
 * 修复bug
 * 增加CSSElement API
