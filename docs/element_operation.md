@@ -1,6 +1,6 @@
 # Element类元素操作方法
 
-当我们定位到一个元素之后，`Elements` 类除了`click`点击和`send_keys`输入，还可以进行那些操作？
+当我们定位到一个元素之后，`Elements` 类除了提供`click`点击和`send_keys`输入，还可以丰富的操作。
 
 * selenium 常规操作
 
@@ -13,48 +13,37 @@ page.elem.send_keys(value)
 Simulates typing into the element.
 """
 
-
 page.elem.click()
 """Clicks the element."""
-
 
 page.elem.submit()
 """Submits a form."""
 
-
 page.elem.tag_name
 """This element's ``tagName`` property."""
-
 
 page.elem.text
 """Clears the text if it's a text entry element."""
 
-
-
 page.elem.size
 """The size of the element."""
-
 
 page.elem.get_property(, name)
 """
 Gets the given property of the element.
 """
 
-
 page.elem.get_attribute(, name)
 """Gets the given attribute or property of the element."""
 
-
 page.elem.is_displayed()
 """Whether the element is visible to a user."""
-
 
 page.elem.is_selected()
 """
 Returns whether the element is selected.
 Can be used to check if a checkbox or radio button is selected.
 """
-
 
 page.elem.is_enabled()
 """Returns whether the element is enabled."""
@@ -64,7 +53,6 @@ page.elem.switch_to_frame()
 selenium API
 Switches focus to the specified frame
 """
-
 
 page.elem.move_to_element()
 """
@@ -84,13 +72,11 @@ selenium API
 Holds down the left mouse button on an element.
 """
 
-
 page.elem.context_click()
 """
 selenium API
 Performs a context-click (right click) on an element.
 """
-
 
 page.elem.drag_and_drop_by_offset(x, y)
 """
@@ -100,7 +86,6 @@ Holds down the left mouse button on the source element,
 :param x: X offset to move to.
 :param y: Y offset to move to.
 """
-
 
 page.elem.refresh_element(, timeout=10)
 """
@@ -125,7 +110,6 @@ Select all options that have a value matching the argument. That is, when given 
 
     throws NoSuchElementException If there is no option with specisied value in SELECT
 """
-
 
 page.elem.select_by_index(index)
 """
@@ -171,7 +155,6 @@ Returns:
     dict: The location of an element relative to the view
 """
 
-
 page.elem.set_value(value)
 """
 appium API
@@ -181,7 +164,7 @@ Set the value on this element in the application
 
 * 模拟键盘操作
 
-```py
+```python
 page.elem.input(text="")
 
 page.elem.enter()

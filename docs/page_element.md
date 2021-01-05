@@ -4,12 +4,11 @@
 
 ```python
 # page层封装
-from poium import Page, Element, Elements
+from poium import Page, Element
 
 class BaiduPage(Page):
     input = Element(id_="kw", describe="搜索输入框")
     button = Element(id_="su", describe="搜索按钮")
-    results = Elements(xpath="//div/h3/a", describe="搜索结果")
 ```
 1. 创建页面类继承`Page`类。
 2. 通过`Element`类定义元素。
