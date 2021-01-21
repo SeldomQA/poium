@@ -220,12 +220,15 @@ class Element(object):
         logging.info("clear element: {}".format(self.desc))
         elem.clear()
 
-    def send_keys(self, value):
+    def send_keys(self, value, clear_before=False):
         """
         Simulates typing into the element.
+        If clear_before is True, it will clear the content before typing.
         """
         elem = self.__get_element(self.k, self.v)
         logging.info("🖋 input element: {}".format(self.desc))
+        if clear_before:
+            elem.clear()
         elem.send_keys(value)
 
     def click(self):
