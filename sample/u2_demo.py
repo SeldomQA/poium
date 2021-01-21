@@ -3,13 +3,13 @@ uiautomator2 Library test demo
 https://github.com/openatx/uiautomator2
 """
 import uiautomator2 as u2
-from poium.u2 import Page, PageElement
+from poium.u2 import Page, Element
 
 
 class BBSPage(Page):
-    search_input = PageElement(resourceId="com.meizu.flyme.flymebbs:id/kp", describe="搜索输入框")
-    search_button = PageElement(resourceId="com.meizu.flyme.flymebbs:id/o2", describe="搜索按钮")
-    search_result = PageElement(resourceId="com.meizu.flyme.flymebbs:id/a2a", describe="搜索结果")
+    search_input = Element(resourceId="com.meizu.flyme.flymebbs:id/kp", describe="搜索输入框")
+    search_button = Element(resourceId="com.meizu.flyme.flymebbs:id/o2", describe="搜索按钮")
+    search_result = Element(resourceId="com.meizu.flyme.flymebbs:id/a2a", describe="搜索结果")
 
 
 d = u2.connect()
