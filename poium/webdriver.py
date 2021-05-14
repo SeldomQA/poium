@@ -68,7 +68,7 @@ class Page(PageObject):
             driver.set_window_size(800,600)
         """
         if width is None and height is None:
-            self.driver.maximize_window()
+            self.driver.maximize_window
         else:
             self.driver.set_window_size(self, width, height)
 
