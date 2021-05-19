@@ -272,7 +272,7 @@ class Page(PageObject):
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).double_click(elem).perform()
 
-    def move_by_offset(self, x, y):
+    def move_by_offset(self, x, y, click=False):
         """
         selenium API
         Moving the mouse to an offset from current mouse position.
@@ -281,7 +281,10 @@ class Page(PageObject):
          - x: X offset to move to, as a positive or negative integer.
          - y: Y offset to move to, as a positive or negative integer.
         """
-        ActionChains(self.driver).move_by_offset(x, y).perform()
+        if click is True:
+            ActionChains(self.driver).move_by_offset(x, y).click().perform()
+        else:
+            ActionChains(self.driver).move_by_offset(x, y).perform()
 
     def release(self):
         """
