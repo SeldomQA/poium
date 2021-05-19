@@ -1,3 +1,8 @@
+#### 1.0.1
+* 增加`value_of_css_property`方法
+* `move_by_offset()` 增加click参数
+* 修复语法错误
+
 #### 1.0.0 version update
 * 移除旧的类
 * 增加Elements
