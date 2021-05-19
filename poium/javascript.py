@@ -175,11 +175,11 @@ class CSSElement(object):
         scroll the div element on the page
         """
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        if top is not 0:
+        if top != 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
             self._execute_javascript(js)
-        if left is not 0:
+        if left != 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
             self._execute_javascript(js)
