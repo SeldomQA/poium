@@ -258,6 +258,13 @@ class Element(object):
         elem = self.__get_element(self.k, self.v)
         return elem.size
 
+    def value_of_css_property(self, property_name):
+        """
+        The value of a CSS property
+        """
+        elem = self.__get_element(self.k, self.v)
+        return elem.value_of_css_property(property_name)
+
     def get_property(self, name):
         """
         Gets the given property of the element.
