@@ -370,3 +370,37 @@ class Page(PageObject):
         Swipe from one point to another point, for an optional duration.
         """
         self.driver.swipe(start_x, start_y, end_x, end_y, duration)
+
+    @staticmethod
+    def sleep(sec: int) -> None:
+        """
+        Usage:
+            page.sleep(seconds)
+        """
+        time.sleep(sec)
+
+    def wait(self, secs: int = 10) -> None:
+        """
+        Implicitly wait.All elements on the page.
+        Usage:
+            page.wait(10)
+        """
+        self.driver.implicitly_wait(secs)
+
+    def wait_script_timeout(self, time_to_wait):
+        """
+        Set the amount of time that the script should wait during an
+           execute_async_script call before throwing an error.
+        Usage:
+            page.wait_script_timeout(10)
+        """
+        self.driver.set_script_timeout(time_to_wait)
+
+    def wait_page_load_timeout(self, time_to_wait):
+        """
+        Set the amount of time to wait for a page load to complete
+           before throwing an error.
+        Usage:
+            page.wait_page_load_timeout(10)
+        """
+        self.driver.set_page_load_timeout(time_to_wait)
