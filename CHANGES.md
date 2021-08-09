@@ -1,3 +1,9 @@
+#### 1.0.2
+* 增加`sleep()` 方法设置固定休眠
+* 增加`wait()` 方法设置隐式等待
+* 增加`wait_script_timeout()` 方法设置脚本加载超时时间
+* 增加`wait_page_load_timeout()` 方法设置页面加载超时时间
+
 #### 1.0.1
 * 增加`value_of_css_property`方法
 * `move_by_offset()` 增加click参数
