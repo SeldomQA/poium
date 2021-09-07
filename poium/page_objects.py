@@ -62,9 +62,31 @@ class PageObject(object):
         """
         :param uri:  URI to GET, based off of the root_uri attribute.
         """
+        warnings.warn("use page.open() instead",
+                      DeprecationWarning, stacklevel=2)
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
+
+    def open(self, uri):
+        """
+        :param uri:  URI to GET, based off of the root_uri attribute.
+        """
+        root_uri = self.root_uri or ''
+        self.driver.get(root_uri + uri)
+        self.driver.implicitly_wait(5)
+
+    def visit(self, uri):
+        """
+        open url
+        """
+        self.open(uri)
+
+    def goto(self, uri):
+        """
+        open url
+        """
+        self.open(uri)
 
 
 class Element(object):
