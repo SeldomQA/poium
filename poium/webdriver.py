@@ -95,7 +95,9 @@ class Page(PageObject):
         selenium API
         Getting a handle to a new window.
         """
-        all_handle = self.window_handles
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
+        all_handle = self.driver.window_handles
         return all_handle[-1]
 
     @property
@@ -104,6 +106,8 @@ class Page(PageObject):
         selenium API
         Returns the handle of the current window.
         """
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
         return self.driver.current_window_handle
 
     @property
@@ -112,14 +116,23 @@ class Page(PageObject):
         selenium API
         Returns the handles of all windows within the current session.
         """
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
         return self.driver.window_handles
 
-    def switch_to_window(self, handle):
+    def switch_to_window(self, index: int) -> None:
         """
         selenium API
         Switches focus to the specified window.
+
+        :Args:
+         - window: window index. 1 represents a newly opened window (0 is the first one)
+
+        :Usage:
+            self.switch_to_window(1)
         """
-        self.driver.switch_to.window(handle)
+        all_handles = self.driver.window_handles
+        self.driver.switch_to.window(all_handles[index])
 
     def screenshots(self, path=None, filename=None):
         """
