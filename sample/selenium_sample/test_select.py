@@ -16,7 +16,7 @@ def test_select(browser):
     """
     page = SelectPage(browser)
 
-    page.get("http://www.w3school.com.cn/tiy/t.asp?f=html_select")
+    page.open("https://www.runoob.com/try/try.php?filename=tryhtml_select")
     page.frame.switch_to_frame()
     page.select_elem.select_by_value("saab")
     sleep(2)

@@ -8,25 +8,9 @@ class BaiduPage(Page):
 
 def test_switch_windows(browser):
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
 
-    # 当前窗口句柄
-    current_handler = page.current_window_handle
-    print(current_handler)
-
-    # 打开新的注册窗口
+    # 0为当前窗口，1为新的打开的窗口，如果打开了多个窗口，按照打开的前后顺序，依次为 1.2.3....
     page.login_button.click()
     page.register_link.click()
-
-    # 新窗口句柄
-    new_handler = page.new_window_handle
-    print(new_handler)
-
-    # 所有窗口句柄
-    all_handler = page.window_handles
-    print(all_handler)
-
-    # 切换窗口句柄
-    page.switch_to_window(current_handler)
-    page.switch_to_window(new_handler)
-
+    page.switch_to_window(1)

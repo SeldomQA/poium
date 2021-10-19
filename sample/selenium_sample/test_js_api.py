@@ -28,7 +28,7 @@ def test_move_to(browser):
     :return:
     """
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
     page.set_window_size()
     page.setting.move_to()
     sleep(5)
@@ -41,7 +41,7 @@ def test_clear_input_click(browser):
     :return:
     """
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
     page.search_input.clear()
     page.search_input.set_text("poium")
     page.search_button.click()
@@ -58,7 +58,7 @@ def test_get_info(browser):
     :return:
     """
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
     sleep(2)
     title = page.get_title
     url = page.get_url
@@ -73,7 +73,7 @@ def test_get_attribute(browser):
     :return:
     """
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
     sleep(2)
     page.search_button.remove_attribute("class")
     page.search_input.set_attribute("type", "password")
@@ -88,7 +88,7 @@ def test_display(browser):
     :return:
     """
     page = SoPage(browser)
-    page.get("https://www.so.com")
+    page.open("https://www.so.com")
     page.setting.display()
     sleep(5)
 
@@ -100,7 +100,7 @@ def test_clear_class(browser):
     :return:
     """
     page = SoPage(browser)
-    page.get("https://www.so.com")
+    page.open("https://www.so.com")
     page.search.clear_class()
     sleep(5)
 
@@ -112,7 +112,7 @@ def test_scroll(browser):
     :return:
     """
     page = RunoobPage(browser)
-    page.get("https://www.runoob.com/try/try.php?filename=tryjsref_onscroll")
+    page.open("https://www.runoob.com/try/try.php?filename=tryjsref_onscroll")
     page.iframe.switch_to_frame()
     page.div.scroll(top=100)
     sleep(5)
