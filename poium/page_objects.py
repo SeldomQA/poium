@@ -157,63 +157,63 @@ class Element(object):
         # selenium
         if by == "id_":
             self.__find_element((By.ID, value))
-            elem = Browser.driver.find_elements_by_id(value)[self.index]
+            elem = Browser.driver.find_elements(By.ID, value)[self.index]
         elif by == "name":
             self.__find_element((By.NAME, value))
-            elem = Browser.driver.find_elements_by_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.NAME, value)[self.index]
         elif by == "class_name":
             self.__find_element((By.CLASS_NAME, value))
-            elem = Browser.driver.find_elements_by_class_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.CLASS_NAME, value)[self.index]
         elif by == "tag":
             self.__find_element((By.TAG_NAME, value))
-            elem = Browser.driver.find_elements_by_tag_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.TAG_NAME, value)[self.index]
         elif by == "link_text":
             self.__find_element((By.LINK_TEXT, value))
-            elem = Browser.driver.find_elements_by_link_text(value)[self.index]
+            elem = Browser.driver.find_elements(By.LINK_TEXT, value)[self.index]
         elif by == "partial_link_text":
             self.__find_element((By.PARTIAL_LINK_TEXT, value))
-            elem = Browser.driver.find_elements_by_partial_link_text(value)[self.index]
+            elem = Browser.driver.find_elements(By.PARTIAL_LINK_TEXT, value)[self.index]
         elif by == "xpath":
             self.__find_element((By.XPATH, value))
-            elem = Browser.driver.find_elements_by_xpath(value)[self.index]
+            elem = Browser.driver.find_elements(By.XPATH, value)[self.index]
         elif by == "css":
             self.__find_element((By.CSS_SELECTOR, value))
-            elem = Browser.driver.find_elements_by_css_selector(value)[self.index]
+            elem = Browser.driver.find_elements(By.CSS_SELECTOR, value)[self.index]
 
         # appium
         elif by == "ios_uiautomation":
             self.__find_element((MobileBy.IOS_UIAUTOMATION, value))
-            elem = Browser.driver.find_elements_by_ios_uiautomation(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.IOS_UIAUTOMATION, value)[self.index]
         elif by == "ios_predicate":
             self.__find_element((MobileBy.IOS_PREDICATE, value))
-            elem = Browser.driver.find_elements_by_ios_predicate(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.IOS_PREDICATE, value)[self.index]
         elif by == "ios_class_chain":
             self.__find_element((MobileBy.IOS_CLASS_CHAIN, value))
-            elem = Browser.driver.find_elements_by_ios_class_chain(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.IOS_CLASS_CHAIN, value)[self.index]
         elif by == "android_uiautomator":
             self.__find_element((MobileBy.ANDROID_UIAUTOMATOR, value))
-            elem = Browser.driver.find_elements_by_android_uiautomator(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.ANDROID_UIAUTOMATOR, value)[self.index]
         elif by == "android_viewtag":
             self.__find_element((MobileBy.ANDROID_VIEWTAG, value))
-            elem = Browser.driver.find_elements_by_android_viewtag(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.ANDROID_VIEWTAG, value)[self.index]
         elif by == "android_data_matcher":
             self.__find_element((MobileBy.ANDROID_DATA_MATCHER, value))
-            elem = Browser.driver.find_elements_by_android_data_matcher(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.ANDROID_DATA_MATCHER, value)[self.index]
         elif by == "accessibility_id":
             self.__find_element((MobileBy.ACCESSIBILITY_ID, value))
-            elem = Browser.driver.find_elements_by_accessibility_id(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.ACCESSIBILITY_ID, value)[self.index]
         elif by == "android_view_matcher":
             self.__find_element((MobileBy.ANDROID_VIEW_MATCHER, value))
-            elem = Browser.driver.find_elements_by_android_view_matcher(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.ANDROID_VIEW_MATCHER, value)[self.index]
         elif by == "windows_uiautomation":
             self.__find_element((MobileBy.WINDOWS_UI_AUTOMATION, value))
-            elem = Browser.driver.find_elements_by_windows_uiautomation(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.WINDOWS_UI_AUTOMATION, value)[self.index]
         elif by == "image":
             self.__find_element((MobileBy.IMAGE, value))
-            elem = Browser.driver.find_elements_by_image(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.IMAGE, value)[self.index]
         elif by == "custom":
             self.__find_element((MobileBy.CUSTOM, value))
-            elem = Browser.driver.find_elements_by_custom(value)[self.index]
+            elem = Browser.driver.find_elements(MobileBy.CUSTOM, value)[self.index]
         else:
             raise FindElementTypesError(
                 "Please enter the correct targeting elements")
