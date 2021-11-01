@@ -95,7 +95,7 @@ class Element(object):
     """
 
     def __init__(self, timeout=5, describe="undefined", index=0, **kwargs):
-        self.timeout = timeout
+        self.times = timeout
         self.index = index
         self.desc = describe
         if not kwargs:
@@ -128,7 +128,7 @@ class Element(object):
         """
         Find if the element exists.
         """
-        for i in range(self.timeout):
+        for i in range(self.times):
             try:
                 elems = self.__elements(elem[0], elem[1])
             except FunctionTimedOut:
@@ -526,8 +526,9 @@ class Elements(object):
     Returns a set of element objects
     """
 
-    def __init__(self, context=False, describe="undefined", **kwargs):
+    def __init__(self, context=False, describe="undefined", timeout=5, **kwargs):
         self.describe = describe
+        self.times = timeout
         if not kwargs:
             raise ValueError("Please specify a locator")
         if len(kwargs) > 1:
@@ -540,12 +541,16 @@ class Elements(object):
         self.has_context = bool(context)
 
     def find(self, context):
-        try:
+        for i in range(self.times):
             elems = context.find_elements(*self.locator)
-        except NoSuchElementException:
+            if len(elems) == 0:
+                sleep(1)
+            else:
+                break
+        else:
             elems = []
-        logging.info("✨ Find {n} elements through: {by}={value}, describe:{desc}".format(
-            n=len(elems), by=self.k, value=self.v, desc=self.describe))
+            logging.info("✨ Find {n} elements through: {by}={value}, describe:{desc}".format(
+                n=len(elems), by=self.k, value=self.v, desc=self.describe))
         return elems
 
     def __get__(self, instance, owner, context=None):
