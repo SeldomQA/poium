@@ -35,7 +35,7 @@ class CSSElement(object):
         Run the javascript script
         """
         try:
-            driver.execute_script(js)
+            return driver.execute_script(js)
         except JavascriptException:
             raise CSSFindElementError("Element discovery failure. ", js)
 
@@ -49,6 +49,20 @@ class CSSElement(object):
                     elm.style.border="2px solid red";
                     elm.value = "";""".format(css=self.css, index=self.index)
         self._execute_javascript(js)
+
+    def get_text(self, i=None):
+        """
+        JavaScript API, Only support css positioning
+        Get element text content.
+        :param i: index
+        """
+        if i is None:
+            i = self.index
+
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """return document.querySelectorAll("{css}")[{index}].textContent;""".format(
+            css=self.css, index=i)
+        return self._execute_javascript(js)
 
     def set_text(self, value):
         """
@@ -193,4 +207,3 @@ class CSSElement(object):
         js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
         self._execute_javascript(js)
-
