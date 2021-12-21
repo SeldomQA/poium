@@ -270,7 +270,7 @@ class Element(object):
 
     @property
     def text(self):
-        """Clears the text if it's a text entry element."""
+        """The text of the element."""
         elem = self.__get_element(self.k, self.v)
         return elem.text
 
