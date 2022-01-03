@@ -1,3 +1,8 @@
+#### 1.0.4
+* `CSSElement`类增加`get_text()`方法，用于获取元素文本
+* `Elements` 类增加`timeout`参数，默认为`5`秒
+
+
 #### 1.0.3
 * 增加`colorLog` 日志开关，例如在jenkins环境上防止编码问题，关闭`colorLog=False`。
 * 即将废弃的API
