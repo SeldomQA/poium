@@ -44,6 +44,8 @@ def test_clear_input_click(browser):
     page.open("https://www.baidu.com")
     page.search_input.clear()
     page.search_input.set_text("poium")
+    value = page.search_input.value
+    print(f"input: {value}")
     page.search_button.click()
     sleep(2)
     page.search_key.click_display()

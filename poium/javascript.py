@@ -35,7 +35,7 @@ class CSSElement(object):
         Run the javascript script
         """
         try:
-            driver.execute_script(js)
+            return driver.execute_script(js)
         except JavascriptException:
             raise CSSFindElementError("Element discovery failure. ", js)
 
@@ -194,3 +194,12 @@ class CSSElement(object):
                     elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
         self._execute_javascript(js)
 
+    @property
+    def value(self):
+        """
+        JavaScript API, Only support css positioning
+        Setting element attribute, Only support css positioning
+        """
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """return document.querySelectorAll("{css}")[{i}].value;""".format(css=self.css, i=self.index)
+        return self._execute_javascript(js)
