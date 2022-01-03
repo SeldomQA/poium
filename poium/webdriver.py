@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoAlertPresentException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
 
 from poium.page_objects import PageObject
+from poium.common.keyboard import KeyEvent
 
 
 class Page(PageObject):
@@ -223,6 +224,16 @@ class Page(PageObject):
                     break
             else:
                 raise NameError("No WebView found.")
+
+    def key_text(self, text):
+        """
+        appium API
+        Support input text, Chinese is not supported
+        Usage:
+            self.set_text("hello")
+        """
+        ke = KeyEvent(self.driver)
+        ke.input(text)
 
     def accept_alert(self):
         """
