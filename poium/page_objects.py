@@ -8,7 +8,7 @@ from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
-from appium.webdriver.common.mobileby import MobileBy
+from appium.webdriver.common.appiumby import AppiumBy
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
 from poium.common import logging
@@ -29,17 +29,17 @@ LOCATOR_LIST = {
     'tag': By.TAG_NAME,
     'class_name': By.CLASS_NAME,
     # appium
-    'ios_uiautomation': MobileBy.IOS_UIAUTOMATION,
-    'ios_predicate': MobileBy.IOS_PREDICATE,
-    'ios_class_chain': MobileBy.IOS_CLASS_CHAIN,
-    'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
-    'android_viewtag': MobileBy.ANDROID_VIEWTAG,
-    'android_data_matcher': MobileBy.ANDROID_DATA_MATCHER,
-    'android_view_matcher': MobileBy.ANDROID_VIEW_MATCHER,
-    'windows_uiautomation': MobileBy.WINDOWS_UI_AUTOMATION,
-    'accessibility_id': MobileBy.ACCESSIBILITY_ID,
-    'image': MobileBy.IMAGE,
-    'custom': MobileBy.CUSTOM,
+    'ios_uiautomation': AppiumBy.IOS_UIAUTOMATION,
+    'ios_predicate': AppiumBy.IOS_PREDICATE,
+    'ios_class_chain': AppiumBy.IOS_CLASS_CHAIN,
+    'android_uiautomator': AppiumBy.ANDROID_UIAUTOMATOR,
+    'android_viewtag': AppiumBy.ANDROID_VIEWTAG,
+    'android_data_matcher': AppiumBy.ANDROID_DATA_MATCHER,
+    'android_view_matcher': AppiumBy.ANDROID_VIEW_MATCHER,
+    'windows_uiautomation': AppiumBy.WINDOWS_UI_AUTOMATION,
+    'accessibility_id': AppiumBy.ACCESSIBILITY_ID,
+    'image': AppiumBy.IMAGE,
+    'custom': AppiumBy.CUSTOM,
 }
 
 
@@ -146,7 +146,7 @@ class Element(object):
                 sleep(1)
         else:
             error_msg = "❌ Find 0 elements through: {by}={value}".format(by=elem[0], value=elem[1])
-            logging.error(error_msg)
+            logging.warn(error_msg)
             raise NoSuchElementException(error_msg)
 
     def __get_element(self, by, value):
@@ -182,38 +182,38 @@ class Element(object):
 
         # appium
         elif by == "ios_uiautomation":
-            self.__find_element((MobileBy.IOS_UIAUTOMATION, value))
-            elem = Browser.driver.find_elements(MobileBy.IOS_UIAUTOMATION, value)[self.index]
+            self.__find_element((AppiumBy.IOS_UIAUTOMATION, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_UIAUTOMATION, value)[self.index]
         elif by == "ios_predicate":
-            self.__find_element((MobileBy.IOS_PREDICATE, value))
-            elem = Browser.driver.find_elements(MobileBy.IOS_PREDICATE, value)[self.index]
+            self.__find_element((AppiumBy.IOS_PREDICATE, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_PREDICATE, value)[self.index]
         elif by == "ios_class_chain":
-            self.__find_element((MobileBy.IOS_CLASS_CHAIN, value))
-            elem = Browser.driver.find_elements(MobileBy.IOS_CLASS_CHAIN, value)[self.index]
+            self.__find_element((AppiumBy.IOS_CLASS_CHAIN, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_CLASS_CHAIN, value)[self.index]
         elif by == "android_uiautomator":
-            self.__find_element((MobileBy.ANDROID_UIAUTOMATOR, value))
-            elem = Browser.driver.find_elements(MobileBy.ANDROID_UIAUTOMATOR, value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_UIAUTOMATOR, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR, value)[self.index]
         elif by == "android_viewtag":
-            self.__find_element((MobileBy.ANDROID_VIEWTAG, value))
-            elem = Browser.driver.find_elements(MobileBy.ANDROID_VIEWTAG, value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_VIEWTAG, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEWTAG, value)[self.index]
         elif by == "android_data_matcher":
-            self.__find_element((MobileBy.ANDROID_DATA_MATCHER, value))
-            elem = Browser.driver.find_elements(MobileBy.ANDROID_DATA_MATCHER, value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_DATA_MATCHER, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_DATA_MATCHER, value)[self.index]
         elif by == "accessibility_id":
-            self.__find_element((MobileBy.ACCESSIBILITY_ID, value))
-            elem = Browser.driver.find_elements(MobileBy.ACCESSIBILITY_ID, value)[self.index]
+            self.__find_element((AppiumBy.ACCESSIBILITY_ID, value))
+            elem = Browser.driver.find_elements(AppiumBy.ACCESSIBILITY_ID, value)[self.index]
         elif by == "android_view_matcher":
-            self.__find_element((MobileBy.ANDROID_VIEW_MATCHER, value))
-            elem = Browser.driver.find_elements(MobileBy.ANDROID_VIEW_MATCHER, value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_VIEW_MATCHER, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEW_MATCHER, value)[self.index]
         elif by == "windows_uiautomation":
-            self.__find_element((MobileBy.WINDOWS_UI_AUTOMATION, value))
-            elem = Browser.driver.find_elements(MobileBy.WINDOWS_UI_AUTOMATION, value)[self.index]
+            self.__find_element((AppiumBy.WINDOWS_UI_AUTOMATION, value))
+            elem = Browser.driver.find_elements(AppiumBy.WINDOWS_UI_AUTOMATION, value)[self.index]
         elif by == "image":
-            self.__find_element((MobileBy.IMAGE, value))
-            elem = Browser.driver.find_elements(MobileBy.IMAGE, value)[self.index]
+            self.__find_element((AppiumBy.IMAGE, value))
+            elem = Browser.driver.find_elements(AppiumBy.IMAGE, value)[self.index]
         elif by == "custom":
-            self.__find_element((MobileBy.CUSTOM, value))
-            elem = Browser.driver.find_elements(MobileBy.CUSTOM, value)[self.index]
+            self.__find_element((AppiumBy.CUSTOM, value))
+            elem = Browser.driver.find_elements(AppiumBy.CUSTOM, value)[self.index]
         else:
             raise FindElementTypesError(
                 "Please enter the correct targeting elements")
