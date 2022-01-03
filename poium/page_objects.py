@@ -94,7 +94,7 @@ class Element(object):
     Returns an element object
     """
 
-    def __init__(self, timeout=5, describe="undefined", index=0, **kwargs):
+    def __init__(self, timeout=5, describe="No describe", index=0, **kwargs):
         self.timeout = timeout
         self.index = index
         self.desc = describe
@@ -147,7 +147,6 @@ class Element(object):
         else:
             error_msg = "❌ Find 0 elements through: {by}={value}".format(by=elem[0], value=elem[1])
             logging.warn(error_msg)
-            raise NoSuchElementException(error_msg)
 
     def __get_element(self, by, value):
         """
