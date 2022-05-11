@@ -27,7 +27,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'Appium-Python-Client>=2.1.0',
-        'colorama>=0.4.3',
+        'loguru>=0.4.1',
         'func-timeout>=4.3.5'
     ],
     classifiers=[

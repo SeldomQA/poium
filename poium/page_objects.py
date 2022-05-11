@@ -5,7 +5,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
-from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
 from appium.webdriver.common.appiumby import AppiumBy
@@ -94,7 +93,7 @@ class Element(object):
     Returns an element object
     """
 
-    def __init__(self, timeout=5, describe="No describe", index=0, **kwargs):
+    def __init__(self, timeout: int = 5, describe: str = "", index: int = 0, **kwargs):
         self.times = timeout
         self.index = index
         self.desc = describe
@@ -135,18 +134,15 @@ class Element(object):
                 elems = []
 
             if len(elems) == 1:
-                logging.info("✅ Find element: {by}={value} ".format(
-                    by=elem[0], value=elem[1]))
+                logging.info(f"✅ Find element: {elem[0]}={elem[1]}")
                 break
             elif len(elems) > 1:
-                logging.info("❓ Find {n} elements through: {by}={value}".format(
-                    n=len(elems), by=elem[0], value=elem[1]))
+                logging.info(f"❓ Find {len(elems)} elements through: {elem[0]}={elem[1]}")
                 break
             else:
                 sleep(1)
         else:
-            error_msg = "❌ Find 0 elements through: {by}={value}".format(by=elem[0], value=elem[1])
-            logging.warn(error_msg)
+            logging.warn(f"❌ Find 0 elements through: {elem[0]}={elem[1]}")
 
     def __get_element(self, by, value):
         """
@@ -238,30 +234,26 @@ class Element(object):
     def clear(self):
         """Clears the text if it's a text entry element."""
         elem = self.__get_element(self.k, self.v)
-        logging.info("clear element: {}".format(self.desc))
         elem.clear()
 
-    def send_keys(self, value, clear_before=False):
+    def send_keys(self, value, clear=False):
         """
         Simulates typing into the element.
         If clear_before is True, it will clear the content before typing.
         """
         elem = self.__get_element(self.k, self.v)
-        logging.info("🖋 input element: {}".format(self.desc))
-        if clear_before:
+        if clear is True:
             elem.clear()
         elem.send_keys(value)
 
     def click(self):
         """Clicks the element."""
         elem = self.__get_element(self.k, self.v)
-        logging.info("🖱 click element: {}".format(self.desc))
         elem.click()
 
     def submit(self):
         """Submits a form."""
         elem = self.__get_element(self.k, self.v)
-        logging.info("submit element: {}".format(self.desc))
         elem.submit()
 
     @property
@@ -539,7 +531,7 @@ class Elements(object):
         try:
             self.locator = (LOCATOR_LIST[self.k], self.v)
         except KeyError:
-            raise FindElementTypesError("Element positioning of type '{}' is not supported. ".format(self.k))
+            raise FindElementTypesError(f"Element positioning of type '{self.k}' is not supported. ")
         self.has_context = bool(context)
 
     def find(self, context):
@@ -551,8 +543,7 @@ class Elements(object):
                 break
         else:
             elems = []
-            logging.info("✨ Find {n} elements through: {by}={value}, describe:{desc}".format(
-                n=len(elems), by=self.k, value=self.v, desc=self.describe))
+            logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.describe}")
         return elems
 
     def __get__(self, instance, owner, context=None):

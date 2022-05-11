@@ -1,75 +1,62 @@
 import sys
 import time
-import platform
-import logging.handlers
-from colorama import Fore, Style
-
-_logger = logging.getLogger('poium')
-_logger.setLevel(logging.DEBUG)
-_handler = logging.StreamHandler(sys.stdout)
-_handler.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
-_logger.addHandler(_handler)
-# _logger.removeHandler(_handler)
-
-colorLog = True
+from loguru import logger
 
 
-def debug(msg):
-    _logger.debug("DEBUG " + str(msg))
+class Logger:
+
+    def __init__(self, level: str = "DEBUG", colorlog: bool = True):
+        self.logger = logger
+        self._colorlog = colorlog
+        self._console_format = "<green>{time:YYYY-MM-DD HH:mm:ss}</> {file} |<level> {level} | {message}</level>"
+        self._log_format = "[{time: YYYY-MM-DD HH:mm:ss} {file} | {level} | {message}"
+        self._level = level
+        self.set_level(self._colorlog, self._console_format, self._level)
+
+    def set_level(self, colorlog: bool = True, format: str = None, level: str = "DEBUG"):
+        if format is None:
+            format = self._console_format
+        logger.remove()
+        logger.add(sys.stderr, level=level, colorize=colorlog, format=format)
+
+    def trace(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | TRACE | {str(msg)}")
+        return self.logger.trace(msg)
+
+    def debug(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | DEBUG | {str(msg)}")
+        return self.logger.debug(msg)
+
+    def info(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | INFO | {str(msg)}")
+        return self.logger.info(msg)
+
+    def success(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | SUCCESS | {str(msg)}")
+        return self.logger.success(msg)
+
+    def warn(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | WARNING | {str(msg)}")
+        return self.logger.warning(msg)
+
+    def error(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | ERROR | {str(msg)}")
+        return self.logger.error(msg)
+
+    def critical(self, msg: str):
+        now = time.strftime("%Y-%m-%d %H:%M:%S")
+        print(f"{now} | CRITICAL | {str(msg)}")
+        return self.logger.critical(msg)
+
+    def printf(self, msg: str):
+        return self.logger.success(msg)
 
 
-def info(msg):
-    if colorLog is True:
-        _logger.info(Fore.GREEN + " [INFO] " + str(msg) + Style.RESET_ALL)
-    else:
-        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
-        _logger.info("[INFO] " + str(msg))
-
-
-def error(msg):
-    if colorLog is True:
-        _logger.error(Fore.RED + " [ERROR] " + str(msg) + Style.RESET_ALL)
-    else:
-        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
-        _logger.error("[ERROR] " + str(msg))
-
-
-def warn(msg):
-    if colorLog is True:
-        _logger.warning(Fore.YELLOW + " [WARNING] " + str(msg) + Style.RESET_ALL)
-    else:
-        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
-        _logger.warning("[WARNING] " + str(msg))
-
-
-def printf(msg):
-    if colorLog is True:
-        _logger.info(Fore.CYAN + " [PRINT] " + str(msg) + Style.RESET_ALL)
-    else:
-        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
-        _logger.info("[PRINT] " + str(msg))
-
-
-def set_level(level):
-    """ 设置log级别
-
-    :param level: logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR
-    :return:
-    """
-    _logger.setLevel(level)
-
-
-def set_level_to_debug():
-    _logger.setLevel(logging.DEBUG)
-
-
-def set_level_to_info():
-    _logger.setLevel(logging.INFO)
-
-
-def set_level_to_warn():
-    _logger.setLevel(logging.WARN)
-
-
-def set_level_to_error():
-    _logger.setLevel(logging.ERROR)
+# log level: TRACE < DEBUG < INFO < SUCCESS < WARNING < ERROR
+logging = Logger(level="TRACE")
