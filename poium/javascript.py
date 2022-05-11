@@ -35,7 +35,7 @@ class CSSElement(object):
         Run the javascript script
         """
         try:
-            driver.execute_script(js)
+            return driver.execute_script(js)
         except JavascriptException:
             raise CSSFindElementError("Element discovery failure. ", js)
 
@@ -49,6 +49,20 @@ class CSSElement(object):
                     elm.style.border="2px solid red";
                     elm.value = "";""".format(css=self.css, index=self.index)
         self._execute_javascript(js)
+
+    def get_text(self, i=None):
+        """
+        JavaScript API, Only support css positioning
+        Get element text content.
+        :param i: index
+        """
+        if i is None:
+            i = self.index
+
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """return document.querySelectorAll("{css}")[{index}].textContent;""".format(
+            css=self.css, index=i)
+        return self._execute_javascript(js)
 
     def set_text(self, value):
         """
@@ -175,11 +189,11 @@ class CSSElement(object):
         scroll the div element on the page
         """
         logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        if top is not 0:
+        if top != 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
             self._execute_javascript(js)
-        if left is not 0:
+        if left != 0:
             js = """var elm = document.querySelectorAll("{css}")[{i}];
                     elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
             self._execute_javascript(js)
@@ -194,3 +208,12 @@ class CSSElement(object):
                     elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
         self._execute_javascript(js)
 
+    @property
+    def value(self):
+        """
+        JavaScript API, Only support css positioning
+        Setting element attribute, Only support css positioning
+        """
+        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        js = """return document.querySelectorAll("{css}")[{i}].value;""".format(css=self.css, i=self.index)
+        return self._execute_javascript(js)

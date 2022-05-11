@@ -24,7 +24,7 @@ def test_move_to_element(browser):
     :return:
     """
     page = BaiduPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
     page.setting.click_and_hold()
     page.search_setting.click()
     sleep(2)
@@ -39,7 +39,7 @@ def test_drag_and_drop_by_offset(browser):
     :return:
     """
     page = DataTimePage(browser)
-    page.get("http://www.jq22.com/yanshi4976")
+    page.open("http://www.jq22.com/yanshi4976")
 
     page.frame.switch_to_frame()
     page.date.click()

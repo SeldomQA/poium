@@ -8,7 +8,7 @@ from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
-from appium.webdriver.common.mobileby import MobileBy
+from appium.webdriver.common.appiumby import AppiumBy
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
 from poium.common import logging
@@ -29,17 +29,17 @@ LOCATOR_LIST = {
     'tag': By.TAG_NAME,
     'class_name': By.CLASS_NAME,
     # appium
-    'ios_uiautomation': MobileBy.IOS_UIAUTOMATION,
-    'ios_predicate': MobileBy.IOS_PREDICATE,
-    'ios_class_chain': MobileBy.IOS_CLASS_CHAIN,
-    'android_uiautomator': MobileBy.ANDROID_UIAUTOMATOR,
-    'android_viewtag': MobileBy.ANDROID_VIEWTAG,
-    'android_data_matcher': MobileBy.ANDROID_DATA_MATCHER,
-    'android_view_matcher': MobileBy.ANDROID_VIEW_MATCHER,
-    'windows_uiautomation': MobileBy.WINDOWS_UI_AUTOMATION,
-    'accessibility_id': MobileBy.ACCESSIBILITY_ID,
-    'image': MobileBy.IMAGE,
-    'custom': MobileBy.CUSTOM,
+    'ios_uiautomation': AppiumBy.IOS_UIAUTOMATION,
+    'ios_predicate': AppiumBy.IOS_PREDICATE,
+    'ios_class_chain': AppiumBy.IOS_CLASS_CHAIN,
+    'android_uiautomator': AppiumBy.ANDROID_UIAUTOMATOR,
+    'android_viewtag': AppiumBy.ANDROID_VIEWTAG,
+    'android_data_matcher': AppiumBy.ANDROID_DATA_MATCHER,
+    'android_view_matcher': AppiumBy.ANDROID_VIEW_MATCHER,
+    'windows_uiautomation': AppiumBy.WINDOWS_UI_AUTOMATION,
+    'accessibility_id': AppiumBy.ACCESSIBILITY_ID,
+    'image': AppiumBy.IMAGE,
+    'custom': AppiumBy.CUSTOM,
 }
 
 
@@ -62,9 +62,31 @@ class PageObject(object):
         """
         :param uri:  URI to GET, based off of the root_uri attribute.
         """
+        warnings.warn("use page.open() instead",
+                      DeprecationWarning, stacklevel=2)
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
+
+    def open(self, uri):
+        """
+        :param uri:  URI to GET, based off of the root_uri attribute.
+        """
+        root_uri = self.root_uri or ''
+        self.driver.get(root_uri + uri)
+        self.driver.implicitly_wait(5)
+
+    def visit(self, uri):
+        """
+        open url
+        """
+        self.open(uri)
+
+    def goto(self, uri):
+        """
+        open url
+        """
+        self.open(uri)
 
 
 class Element(object):
@@ -72,8 +94,8 @@ class Element(object):
     Returns an element object
     """
 
-    def __init__(self, timeout=5, describe="undefined", index=0, **kwargs):
-        self.timeout = timeout
+    def __init__(self, timeout=5, describe="No describe", index=0, **kwargs):
+        self.times = timeout
         self.index = index
         self.desc = describe
         if not kwargs:
@@ -106,7 +128,7 @@ class Element(object):
         """
         Find if the element exists.
         """
-        for i in range(self.timeout):
+        for i in range(self.times):
             try:
                 elems = self.__elements(elem[0], elem[1])
             except FunctionTimedOut:
@@ -124,8 +146,7 @@ class Element(object):
                 sleep(1)
         else:
             error_msg = "❌ Find 0 elements through: {by}={value}".format(by=elem[0], value=elem[1])
-            logging.error(error_msg)
-            raise NoSuchElementException(error_msg)
+            logging.warn(error_msg)
 
     def __get_element(self, by, value):
         """
@@ -135,63 +156,63 @@ class Element(object):
         # selenium
         if by == "id_":
             self.__find_element((By.ID, value))
-            elem = Browser.driver.find_elements_by_id(value)[self.index]
+            elem = Browser.driver.find_elements(By.ID, value)[self.index]
         elif by == "name":
             self.__find_element((By.NAME, value))
-            elem = Browser.driver.find_elements_by_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.NAME, value)[self.index]
         elif by == "class_name":
             self.__find_element((By.CLASS_NAME, value))
-            elem = Browser.driver.find_elements_by_class_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.CLASS_NAME, value)[self.index]
         elif by == "tag":
             self.__find_element((By.TAG_NAME, value))
-            elem = Browser.driver.find_elements_by_tag_name(value)[self.index]
+            elem = Browser.driver.find_elements(By.TAG_NAME, value)[self.index]
         elif by == "link_text":
             self.__find_element((By.LINK_TEXT, value))
-            elem = Browser.driver.find_elements_by_link_text(value)[self.index]
+            elem = Browser.driver.find_elements(By.LINK_TEXT, value)[self.index]
         elif by == "partial_link_text":
             self.__find_element((By.PARTIAL_LINK_TEXT, value))
-            elem = Browser.driver.find_elements_by_partial_link_text(value)[self.index]
+            elem = Browser.driver.find_elements(By.PARTIAL_LINK_TEXT, value)[self.index]
         elif by == "xpath":
             self.__find_element((By.XPATH, value))
-            elem = Browser.driver.find_elements_by_xpath(value)[self.index]
+            elem = Browser.driver.find_elements(By.XPATH, value)[self.index]
         elif by == "css":
             self.__find_element((By.CSS_SELECTOR, value))
-            elem = Browser.driver.find_elements_by_css_selector(value)[self.index]
+            elem = Browser.driver.find_elements(By.CSS_SELECTOR, value)[self.index]
 
         # appium
         elif by == "ios_uiautomation":
-            self.__find_element((MobileBy.IOS_UIAUTOMATION, value))
-            elem = Browser.driver.find_elements_by_ios_uiautomation(value)[self.index]
+            self.__find_element((AppiumBy.IOS_UIAUTOMATION, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_UIAUTOMATION, value)[self.index]
         elif by == "ios_predicate":
-            self.__find_element((MobileBy.IOS_PREDICATE, value))
-            elem = Browser.driver.find_elements_by_ios_predicate(value)[self.index]
+            self.__find_element((AppiumBy.IOS_PREDICATE, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_PREDICATE, value)[self.index]
         elif by == "ios_class_chain":
-            self.__find_element((MobileBy.IOS_CLASS_CHAIN, value))
-            elem = Browser.driver.find_elements_by_ios_class_chain(value)[self.index]
+            self.__find_element((AppiumBy.IOS_CLASS_CHAIN, value))
+            elem = Browser.driver.find_elements(AppiumBy.IOS_CLASS_CHAIN, value)[self.index]
         elif by == "android_uiautomator":
-            self.__find_element((MobileBy.ANDROID_UIAUTOMATOR, value))
-            elem = Browser.driver.find_elements_by_android_uiautomator(value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_UIAUTOMATOR, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR, value)[self.index]
         elif by == "android_viewtag":
-            self.__find_element((MobileBy.ANDROID_VIEWTAG, value))
-            elem = Browser.driver.find_elements_by_android_viewtag(value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_VIEWTAG, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEWTAG, value)[self.index]
         elif by == "android_data_matcher":
-            self.__find_element((MobileBy.ANDROID_DATA_MATCHER, value))
-            elem = Browser.driver.find_elements_by_android_data_matcher(value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_DATA_MATCHER, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_DATA_MATCHER, value)[self.index]
         elif by == "accessibility_id":
-            self.__find_element((MobileBy.ACCESSIBILITY_ID, value))
-            elem = Browser.driver.find_elements_by_accessibility_id(value)[self.index]
+            self.__find_element((AppiumBy.ACCESSIBILITY_ID, value))
+            elem = Browser.driver.find_elements(AppiumBy.ACCESSIBILITY_ID, value)[self.index]
         elif by == "android_view_matcher":
-            self.__find_element((MobileBy.ANDROID_VIEW_MATCHER, value))
-            elem = Browser.driver.find_elements_by_android_view_matcher(value)[self.index]
+            self.__find_element((AppiumBy.ANDROID_VIEW_MATCHER, value))
+            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEW_MATCHER, value)[self.index]
         elif by == "windows_uiautomation":
-            self.__find_element((MobileBy.WINDOWS_UI_AUTOMATION, value))
-            elem = Browser.driver.find_elements_by_windows_uiautomation(value)[self.index]
+            self.__find_element((AppiumBy.WINDOWS_UI_AUTOMATION, value))
+            elem = Browser.driver.find_elements(AppiumBy.WINDOWS_UI_AUTOMATION, value)[self.index]
         elif by == "image":
-            self.__find_element((MobileBy.IMAGE, value))
-            elem = Browser.driver.find_elements_by_image(value)[self.index]
+            self.__find_element((AppiumBy.IMAGE, value))
+            elem = Browser.driver.find_elements(AppiumBy.IMAGE, value)[self.index]
         elif by == "custom":
-            self.__find_element((MobileBy.CUSTOM, value))
-            elem = Browser.driver.find_elements_by_custom(value)[self.index]
+            self.__find_element((AppiumBy.CUSTOM, value))
+            elem = Browser.driver.find_elements(AppiumBy.CUSTOM, value)[self.index]
         else:
             raise FindElementTypesError(
                 "Please enter the correct targeting elements")
@@ -251,7 +272,7 @@ class Element(object):
 
     @property
     def text(self):
-        """Clears the text if it's a text entry element."""
+        """The text of the element."""
         elem = self.__get_element(self.k, self.v)
         return elem.text
 
@@ -260,6 +281,13 @@ class Element(object):
         """The size of the element."""
         elem = self.__get_element(self.k, self.v)
         return elem.size
+
+    def value_of_css_property(self, property_name):
+        """
+        The value of a CSS property
+        """
+        elem = self.__get_element(self.k, self.v)
+        return elem.value_of_css_property(property_name)
 
     def get_property(self, name):
         """
@@ -500,8 +528,9 @@ class Elements(object):
     Returns a set of element objects
     """
 
-    def __init__(self, context=False, describe="undefined", **kwargs):
+    def __init__(self, context=False, describe="undefined", timeout=5, **kwargs):
         self.describe = describe
+        self.times = timeout
         if not kwargs:
             raise ValueError("Please specify a locator")
         if len(kwargs) > 1:
@@ -514,12 +543,16 @@ class Elements(object):
         self.has_context = bool(context)
 
     def find(self, context):
-        try:
+        for i in range(self.times):
             elems = context.find_elements(*self.locator)
-        except NoSuchElementException:
+            if len(elems) == 0:
+                sleep(1)
+            else:
+                break
+        else:
             elems = []
-        logging.info("✨ Find {n} elements through: {by}={value}, describe:{desc}".format(
-            n=len(elems), by=self.k, value=self.v, desc=self.describe))
+            logging.info("✨ Find {n} elements through: {by}={value}, describe:{desc}".format(
+                n=len(elems), by=self.k, value=self.v, desc=self.describe))
         return elems
 
     def __get__(self, instance, owner, context=None):

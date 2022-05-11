@@ -22,16 +22,6 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-## 旧版本说明
-
-> `poium < 0.6.0`版本，主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
-
-[参考文档](./docs/base_old.md)
-
-> `poium>=0.6.0, <1.0.0` 版本，新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
-
-[参考文档](./docs/base_0.6.0.md)
-
 ## Sample
 
 通过下面的例子，体会`Page Objects` 设计模式如此简单。
@@ -48,7 +38,7 @@ class BaiduIndexPage(Page):
 
 driver = webdriver.Chrome()
 page = BaiduIndexPage(driver)
-page.get("https://www.baidu.com")
+page.open("https://www.baidu.com")
 
 page.search_input.send_keys("poium") 
 page.search_button.click()
@@ -74,6 +64,16 @@ driver.quit()
 * 在基于pytest的自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
 
 * 在基于seldom自动化测试框架的应用，请点击[这里](https://github.com/SeldomQA/seldom) 。
+
+## Old version
+
+> `poium < 0.6.0`版本，主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
+
+[参考文档](./docs/base_old.md)
+
+> `poium>=0.6.0, <1.0.0` 版本，新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+
+[参考文档](./docs/base_0.6.0.md)
 
 ## Project History
 

@@ -1,4 +1,5 @@
 import sys
+import time
 import platform
 import logging.handlers
 from colorama import Fore, Style
@@ -8,6 +9,9 @@ _logger.setLevel(logging.DEBUG)
 _handler = logging.StreamHandler(sys.stdout)
 _handler.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
 _logger.addHandler(_handler)
+# _logger.removeHandler(_handler)
+
+colorLog = True
 
 
 def debug(msg):
@@ -15,19 +19,35 @@ def debug(msg):
 
 
 def info(msg):
-    _logger.info(Fore.GREEN + "INFO " + str(msg) + Style.RESET_ALL)
+    if colorLog is True:
+        _logger.info(Fore.GREEN + " [INFO] " + str(msg) + Style.RESET_ALL)
+    else:
+        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
+        _logger.info("[INFO] " + str(msg))
 
 
 def error(msg):
-    _logger.error(Fore.RED + "ERROR " + str(msg) + Style.RESET_ALL)
+    if colorLog is True:
+        _logger.error(Fore.RED + " [ERROR] " + str(msg) + Style.RESET_ALL)
+    else:
+        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
+        _logger.error("[ERROR] " + str(msg))
 
 
 def warn(msg):
-    _logger.warning(Fore.YELLOW + "WARNING " + str(msg) + Style.RESET_ALL)
+    if colorLog is True:
+        _logger.warning(Fore.YELLOW + " [WARNING] " + str(msg) + Style.RESET_ALL)
+    else:
+        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
+        _logger.warning("[WARNING] " + str(msg))
 
 
-def _print(msg):
-    _logger.debug(Fore.BLUE + "PRINT " + str(msg) + Style.RESET_ALL)
+def printf(msg):
+    if colorLog is True:
+        _logger.info(Fore.CYAN + " [PRINT] " + str(msg) + Style.RESET_ALL)
+    else:
+        msg = msg.encode('gbk', 'ignore').decode('gbk', "ignore")
+        _logger.info("[PRINT] " + str(msg))
 
 
 def set_level(level):

@@ -1,3 +1,28 @@
+#### 1.0.4
+* `CSSElement`类增加`get_text()`方法，用于获取元素文本
+* `Elements` 类增加`timeout`参数，默认为`5`秒
+
+
+#### 1.0.3
+* 增加`colorLog` 日志开关，例如在jenkins环境上防止编码问题，关闭`colorLog=False`。
+* 即将废弃的API
+  * ~~open()~~即将被移除，请使用`open()/visit()/goto()`任意一个代替。
+  * ~~new_window_handle~~ 即将被移除。
+  * ~~current_window_handle~~ 即将被移除。
+  * ~~window_handles~~ 即将被移除。
+* switch_to_window() 修改用方法。[sample](./sample/selenium_sample/test_window.py)
+
+#### 1.0.2
+* 增加`sleep()` 方法设置固定休眠
+* 增加`wait()` 方法设置隐式等待
+* 增加`wait_script_timeout()` 方法设置脚本加载超时时间
+* 增加`wait_page_load_timeout()` 方法设置页面加载超时时间
+
+#### 1.0.1
+* 增加`value_of_css_property`方法
+* `move_by_offset()` 增加click参数
+* 修复语法错误
+
 #### 1.0.0 version update
 * 移除旧的类
 * 增加Elements

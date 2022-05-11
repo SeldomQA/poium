@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoAlertPresentException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
 
 from poium.page_objects import PageObject
+from poium.common.keyboard import KeyEvent
 
 
 class Page(PageObject):
@@ -77,7 +78,7 @@ class Page(PageObject):
         selenium API
         Switches focus to the specified frame, by id, name, or webelement.
         """
-        warnings.warn("use driver.elem.switch_to_frame() instead",
+        warnings.warn("use page.elem.switch_to_frame() instead",
                       DeprecationWarning, stacklevel=2)
         self.driver.switch_to.frame(frame_reference)
 
@@ -95,7 +96,9 @@ class Page(PageObject):
         selenium API
         Getting a handle to a new window.
         """
-        all_handle = self.window_handles
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
+        all_handle = self.driver.window_handles
         return all_handle[-1]
 
     @property
@@ -104,6 +107,8 @@ class Page(PageObject):
         selenium API
         Returns the handle of the current window.
         """
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
         return self.driver.current_window_handle
 
     @property
@@ -112,14 +117,23 @@ class Page(PageObject):
         selenium API
         Returns the handles of all windows within the current session.
         """
+        warnings.warn("This method is on the verge of obsolescence",
+                      DeprecationWarning, stacklevel=2)
         return self.driver.window_handles
 
-    def switch_to_window(self, handle):
+    def switch_to_window(self, index: int) -> None:
         """
         selenium API
         Switches focus to the specified window.
+
+        :Args:
+         - window: window index. 1 represents a newly opened window (0 is the first one)
+
+        :Usage:
+            self.switch_to_window(1)
         """
-        self.driver.switch_to.window(handle)
+        all_handles = self.driver.window_handles
+        self.driver.switch_to.window(all_handles[index])
 
     def screenshots(self, path=None, filename=None):
         """
@@ -211,6 +225,16 @@ class Page(PageObject):
             else:
                 raise NameError("No WebView found.")
 
+    def key_text(self, text):
+        """
+        appium API
+        Support input text, Chinese is not supported
+        Usage:
+            self.set_text("hello")
+        """
+        ke = KeyEvent(self.driver)
+        ke.input(text)
+
     def accept_alert(self):
         """
         selenium API
@@ -250,7 +274,7 @@ class Page(PageObject):
         selenium API
         Moving the mouse to the middle of an element
         """
-        warnings.warn("use driver.elem.move_to_element() instead",
+        warnings.warn("use page.elem.move_to_element() instead",
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).move_to_element(elem).perform()
 
@@ -259,7 +283,7 @@ class Page(PageObject):
         selenium API
         Holds down the left mouse button on an element.
         """
-        warnings.warn("use driver.elem.click_and_hold() instead",
+        warnings.warn("use page.elem.click_and_hold() instead",
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).click_and_hold(elem).perform()
 
@@ -268,11 +292,11 @@ class Page(PageObject):
         selenium API
         Double-clicks an element.
         """
-        warnings.warn("use driver.elem.double_click() instead",
+        warnings.warn("use page.elem.double_click() instead",
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).double_click(elem).perform()
 
-    def move_by_offset(self, x, y):
+    def move_by_offset(self, x, y, click=False):
         """
         selenium API
         Moving the mouse to an offset from current mouse position.
@@ -281,7 +305,10 @@ class Page(PageObject):
          - x: X offset to move to, as a positive or negative integer.
          - y: Y offset to move to, as a positive or negative integer.
         """
-        ActionChains(self.driver).move_by_offset(x, y).perform()
+        if click is True:
+            ActionChains(self.driver).move_by_offset(x, y).click().perform()
+        else:
+            ActionChains(self.driver).move_by_offset(x, y).perform()
 
     def release(self):
         """
@@ -295,7 +322,7 @@ class Page(PageObject):
         selenium API
         Performs a context-click (right click) on an element.
         """
-        warnings.warn("use driver.elem.context_click() instead",
+        warnings.warn("use page.elem.context_click() instead",
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).context_click(elem).perform()
 
@@ -308,7 +335,7 @@ class Page(PageObject):
         :param x: X offset to move to.
         :param y: Y offset to move to.
         """
-        warnings.warn("use driver.elem.drag_and_drop_by_offset(x, y) instead",
+        warnings.warn("use page.elem.drag_and_drop_by_offset(x, y) instead",
                       DeprecationWarning, stacklevel=2)
         ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
 
@@ -317,7 +344,7 @@ class Page(PageObject):
         selenium API
         Refreshes the current page, retrieve elements.
         """
-        warnings.warn("use driver.elem.refresh_element() instead",
+        warnings.warn("use page.elem.refresh_element() instead",
                       DeprecationWarning, stacklevel=2)
         try:
             timeout_int = int(timeout)
@@ -367,3 +394,37 @@ class Page(PageObject):
         Swipe from one point to another point, for an optional duration.
         """
         self.driver.swipe(start_x, start_y, end_x, end_y, duration)
+
+    @staticmethod
+    def sleep(sec: int) -> None:
+        """
+        Usage:
+            page.sleep(seconds)
+        """
+        time.sleep(sec)
+
+    def wait(self, secs: int = 10) -> None:
+        """
+        Implicitly wait.All elements on the page.
+        Usage:
+            page.wait(10)
+        """
+        self.driver.implicitly_wait(secs)
+
+    def wait_script_timeout(self, time_to_wait):
+        """
+        Set the amount of time that the script should wait during an
+           execute_async_script call before throwing an error.
+        Usage:
+            page.wait_script_timeout(10)
+        """
+        self.driver.set_script_timeout(time_to_wait)
+
+    def wait_page_load_timeout(self, time_to_wait):
+        """
+        Set the amount of time to wait for a page load to complete
+           before throwing an error.
+        Usage:
+            page.wait_page_load_timeout(10)
+        """
+        self.driver.set_page_load_timeout(time_to_wait)

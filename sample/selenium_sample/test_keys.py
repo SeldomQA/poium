@@ -8,7 +8,7 @@ class BaiduIndexPage(Page):
 
 def test_keys(browser):
     page = BaiduIndexPage(browser)
-    page.get("https://www.baidu.com")
+    page.open("https://www.baidu.com")
 
     # 输入 seldomm
     page.search_input.input("seldomm")

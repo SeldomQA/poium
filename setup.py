@@ -25,10 +25,11 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['selenium>=3.14.1',
-                      'Appium-Python-Client>=1.0.1',
-                      'colorama>=0.4.3',
-                      'func-timeout>=4.3.5'],
+    install_requires=[
+        'Appium-Python-Client>=2.1.0',
+        'colorama>=0.4.3',
+        'func-timeout>=4.3.5'
+    ],
     classifiers=[
         'Intended Audience :: Developers',
         'Operating System :: MacOS :: MacOS X',
@@ -37,11 +38,9 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     extras_require={
