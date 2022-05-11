@@ -14,6 +14,7 @@ class BBSPage(Page):
     search_result = Element(resourceId="com.meizu.flyme.flymebbs:id/a29", describe="搜索结果")
 
 
+
 d = u2.connect()
 d.app_start("com.meizu.flyme.flymebbs")
 page = BBSPage(d)

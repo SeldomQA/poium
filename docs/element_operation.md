@@ -8,9 +8,10 @@
 page.elem.clear()
 """Clears the text if it's a text entry element."""
 
-page.elem.send_keys(value)
+page.elem.send_keys(value, clear_before=False)
 """
 Simulates typing into the element.
+If clear_before is True, it will clear the content before typing.
 """
 
 page.elem.click()

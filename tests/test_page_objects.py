@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 from selenium.common.exceptions import NoSuchElementException
 
-from poium import Page, PageElement, PageElements
+from poium import Page, Element, Elements
 
 @pytest.fixture()
 def webdriver():
@@ -18,14 +18,14 @@ def webdriver():
 class TestConstructor:
 
     def test_page_element(self):
-        elem_id = PageElement(id_='id')
-        elem_name = PageElement(name='name')
-        elem_class = PageElement(class_name='class')
-        elem_tag = PageElement(tag='input')
-        elem_link_text = PageElement(link_text='this_is_link')
-        elem_partial_link_text = PageElement(partial_link_text='is_link')
-        elem_xpath = PageElement(xpath='//*[@id="kk"]')
-        elem_css = PageElement(css='#id')
+        elem_id = Element(id_='id')
+        elem_name = Element(name='name')
+        elem_class = Element(class_name='class')
+        elem_tag = Element(tag='input')
+        elem_link_text = Element(link_text='this_is_link')
+        elem_partial_link_text = Element(partial_link_text='is_link')
+        elem_xpath = Element(xpath='//*[@id="kk"]')
+        elem_css = Element(css='#id')
         assert elem_id.k == 'id_'
         assert elem_name.k == "name"
         assert elem_class.k == "class_name"
@@ -37,22 +37,22 @@ class TestConstructor:
 
     def test_page_element_bad_args(self):
         with pytest.raises(ValueError):
-            PageElement()
+            Element()
         with pytest.raises(ValueError):
-            PageElement(id_='foo', xpath='bar')
+            Element(id_='foo', xpath='bar')
 
 
 class TestGet:
 
     def test_get_unattached(self):
-        assert PageElement(css='bar').__get__(None, None) is None
+        assert Element(css='bar').__get__(None, None) is None
 
 
 class TestSet:
 
     def test_set_multi(self, webdriver):
         class TestPage(Page):
-            test_elems = PageElements(css='foo')
+            test_elems = Elements(css='foo')
 
         page = TestPage(webdriver)
         elem1 = mock.Mock(spec=WebElement)
@@ -98,14 +98,14 @@ class TestRootURI:
 class TestTimeOut:
 
     def test_setting_time_out(self):
-        elem = PageElement(css='foo', timeout=10)
+        elem = Element(css='foo', timeout=10)
         assert elem.k == "css"
 
 
 class TestDescribe:
 
     def test_setting_describe(self):
-        elem = PageElement(name='wd', describe="this is search input")
+        elem = Element(name='wd', describe="this is search input")
         assert elem.k == "name"
 
 
