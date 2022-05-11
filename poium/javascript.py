@@ -15,12 +15,9 @@ class CSSElement(object):
 
     driver = None
 
-    def __init__(self, css, index=None, describe=None):
+    def __init__(self, css: str, index: int = 0, describe: str = ""):
         self.css = css
-        if index is None:
-            self.index = "0"
-        else:
-            self.index = str(index)
+        self.index = str(index)
         self.desc = describe
 
     def __get__(self, instance, owner):
@@ -39,181 +36,181 @@ class CSSElement(object):
         except JavascriptException:
             raise CSSFindElementError("Element discovery failure. ", js)
 
-    def clear(self):
+    def clear(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Clears the text if it's a text entry element, Only support css positioning
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
+        logging.info(f"Clear input field. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
                     elm.style.border="2px solid red";
-                    elm.value = "";""".format(css=self.css, index=self.index)
+                    elm.value = "";"""
         self._execute_javascript(js)
 
-    def get_text(self, i=None):
+    def get_text(self, i: int = None) -> str:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Get element text content.
         :param i: index
         """
         if i is None:
             i = self.index
-
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """return document.querySelectorAll("{css}")[{index}].textContent;""".format(
-            css=self.css, index=i)
+        else:
+            i = str(i)
+        logging.info(f"get text. {self.desc}")
+        js = f"""return document.querySelectorAll("{self.css}")[{i}].textContent;"""
         return self._execute_javascript(js)
 
-    def set_text(self, value):
+    def set_text(self, value: str) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Simulates typing into the element.
         :param value: input text
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
+        logging.info(f"set text. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
                     elm.style.border="2px solid red";
-                    elm.value = "{value}";""".format(css=self.css, index=self.index, value=value)
+                    elm.value = "{value}";"""
         self._execute_javascript(js)
 
-    def click(self):
+    def click(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Click element.
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
+        logging.info(f"click element. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
                    elm.style.border="2px solid red";
-                   elm.click();""".format(css=self.css, index=self.index)
+                   elm.click();"""
         self._execute_javascript(js)
 
-    def click_display(self):
+    def click_display(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Click on the displayed element, otherwise skip it.
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        logging.info(f"Click on the displayed element. {self.desc}")
         js = 'var elm = document.querySelector("' + self.css + '");' \
              ' if(elm != null){elm.style.border="2px solid red";elm.click();}'
         self._execute_javascript(js)
 
-    def display(self):
+    def display(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Display hidden elements
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                    elm.style.display = "block";""".format(css=self.css, index=self.index)
+        logging.info(f"display hidden element. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.style.display = "block";"""
         self._execute_javascript(js)
 
-    def remove_attribute(self, attribute):
+    def remove_attribute(self, attribute) -> None:
         """
-        JavaScript API, Only support css positioning
-        Remove element attribute, Only support css positioning
+        JavaScript API
+        Remove element attribute
         :param attribute:
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                    elm.removeAttribute("{attr}");""".format(css=self.css, index=self.index, attr=attribute)
+        logging.info(f"remove element attribute. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.removeAttribute("{attribute}");"""
         self._execute_javascript(js)
 
-    def set_attribute(self, attribute, value):
+    def set_attribute(self, attribute, value) -> None:
         """
-        JavaScript API, Only support css positioning
-        Setting element attribute, Only support css positioning
+        JavaScript API
+        Setting element attribute
         :param attribute:
         :param value:
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                    elm.setAttribute("{attr}", "{value}");
-                    """.format(css=self.css, index=self.index, attr=attribute, value=value)
+        logging.info(f"setting element attribute. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.setAttribute("{attribute}", "{value}");
+                    """
         self._execute_javascript(js)
 
-    def clear_style(self):
+    def clear_style(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Clear element styles.
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                    elm.style="";""".format(css=self.css, index=self.index)
+        logging.info(f"clear element styles. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.style="";"""
         self._execute_javascript(js)
 
-    def clear_class(self):
+    def clear_class(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Clear element class
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{index}];
-                     elm.removeAttribute("class");""".format(css=self.css, index=self.index)
+        logging.info(f"clear element class. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                     elm.removeAttribute("class");"""
         self._execute_javascript(js)
 
-    def inner_text(self, text):
+    def inner_text(self, text) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         The innerText property sets the text content of the specified element, Only support css positioning
         :param text: Inserted text
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{i}];
-                     elm.innerText="{text}";""".format(css=self.css, i=self.index, text=text)
+        logging.info(f"inner text. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                     elm.innerText="{text}";"""
         self._execute_javascript(js)
 
-    def remove_child(self, child=0):
+    def remove_child(self, child: int = 0) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Remove a node from the child node list
         :param child: child of the child node
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.removeChild(elm.childNodes[{child}]);""".format(css=self.css, i=self.index, child=str(child))
+        logging.info(f"Remove a node from the child node list. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.removeChild(elm.childNodes[{child}]);"""
         self._execute_javascript(js)
 
-    def click_parent(self):
+    def click_parent(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Click the parent element of the element
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.parentElement.click();""".format(css=self.css, i=self.index)
+        logging.info(f"click the parent element of the element. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.parentElement.click();"""
         self._execute_javascript(js)
 
-    def scroll(self, top=0, left=0):
+    def scroll(self, top=0, left=0) -> None:
         """
-        JavaScript API, Only support css positioning
-        scroll the div element on the page
+        JavaScript API
+        Scroll the div element on the page
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
+        logging.info(f"scroll the div element on the page. {self.desc}")
         if top != 0:
-            js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.scrollTop={t};""".format(css=self.css, i=self.index, t=top)
+            js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.scrollTop={top};"""
             self._execute_javascript(js)
         if left != 0:
-            js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.scrollLeft={l};""".format(css=self.css, i=self.index, l=left)
+            js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.scrollLeft={left};"""
             self._execute_javascript(js)
 
-    def move_to(self):
+    def move_to(self) -> None:
         """
-        JavaScript API, Only support css positioning
+        JavaScript API
         Move the mouse over the element
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """var elm = document.querySelectorAll("{css}")[{i}];
-                    elm.dispatchEvent(new Event("mouseover"));""".format(css=self.css, i=self.index)
+        logging.info(f"Move the mouse over the element. {self.desc}")
+        js = f"""var elm = document.querySelectorAll("{self.css}")[{self.index}];
+                    elm.dispatchEvent(new Event("mouseover"));"""
         self._execute_javascript(js)
 
     @property
-    def value(self):
+    def value(self) -> str:
         """
-        JavaScript API, Only support css positioning
-        Setting element attribute, Only support css positioning
+        JavaScript API
+        Gets the value of the element.
         """
-        logging.info("Element of the current operation: {desc}".format(desc=self.desc))
-        js = """return document.querySelectorAll("{css}")[{i}].value;""".format(css=self.css, i=self.index)
+        logging.info(f"get element value. {self.desc}")
+        js = f"""return document.querySelectorAll("{self.css}")[{self.index}].value;"""
         return self._execute_javascript(js)
