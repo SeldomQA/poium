@@ -1,4 +1,6 @@
 
+printLog = False
+
 
 class Browser:
     # Default browser driver
