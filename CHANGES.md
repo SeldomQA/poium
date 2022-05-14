@@ -1,6 +1,6 @@
 #### 1.1.0
 * 依赖版本：`appium 2.0+` 、`selenium 4.0+`，要求`python 3.7+`。
-* 新的log库: `loguru`
+* 新的log库: `loguru`, 元素操作增加日志。
 * 元素为添加描述，不再提示`undefined`
 * `CSSElement`类增加`value`语句，用于获取输入框内容。
 * 移动测试增加`key_text()`, 模拟键盘输入。
