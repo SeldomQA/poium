@@ -134,7 +134,7 @@ class Element(object):
                 elems = []
 
             if len(elems) == 1:
-                logging.info(f"✅ Find element: {elem[0]}={elem[1]}. {self.desc}")
+                logging.info(f"🔍 Find element: {elem[0]}={elem[1]}. {self.desc}")
                 break
             elif len(elems) > 1:
                 logging.info(f"❓ Find {len(elems)} elements through: {elem[0]}={elem[1]}. {self.desc}")
@@ -233,10 +233,11 @@ class Element(object):
 
     def clear(self):
         """Clears the text if it's a text entry element."""
+        logging.info("✅ clear.")
         elem = self.__get_element(self.k, self.v)
         elem.clear()
 
-    def send_keys(self, value, clear=False):
+    def send_keys(self, value, clear=False) -> None:
         """
         Simulates typing into the element.
         If clear_before is True, it will clear the content before typing.
@@ -245,58 +246,82 @@ class Element(object):
         if clear is True:
             elem.clear()
         elem.send_keys(value)
+        logging.info(f"✅ send_keys('{value}').")
 
-    def click(self):
-        """Clicks the element."""
+    def click(self) -> None:
+        """
+        Clicks the element.
+        """
         elem = self.__get_element(self.k, self.v)
         elem.click()
+        logging.info(f"✅ click().")
 
     def submit(self):
-        """Submits a form."""
+        """
+        Submits a form.
+        """
         elem = self.__get_element(self.k, self.v)
         elem.submit()
+        logging.info(f"✅ submit().")
 
     @property
-    def tag_name(self):
+    def tag_name(self) -> str:
         """This element's ``tagName`` property."""
         elem = self.__get_element(self.k, self.v)
-        return elem.tag_name
+        tag_name = elem.tag_name
+        logging.info(f"✅ tag_name: {tag_name}.")
+        return tag_name
 
     @property
-    def text(self):
+    def text(self) -> str:
         """The text of the element."""
         elem = self.__get_element(self.k, self.v)
-        return elem.text
+        text = elem.text
+        logging.info(f"✅ text: {text}.")
+        return text
 
     @property
-    def size(self):
+    def size(self) -> dict:
         """The size of the element."""
         elem = self.__get_element(self.k, self.v)
-        return elem.size
+        size = elem.size
+        logging.info(f"✅ size: {size}.")
+        return size
 
     def value_of_css_property(self, property_name):
         """
         The value of a CSS property
+        :param property_name:
         """
         elem = self.__get_element(self.k, self.v)
-        return elem.value_of_css_property(property_name)
+        property_value = elem.value_of_css_property(property_name)
+        logging.info(f"✅ value_of_css_property('{property_name}') -> {property_value}.")
+        return property_name
 
-    def get_property(self, name):
+    def get_property(self, name) -> str:
         """
         Gets the given property of the element.
         """
         elem = self.__get_element(self.k, self.v)
-        return elem.get_property(name)
+        value = elem.get_property(name)
+        logging.info(f"✅ get_property('{name}') -> {value}.")
+        return value
 
-    def get_attribute(self, name):
-        """Gets the given attribute or property of the element."""
+    def get_attribute(self, name) -> str:
+        """
+        Gets the given attribute or property of the element.
+        """
         elem = self.__get_element(self.k, self.v)
-        return elem.get_attribute(name)
+        value = elem.get_attribute(name)
+        logging.info(f"✅ get_property('{name}') -> {value}.")
+        return value
 
-    def is_displayed(self):
+    def is_displayed(self) -> bool:
         """Whether the element is visible to a user."""
         elem = self.__get_element(self.k, self.v)
-        return elem.is_displayed()
+        display = elem.is_displayed()
+        logging.info(f"✅ is_displayed() -> {display}.")
+        return display
 
     def is_selected(self):
         """
@@ -305,54 +330,63 @@ class Element(object):
         Can be used to check if a checkbox or radio button is selected.
         """
         elem = self.__get_element(self.k, self.v)
-        return elem.is_selected()
+        select = elem.is_selected()
+        logging.info(f"✅ is_selected() -> {select}.")
+        return select
 
     def is_enabled(self):
         """Returns whether the element is enabled."""
         elem = self.__get_element(self.k, self.v)
-        return elem.is_enabled()
+        enable = elem.is_enabled()
+        logging.info(f"✅ is_enabled() -> {enable}.")
+        return enable
 
-    def switch_to_frame(self):
+    def switch_to_frame(self) -> None:
         """
         selenium API
         Switches focus to the specified frame
         """
         elem = self.__get_element(self.k, self.v)
         Browser.driver.switch_to.frame(elem)
+        logging.info(f"✅ switch_to_frame().")
 
-    def move_to_element(self):
+    def move_to_element(self) -> None:
         """
         selenium API
         Moving the mouse to the middle of an element
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).move_to_element(elem).perform()
+        logging.info(f"✅ move_to_element().")
 
-    def click_and_hold(self):
+    def click_and_hold(self) -> None:
         """
         selenium API
         Holds down the left mouse button on an element.
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).click_and_hold(elem).perform()
+        logging.info(f"✅ click_and_hold().")
 
-    def double_click(self):
+    def double_click(self) -> None:
         """
         selenium API
         Holds down the left mouse button on an element.
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).double_click(elem).perform()
+        logging.info(f"✅ double_click().")
 
-    def context_click(self):
+    def context_click(self) -> None:
         """
         selenium API
         Performs a context-click (right click) on an element.
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).context_click(elem).perform()
+        logging.info(f"✅ double_click().")
 
-    def drag_and_drop_by_offset(self, x, y):
+    def drag_and_drop_by_offset(self, x: int, y: int) -> None:
         """
         selenium API
         Holds down the left mouse button on the source element,
@@ -362,19 +396,15 @@ class Element(object):
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
+        logging.info(f"✅ drag_and_drop_by_offset('{x}', '{y}').")
 
-    def refresh_element(self, timeout=10):
+    def refresh_element(self, timeout: int = 10) -> None:
         """
         selenium API
         Refreshes the current page, retrieve elements.
         """
-        try:
-            timeout_int = int(timeout)
-        except TypeError:
-            raise ValueError("Type 'timeout' error, must be type int() ")
-
         elem = self.__get_element(self.k, self.v)
-        for i in range(timeout_int):
+        for i in range(timeout):
             if elem is not None:
                 try:
                     elem
@@ -387,7 +417,7 @@ class Element(object):
         else:
             raise TimeoutError("stale element reference: element is not attached to the page document.")
 
-    def select_by_value(self, value):
+    def select_by_value(self, value: str) -> None:
         """
         selenium API
         Select all options that have a value matching the argument. That is, when given "foo" this
@@ -402,8 +432,9 @@ class Element(object):
         """
         select_elem = self.__get_element(self.k, self.v)
         Select(select_elem).select_by_value(value)
+        logging.info(f"✅ select_by_value('{value}').")
 
-    def select_by_index(self, index):
+    def select_by_index(self, index: int) -> None:
         """
         selenium API
         Select the option at the given index. This is done by examing the "index" attribute of an
@@ -416,8 +447,9 @@ class Element(object):
         """
         select_elem = self.__get_element(self.k, self.v)
         Select(select_elem).select_by_index(index)
+        logging.info(f"✅ select_by_index('{index}').")
 
-    def select_by_visible_text(self, text):
+    def select_by_visible_text(self, text: str) -> None:
         """
         selenium API
         Select all options that display text matching the argument. That is, when given "Bar" this
@@ -432,6 +464,7 @@ class Element(object):
         """
         select_elem = self.__get_element(self.k, self.v)
         Select(select_elem).select_by_visible_text(text)
+        logging.info(f"✅ select_by_visible_text('{text}').")
 
     def set_text(self, keys):
         """
@@ -440,6 +473,7 @@ class Element(object):
         """
         elem = self.__get_element(self.k, self.v)
         elem.set_text(keys)
+        logging.info(f"✅ set_text('{keys}').")
         return self
 
     @property
@@ -451,68 +485,81 @@ class Element(object):
             dict: The location of an element relative to the view
         """
         elem = self.__get_element(self.k, self.v)
-        return elem.location_in_view()
+        location = elem.location_in_view()
+        logging.info(f"✅ location_in_view -> {location}.")
+        return location
 
-    def set_value(self, value):
+    def set_value(self, value: str):
         """
         appium API
         Set the value on this element in the application
         """
         elem = self.__get_element(self.k, self.v)
         elem.set_value(value)
+        logging.info(f"✅ set_value('{value}').")
         return self
 
-    def input(self, text=""):
+    def input(self, text="") -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(text)
+        logging.info(f"🎹 input('{text}').")
 
-    def enter(self):
+    def enter(self) -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.ENTER)
+        logging.info(f"🎹 enter.")
 
-    def select_all(self):
+    def select_all(self) -> None:
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "a")
         else:
             elem.send_keys(Keys.CONTROL, "a")
+        logging.info(f"🎹 control + a.")
 
-    def cut(self):
+    def cut(self) -> None:
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "x")
         else:
             elem.send_keys(Keys.CONTROL, "x")
+        logging.info(f"🎹 control + x.")
 
-    def copy(self):
+    def copy(self) -> None:
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "c")
         else:
             elem.send_keys(Keys.CONTROL, "c")
+        logging.info(f"🎹 control + c.")
 
-    def paste(self):
+    def paste(self) -> None:
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "v")
         else:
             elem.send_keys(Keys.CONTROL, "v")
+        logging.info(f"🎹 control + v.")
 
-    def backspace(self):
+    def backspace(self) -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.BACKSPACE)
+        logging.info(f"🎹 backspace.")
 
-    def delete(self):
+    def delete(self) -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.DELETE)
+        logging.info(f"🎹 delete.")
 
-    def tab(self):
+    def tab(self) -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.TAB)
+        logging.info(f"🎹 tab.")
 
-    def space(self):
+    def space(self) -> None:
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.SPACE)
+        logging.info(f"🎹 space.")
 
 
 class Elements(object):
