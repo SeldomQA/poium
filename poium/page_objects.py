@@ -13,6 +13,7 @@ from poium.common.exceptions import FindElementTypesError
 from poium.common import logging
 from func_timeout import func_set_timeout
 from func_timeout.exceptions import FunctionTimedOut
+from poium import config
 from poium.config import Browser
 
 
@@ -47,7 +48,7 @@ class PageObject(object):
     Page Object pattern.
     """
 
-    def __init__(self, driver, url=None):
+    def __init__(self, driver, url=None, print_log=False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
@@ -56,6 +57,7 @@ class PageObject(object):
         """
         self.driver = driver
         self.root_uri = url if url else getattr(self.driver, 'url', None)
+        config.printLog = print_log
 
     def get(self, uri):
         """

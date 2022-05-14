@@ -1,7 +1,7 @@
 import sys
 import time
 from loguru import logger
-from poium.config import printLog
+from poium import config
 
 
 class Logger:
@@ -21,43 +21,43 @@ class Logger:
         logger.add(sys.stderr, level=level, colorize=colorlog, format=format)
 
     def trace(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | TRACE | {str(msg)}")
         return self.logger.trace(msg)
 
     def debug(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | DEBUG | {str(msg)}")
         return self.logger.debug(msg)
 
     def info(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | INFO | {str(msg)}")
         return self.logger.info(msg)
 
     def success(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | SUCCESS | {str(msg)}")
         return self.logger.success(msg)
 
     def warn(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | WARNING | {str(msg)}")
         return self.logger.warning(msg)
 
     def error(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | ERROR | {str(msg)}")
         return self.logger.error(msg)
 
     def critical(self, msg: str):
-        if printLog is True:
+        if config.printLog is True:
             now = time.strftime("%Y-%m-%d %H:%M:%S")
             print(f"{now} | CRITICAL | {str(msg)}")
         return self.logger.critical(msg)
