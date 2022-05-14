@@ -134,15 +134,15 @@ class Element(object):
                 elems = []
 
             if len(elems) == 1:
-                logging.info(f"✅ Find element: {elem[0]}={elem[1]}")
+                logging.info(f"✅ Find element: {elem[0]}={elem[1]}. {self.desc}")
                 break
             elif len(elems) > 1:
-                logging.info(f"❓ Find {len(elems)} elements through: {elem[0]}={elem[1]}")
+                logging.info(f"❓ Find {len(elems)} elements through: {elem[0]}={elem[1]}. {self.desc}")
                 break
             else:
                 sleep(1)
         else:
-            logging.warn(f"❌ Find 0 elements through: {elem[0]}={elem[1]}")
+            logging.warn(f"❌ Find 0 elements through: {elem[0]}={elem[1]}. {self.desc}")
 
     def __get_element(self, by, value):
         """
@@ -520,8 +520,8 @@ class Elements(object):
     Returns a set of element objects
     """
 
-    def __init__(self, context=False, describe="undefined", timeout=5, **kwargs):
-        self.describe = describe
+    def __init__(self, context=False, describe: str = "", timeout: int = 5, **kwargs):
+        self.desc = describe
         self.times = timeout
         if not kwargs:
             raise ValueError("Please specify a locator")
@@ -543,7 +543,7 @@ class Elements(object):
                 break
         else:
             elems = []
-            logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.describe}")
+            logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.desc}")
         return elems
 
     def __get__(self, instance, owner, context=None):
