@@ -298,7 +298,7 @@ class Element(object):
         elem = self.__get_element(self.k, self.v)
         property_value = elem.value_of_css_property(property_name)
         logging.info(f"✅ value_of_css_property('{property_name}') -> {property_value}.")
-        return property_name
+        return property_value
 
     def get_property(self, name) -> str:
         """
