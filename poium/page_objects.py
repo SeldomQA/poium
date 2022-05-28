@@ -48,7 +48,7 @@ class PageObject(object):
     Page Object pattern.
     """
 
-    def __init__(self, driver, url=None, print_log=False):
+    def __init__(self, driver, url=None):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
@@ -57,7 +57,6 @@ class PageObject(object):
         """
         self.driver = driver
         self.root_uri = url if url else getattr(self.driver, 'url', None)
-        config.printLog = print_log
 
     def get(self, uri):
         """
