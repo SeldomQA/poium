@@ -48,15 +48,17 @@ class PageObject(object):
     Page Object pattern.
     """
 
-    def __init__(self, driver, url=None):
+    def __init__(self, driver, url=None,  print_log: bool = False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
+        :param print_log: `bool` Need to be turned on when used with the seldom framework
         Root URI to base any calls to the ``PageObject.get`` method. If not defined
         in the constructor it will try and look it from the webdriver object.
         """
         self.driver = driver
         self.root_uri = url if url else getattr(self.driver, 'url', None)
+        config.printLog = print_log
 
     def get(self, uri):
         """

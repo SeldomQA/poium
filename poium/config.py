@@ -1,4 +1,7 @@
 
+# 开启print打印
+printLog = False
+
 
 class Browser:
     # Default browser driver
