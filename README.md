@@ -58,6 +58,7 @@ driver.quit()
 * [CSSElement类](/docs/csselement.md)
 * [在Selenium中使用poium](docs/selenium_sample.md)
 * [在appium中使用poium](docs/poium_sample.md)
+* [在seldom框架中使用poium](docs/seldom_sample.md)
 
 ## Project usage
 
