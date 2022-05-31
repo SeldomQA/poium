@@ -1,10 +1,10 @@
 import os
 import time
-from poium.settings import Setting
-from poium.common import logging
-from poium.processing import processing, screenshots_name
-from poium.common.assert_des import insert_assert
 
+from poium.common import logging
+from poium.common.assert_des import insert_assert
+from poium.processing import processing, screenshots_name
+from poium.settings import Setting
 
 LOCATOR_LIST = [
     "text",
@@ -89,7 +89,7 @@ class Page(object):
         """
         return self.driver.app_info(pkg_name)
 
-    def click(self, x: float=None, y: float=None, text: str=None, screenshots=Setting.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None, screenshots=Setting.click_screenshots):
         """
         Args:
             x : width / percentage of width
@@ -173,7 +173,7 @@ class Page(object):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
             time.sleep(between)
 
-    def swipe_left(self,  fx=0.3, fy=0.5, tx=0.7, ty=0.5, duration=0.1, times=1, between=0):
+    def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, duration=0.1, times=1, between=0):
         """
         Args:
             fx: from position
@@ -192,7 +192,7 @@ class Page(object):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
             time.sleep(between)
 
-    def swipe_right(self,  fx=0.7, fy=0.5, tx=0.3, ty=0.5, duration=0.1, times=1, between=0):
+    def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, duration=0.1, times=1, between=0):
         """
         Args:
             fx: from position
@@ -210,7 +210,7 @@ class Page(object):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
             time.sleep(between)
 
-    def swipe_search(self, text, direction="down", x: float=None, y: float=None):
+    def swipe_search(self, text, direction="down", x: float = None, y: float = None):
         """
         文本搜索(不基于元素对象)
 
@@ -283,7 +283,7 @@ class Page(object):
             logging.info("实际结果: " + describe + " 文案存在")
         else:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 文案不存在")
+            logging.warning("实际结果: " + describe + " 文案不存在")
 
     def assert_element_exists(self, element, describe, sleep=0, timeout=10):
         """
@@ -305,7 +305,7 @@ class Page(object):
             logging.info("实际结果: " + describe + " 元素存在")
         else:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 元素不存在")
+            logging.warning("实际结果: " + describe + " 元素不存在")
 
     def assert_text_not_exists(self, text, describe, sleep=0, timeout=10):
         """
@@ -324,7 +324,7 @@ class Page(object):
         logging.info("预期结果: " + describe + " 文案不存在")
         if text_exists is True:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 文案存在")
+            logging.warning("实际结果: " + describe + " 文案存在")
         else:
             insert_assert(describe, True)
             logging.info("实际结果: " + describe + " 文案不存在")
@@ -345,7 +345,7 @@ class Page(object):
         logging.info("预期结果: " + describe + " 元素不存在")
         if element_exists is True:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 元素存在")
+            logging.warning("实际结果: " + describe + " 元素存在")
         else:
             insert_assert(describe, True)
             logging.info("实际结果: " + describe + " 元素不存在")
@@ -372,7 +372,7 @@ class Page(object):
         else:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("实际结果: " + describe + " 文案不存在")
+            logging.warning("实际结果: " + describe + " 文案不存在")
 
     def assert_not_contain_text(self, text, describe, sleep=0, timeout=10):
         """
@@ -392,7 +392,7 @@ class Page(object):
         if text_exists is True:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("实际结果: " + describe + " 文案存在")
+            logging.warning("实际结果: " + describe + " 文案存在")
         else:
             result = [describe, True]
             Setting.assert_result.append(result)
@@ -416,7 +416,7 @@ class Page(object):
         else:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("实际结果: " + text_1 + "," + text_2 + " 不相等")
+            logging.warning("实际结果: " + text_1 + "," + text_2 + " 不相等")
 
     @staticmethod
     def assert_text_not_equals(text_1, text_2, describe):
@@ -430,7 +430,7 @@ class Page(object):
         if text_1 == text_2:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("预期结果: " + text_1 + "," + text_2 + " 相等")
+            logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, True]
             Setting.assert_result.append(result)
@@ -509,7 +509,6 @@ class XpathElement(object):
 
 
 class Element(object):
-
     driver = None
 
     def __init__(self, timeout=10, describe=None, **kwargs):
@@ -658,7 +657,7 @@ class Element(object):
             driver(**self.kwargs).swipe(direction=direction, steps=steps)
         time.sleep(1)
 
-    def sliding(self, h: float=None, click=False):
+    def sliding(self, h: float = None, click=False):
         """
         Args:
             h(float): The screen height 0 ~ 1

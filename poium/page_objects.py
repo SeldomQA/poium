@@ -145,7 +145,7 @@ class Element(object):
             else:
                 sleep(1)
         else:
-            logging.warn(f"❌ Find 0 elements through: {elem[0]}={elem[1]}. {self.desc}")
+            logging.warning(f"❌ Find 0 elements through: {elem[0]}={elem[1]}. {self.desc}")
 
     def __get_element(self, by, value):
         """

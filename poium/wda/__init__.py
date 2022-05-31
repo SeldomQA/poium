@@ -1,9 +1,9 @@
 import time
-from poium.common import logging
-from poium.settings import Setting
-from poium.processing import processing, screenshots_name
-from poium.common.assert_des import insert_assert
 
+from poium.common import logging
+from poium.common.assert_des import insert_assert
+from poium.processing import processing, screenshots_name
+from poium.settings import Setting
 
 LOCATOR_LIST = [
     "id",
@@ -45,7 +45,7 @@ class Page(object):
         """
         self.driver.close()
 
-    def click(self, x: float=None, y: float=None, text: str=None, screenshots=Setting.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None, screenshots=Setting.click_screenshots):
         """
         点击坐标
         Args：
@@ -274,7 +274,7 @@ class Page(object):
                 continue
         else:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 文案不存在")
+            logging.warning("实际结果: " + describe + " 文案不存在")
         self.screenshots(describe="断言")
 
     def assert_text_contains(self, text: str, describe, sleep=0, timeout=10):
@@ -300,7 +300,7 @@ class Page(object):
                 continue
         else:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 文案不存在")
+            logging.warning("实际结果: " + describe + " 文案不存在")
         self.screenshots(describe="断言")
 
     def assert_element_exists(self, element, describe, sleep=0, timeout=10):
@@ -326,7 +326,7 @@ class Page(object):
                 continue
         else:
             insert_assert(describe, False)
-            logging.warn("实际结果: " + describe + " 元素不存在")
+            logging.warning("实际结果: " + describe + " 元素不存在")
         self.screenshots(describe="断言")
 
     def assert_text_not_exists(self, text: str, describe, sleep=0, timeout=10):
@@ -345,7 +345,7 @@ class Page(object):
             text_exists = self.driver(text=text).exists
             if text_exists is True:
                 insert_assert(describe, False)
-                logging.warn("实际结果: " + describe + " 文案存在")
+                logging.warning("实际结果: " + describe + " 文案存在")
                 break
             else:
                 time.sleep(1)
@@ -371,7 +371,7 @@ class Page(object):
             element_exists = element.exists()
             if element_exists is True:
                 insert_assert(describe, False)
-                logging.warn("实际结果: " + describe + " 元素存在")
+                logging.warning("实际结果: " + describe + " 元素存在")
                 break
             else:
                 time.sleep(1)
@@ -398,7 +398,7 @@ class Page(object):
         else:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("预期结果: " + text_1 + "," + text_2 + " 不相等")
+            logging.warning("预期结果: " + text_1 + "," + text_2 + " 不相等")
 
     @staticmethod
     def assert_text_not_equals(text_1, text_2, describe):
@@ -413,7 +413,7 @@ class Page(object):
         if text_1 == text_2:
             result = [describe, False]
             Setting.assert_result.append(result)
-            logging.warn("预期结果: " + text_1 + "," + text_2 + " 相等")
+            logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, True]
             Setting.assert_result.append(result)
@@ -421,7 +421,6 @@ class Page(object):
 
 
 class Element(object):
-
     driver = None
 
     def __init__(self, timeout=10, describe=None, **kwargs):
