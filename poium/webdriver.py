@@ -207,15 +207,20 @@ class Page(PageObject):
         appium API
         Switch to native app.
         """
-        self.driver.switch_to.context('NATIVE_APP')
+        current_context = self.driver.current_context
+        if current_context != "NATIVE_APP":
+            self.driver.switch_to.context('NATIVE_APP')
 
     def switch_to_web(self, context=None):
         """
         appium API
         Switch to web view.
         """
+        current_context = self.driver.current_context
         if context is not None:
             self.driver.switch_to.context(context)
+        elif "WEBVIEW" in current_context:
+            return
         else:
             all_context = self.driver.contexts
             for context in all_context:
@@ -224,6 +229,15 @@ class Page(PageObject):
                     break
             else:
                 raise NameError("No WebView found.")
+
+    def switch_to_flutter(self):
+        """
+        appium API
+         Switch to flutter app.
+        """
+        current_context = self.driver.current_context
+        if current_context != "FLUTTER":
+            self.driver.switch_to.context('FLUTTER')
 
     def key_text(self, text):
         """
