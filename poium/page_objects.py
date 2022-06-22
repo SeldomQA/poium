@@ -121,9 +121,9 @@ class Element(object):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
 
-    @func_set_timeout(0.5)
+    @func_set_timeout(1)
     def __elements(self, key, vlaue):
-        elems = Browser.driver.find_elements(by=key, value=vlaue)
+        elems = Browser.driver.find_elements(key, vlaue)
         return elems
 
     def __find_element(self, elem):
@@ -251,6 +251,7 @@ class Element(object):
         if click is True:
             elem.click()
             sleep(1)
+            logging.info(f"✅ click().")
         elem.send_keys(value)
         logging.info(f"✅ send_keys('{value}').")
 
