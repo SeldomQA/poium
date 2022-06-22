@@ -54,6 +54,10 @@ keycodes = {
     '=': 161,
     '.': 158,
     '+': 157,
+    'NUM_LOCK': 143,   # lower case
+    'CAPS_LOCK': 115,  # upper case
+    'HOME': 4,    # home
+    'BACK': 3,    # back
 }
 
 
@@ -78,3 +82,12 @@ class KeyEvent:
             if keycode == 0:
                 raise KeyError(f"The '{s}' character is not supported")
             self.driver.keyevent(keycode)
+
+    def keyboard(self, key):
+        """
+        keyboard
+        :param key:
+        :return:
+        """
+        keycode = keycodes.get(key)
+        self.driver.press_keycode(keycode)

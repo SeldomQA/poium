@@ -249,6 +249,16 @@ class Page(PageObject):
         ke = KeyEvent(self.driver)
         ke.input(text)
 
+    def keyboard(self, text):
+        """
+        appium API
+        keyboard
+        Usage:
+            self.keyboard("CAPS_LOCK")
+        """
+        ke = KeyEvent(self.driver)
+        ke.keyboard(text)
+
     def accept_alert(self):
         """
         selenium API
@@ -408,6 +418,14 @@ class Page(PageObject):
         Swipe from one point to another point, for an optional duration.
         """
         self.driver.swipe(start_x, start_y, end_x, end_y, duration)
+
+    def back(self):
+        """go back"""
+        self.driver.back()
+
+    def home(self):
+        """press home"""
+        self.driver.home()
 
     @staticmethod
     def sleep(sec: int) -> None:
