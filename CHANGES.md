@@ -1,3 +1,13 @@
+#### 1.1.5
+* 修复：退回`1.1.1` 版本的日志，为了支持`seldom`框架。
+* 变更：`log.warn` 变更为 `log.warning`
+* 增加：appium 新增的API:
+  * `switch_to_flutter` 支持切换 flutter 模式
+  * `back` 手机`back` 键
+  * `home` 手机`home` 键
+  * `key_text_capital("HELLO")` 支持键盘输入大写。
+  * `send_keys("hello", click=Ture)` App 上好多输入框都需要先点击后输入，所以`send_keys()`提供了`click` 参数。
+
 #### 1.1.2
 * 修复：`logging` 日志模块。
   * 日志可以显示具体的文件名。
