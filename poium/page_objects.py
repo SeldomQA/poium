@@ -240,7 +240,7 @@ class Element(object):
         elem = self.__get_element(self.k, self.v)
         elem.clear()
 
-    def send_keys(self, value, clear=False) -> None:
+    def send_keys(self, value, clear=False, click=False) -> None:
         """
         Simulates typing into the element.
         If clear_before is True, it will clear the content before typing.
@@ -248,6 +248,9 @@ class Element(object):
         elem = self.__get_element(self.k, self.v)
         if clear is True:
             elem.clear()
+        if click is True:
+            elem.click()
+            sleep(1)
         elem.send_keys(value)
         logging.info(f"✅ send_keys('{value}').")
 
