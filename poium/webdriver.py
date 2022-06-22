@@ -249,15 +249,15 @@ class Page(PageObject):
         ke = KeyEvent(self.driver)
         ke.input(text)
 
-    def keyboard(self, text):
+    def key_text_capital(self, text):
         """
         appium API
-        keyboard
+        Support input capital text, Chinese is not supported
         Usage:
-            self.keyboard("CAPS_LOCK")
+            self.key_text_capital("HELLO")
         """
         ke = KeyEvent(self.driver)
-        ke.keyboard(text)
+        ke.input_capital(text)
 
     def accept_alert(self):
         """

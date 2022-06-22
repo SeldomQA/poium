@@ -83,11 +83,16 @@ class KeyEvent:
                 raise KeyError(f"The '{s}' character is not supported")
             self.driver.keyevent(keycode)
 
-    def keyboard(self, key):
+    def input_capital(self, text=""):
         """
-        keyboard
-        :param key:
-        :return:
+        input capital text
         """
-        keycode = keycodes.get(key)
-        self.driver.press_keycode(keycode)
+        if text == "":
+            return
+
+        for s in text:
+            keycode = keycodes.get(s.upper(), 0)
+            if keycode == 0:
+                raise KeyError(f"The '{s}' character is not supported")
+            self.driver.press_keycode(keycode, 64, 59)
+
