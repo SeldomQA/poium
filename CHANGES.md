@@ -1,3 +1,9 @@
+#### 1.1.6
+* 增加：appium 更新API:
+  * 移除 ~~key_text_capital()~~。
+  * 优化 `key_text("Hello")` 支持大小写输入。
+  * 优化 `send_keys("hello", clear=True, click=Ture)` 先 `click`，然后 `clear`, 最后输入`hello`。
+
 #### 1.1.5
 * 修复：退回`1.1.1` 版本的日志，为了支持`seldom`框架。
 * 变更：`log.warn` 变更为 `log.warning`
