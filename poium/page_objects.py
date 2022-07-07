@@ -246,12 +246,14 @@ class Element(object):
         If clear_before is True, it will clear the content before typing.
         """
         elem = self.__get_element(self.k, self.v)
-        if clear is True:
-            elem.clear()
         if click is True:
             elem.click()
-            sleep(1)
+            sleep(0.5)
             logging.info(f"✅ click().")
+        if clear is True:
+            elem.clear()
+            sleep(0.5)
+            logging.info(f"✅ clear().")
         elem.send_keys(value)
         logging.info(f"✅ send_keys('{value}').")
 
