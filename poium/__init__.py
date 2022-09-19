@@ -18,7 +18,7 @@
 # under the License.
 
 from .webdriver import Page
-from .page_objects import Element, Elements
+from .selenium import Element, Elements
 from .config import Browser
 from .javascript import CSSElement
 

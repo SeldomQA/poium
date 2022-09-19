@@ -43,7 +43,7 @@ LOCATOR_LIST = {
 }
 
 
-class PageObject(object):
+class PageBase(object):
     """
     Page Object pattern.
     """
@@ -77,18 +77,6 @@ class PageObject(object):
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
-
-    def visit(self, uri):
-        """
-        open url
-        """
-        self.open(uri)
-
-    def goto(self, uri):
-        """
-        open url
-        """
-        self.open(uri)
 
 
 class Element(object):

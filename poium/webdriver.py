@@ -7,11 +7,11 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import NoAlertPresentException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
 
-from poium.page_objects import PageObject
+from poium.selenium import PageBase
 from poium.common.keyboard import KeyEvent
 
 
-class Page(PageObject):
+class Page(PageBase):
     """
     Implement the APIs with javascript,
     and selenium/appium extension APIs。
