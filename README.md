@@ -3,10 +3,17 @@
 
 基于 selenium/appium 的 Page Objects 设计模式测试库。
 
-* 极大的简化了Page层的元素定义。
-* 同时支持selenium和appium
-* 通过JavaScript扩展了selenium API
+* 简化了Page层的元素定义
 * 对原生 API 无损
+
+
+__支持库：__
+
+  - [x] selenium ✔️
+  - [x] appium ✔️
+  - [ ] playwright ⌛
+  - [ ] uiautomator2 
+  - [ ] ...
 
 ## Installation
 
