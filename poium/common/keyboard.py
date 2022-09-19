@@ -94,5 +94,7 @@ class KeyEvent:
             keycode = keycodes.get(s.upper(), 0)
             if keycode == 0:
                 raise KeyError(f"The '{s}' character is not supported")
-            self.driver.press_keycode(keycode, 64, 59)
-
+            if s.isupper():
+                self.driver.press_keycode(keycode, 64, 59)
+            else:
+                self.driver.keyevent(keycode)
