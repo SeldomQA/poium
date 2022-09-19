@@ -28,7 +28,8 @@ setup(
     install_requires=[
         'Appium-Python-Client>=2.1.0',
         'loguru>=0.6.0',
-        'func-timeout>=4.3.5'
+        'func-timeout>=4.3.5',
+        'playwright>=1.25.2'
     ],
     classifiers=[
         'Intended Audience :: Developers',
