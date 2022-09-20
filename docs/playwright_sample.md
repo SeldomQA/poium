@@ -1,6 +1,6 @@
 ## 在 poium 中使用 playwright
 
-poium 本质上是一种模式，或者叫`语法糖`，所以，他不局限于selenium/appium，很告诉你appium同样支持 playwright。
+poium 本质上是一种模式，或者叫`语法糖`，所以，他不局限于selenium/appium，很高兴告诉你poium同样支持 playwright。
 
 ```python
 import re
