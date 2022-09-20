@@ -1,6 +1,6 @@
-## 在 appium 中使用 poium
+## 在 poium 中使用 appium
 
-在appium中使用poium非常简单。
+在 appium 中使用poium, 由于appium继承selenium，所以用法与selenium一致。
 
 ```python
 from poium import Page, Element

@@ -9,8 +9,8 @@
 
 __支持库：__
 
-  - [x] selenium ✔️
-  - [x] appium ✔️
+  - [x] [selenium](./docs/selenium_sample.md) ✔️
+  - [x] [appium](./docs/appium_sample.md) ✔️
   - [ ] playwright ⌛
   - [ ] uiautomator2 
   - [ ] ...
@@ -63,9 +63,9 @@ driver.quit()
 * [Page和Element类](/docs/page_element.md)
 * [Eelment类元素操作](docs/element_operation.md)
 * [CSSElement类](/docs/csselement.md)
-* [在Selenium中使用poium](docs/selenium_sample.md)
-* [在appium中使用poium](docs/poium_sample.md)
-* [在seldom框架中使用poium](docs/seldom_sample.md)
+
+其他用法：
+* [seldom+poium](docs/seldom_sample.md)
 
 ## Project usage
 

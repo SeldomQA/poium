@@ -17,15 +17,15 @@ class BaiduPage(Page):
     search_result = PageElements(xpath="//div/h3/a")
 ```
 
-但是，使用时并不知道元素对象提供了那些操作，例如`click()`、`send_keys()`、`text`...等，更重要的是无法通过编辑器(pycharm)联想，如何你们不熟悉Selenium/appium API就蒙圈了。
+但是，使用时并不知道元素对象提供了那些操作，例如`click()`、`send_keys()`、`text`...等，更重要的是无法通过编辑器(pycharm)联想，如果你们不熟悉Selenium/appium API就蒙圈了。
 
-![](./PageElement.png)
+![](image/PageElement.png)
 
 ## NewPageElement
 
 在 poium `0.6.0` 版本，为了保持向下的兼容性，重新实现了`NewPageElement`类，最大的区别是在poium重新实现了Selenium/appium的元素对象操作方法。
 
-![](./NewPageElement.png)
+![](image/NewPageElement.png)
 
 现在，可以对元素对象对做什么操作是不是一目了然。
 

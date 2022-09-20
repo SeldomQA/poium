@@ -1,12 +1,11 @@
-## 在 Selenium 中使用 poium
+## 在 selenium 中使用 poium
 
-在Selenium中使用poium非常简单。
+在selenium中使用poium非常简单。
 
 ```python
 from time import sleep
-from poium import Page, Element, Elements
-from poium import Browser
 from selenium import webdriver
+from poium import Page, Element, Elements
 
 # page层定义
 class BaiduPage(Page):
@@ -17,7 +16,7 @@ class BaiduPage(Page):
 
 dr = webdriver.Firefox()
 page = BaiduPage(dr)
-page.get("https://www.baidu.com")
+page.open("https://www.baidu.com")
 page.input.send_keys("baidu")
 page.button.click()
 sleep(2)
