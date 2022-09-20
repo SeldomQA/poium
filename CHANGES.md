@@ -1,3 +1,6 @@
+#### 1.2.0
+* 全面支持 playwright
+
 #### 1.1.6
 * 增加：appium 更新API:
   * 移除 ~~key_text_capital()~~。
