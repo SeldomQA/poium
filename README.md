@@ -11,8 +11,8 @@ __支持库：__
 
   - [x] [selenium](./docs/selenium_sample.md) ✔️
   - [x] [appium](./docs/appium_sample.md) ✔️
-  - [ ] playwright ⌛
-  - [ ] uiautomator2 
+  - [ ] [playwright](./docs/playwright_sample.md) ✔️
+  - [ ] uiautomator2 ⌛
   - [ ] ...
 
 ## Installation
