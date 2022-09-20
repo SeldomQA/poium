@@ -29,6 +29,7 @@ if sys.version_info >= (3, 8):  # pragma: no cover
     from typing import Literal
 else:  # pragma: no cover
     from typing_extensions import Literal
+from poium import config
 
 
 class Page(object):
@@ -36,23 +37,16 @@ class Page(object):
     Page Object pattern.
     """
 
-    def __init__(self, page, url=None):
+    def __init__(self, page, print_log: bool = False):
         """
-        :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
+        :param page: `playwright.sync_api.Page`
         :param url: `str`
         :param print_log: `bool` Need to be turned on when used with the seldom framework
         Root URI to base any calls to the ``PageObject.get`` method. If not defined
         in the constructor it will try and look it from the webdriver object.
         """
         self.page = page
-        self.root_uri = url if url else getattr(self.page, 'url', None)
-
-    def goto(self, uri):
-        """
-        :param uri:  URI to goto, based off of the root_uri attribute.
-        """
-        root_uri = self.root_uri or ''
-        self.page.goto(root_uri + uri)
+        config.printLog = print_log
 
 
 class Locator:
