@@ -48,7 +48,7 @@ class PageBase(object):
     Page Object pattern.
     """
 
-    def __init__(self, driver, url=None,  print_log: bool = False):
+    def __init__(self, driver=None, url=None,  print_log: bool = False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
@@ -56,7 +56,19 @@ class PageBase(object):
         Root URI to base any calls to the ``PageObject.get`` method. If not defined
         in the constructor it will try and look it from the webdriver object.
         """
-        self.driver = driver
+        if driver is not None:
+            self.driver = driver
+        else:
+            try:
+                # support seldom driver
+                from seldom import Seldom
+                if Seldom.driver is None:
+                    raise ValueError("seldom browser is None")
+                else:
+                    self.driver = Seldom.driver
+            except ImportError:
+                raise ValueError("driver is None, Please set selenium/appium driver.")
+
         self.root_uri = url if url else getattr(self.driver, 'url', None)
         config.printLog = print_log
 
