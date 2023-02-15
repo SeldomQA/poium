@@ -1,6 +1,6 @@
 ## 在 poium 中使用 playwright
 
-poium 本质上是一种模式，活着叫`语法糖`，所以，他不局限于selenium/appium，很告诉你appium同样支持 playwright。
+poium 本质上是一种模式，或者叫`语法糖`，所以，他不局限于selenium/appium，很高兴告诉你poium同样支持 playwright。
 
 ```python
 import re
@@ -38,6 +38,7 @@ with sync_playwright() as p:
 ```
 
 * `Locator` 是 playwright 定位元素发方法，这里于原方法保持一致。
-* `Locator` 支持的定位：https://playwright.dev/python/docs/selectors
+* `Locator` 支持的定位，参考：https://playwright.dev/python/docs/selectors
+* 基于元素定位可以实现哪些操作，参考：https://playwright.dev/python/docs/api/class-locator
 
 

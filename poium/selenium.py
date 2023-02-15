@@ -494,7 +494,7 @@ class Element(object):
             dict: The location of an element relative to the view
         """
         elem = self.__get_element(self.k, self.v)
-        location = elem.location_in_view()
+        location = elem.location_in_view
         logging.info(f"✅ location_in_view -> {location}.")
         return location
 
