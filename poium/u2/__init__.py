@@ -226,9 +226,9 @@ class Page(object):
             if self.driver(textContains=text).exists:
                 break
             else:
-                if direction is "down":
+                if direction == "down":
                     self.swipe_down(fx=x, fy=y, tx=x, ty=y - 0.2, between=1)
-                elif direction is "up":
+                elif direction == "up":
                     self.swipe_up(fx=x, fy=y, tx=x, ty=y + 0.2, between=1)
                 else:
                     raise NameError

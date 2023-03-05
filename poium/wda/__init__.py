@@ -168,9 +168,9 @@ class Page(object):
             if self.driver(text=text).exists and self.driver(text=text).displayed:
                 break
             else:
-                if direction is "down":
+                if direction == "down":
                     self.swipe_down()
-                elif direction is "up":
+                elif direction == "up":
                     self.swipe_up()
                 else:
                     raise NameError
@@ -552,9 +552,9 @@ class Element(object):
             _list.append(i)
         if self.k == "xpath":
             self.kwargs = {"xpath": self.v + "[{}]".format(_list[num] + 1)}
-            element = PageElement(**self.kwargs)
+            element = Element(**self.kwargs)
         else:
-            element = PageElement(**self.kwargs, index=_list[num] + 1)
+            element = Element(**self.kwargs, index=_list[num] + 1)
         return element
 
     def clear_text(self):
@@ -669,9 +669,9 @@ class Element(object):
             if self.exists() is True:
                 break
             else:
-                if direction is "down":
+                if direction == "down":
                     driver.swipe(0.5, 0.5, 0.5, 0.4)
-                elif direction is "up":
+                elif direction == "up":
                     driver.swipe(0.5, 0.5, 0.5, 0.6)
                 else:
                     raise ValueError("The direction parameter can only be 'down' or 'up'")
@@ -712,9 +712,9 @@ class Element(object):
             height = height
             height_max = height + 0.05
             height_min = height - 0.05
-            if direction is "down":
+            if direction == "down":
                 self.scroll_search(direction="down")
-            elif direction is "up":
+            elif direction == "up":
                 self.scroll_search(direction="up")
             else:
                 raise ValueError("The direction parameter can only be 'down' or 'up'")
