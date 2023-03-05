@@ -23,6 +23,13 @@ class PoiumException(Exception):
         return exception_msg
 
 
+class DriverNoneException(PoiumException):
+    """
+    Thrown when driver is empty error
+    """
+    pass
+
+
 class PageSelectException(PoiumException):
     """
     Thrown when using a select box error
