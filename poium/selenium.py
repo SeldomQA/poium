@@ -10,6 +10,7 @@ from selenium.common.exceptions import WebDriverException
 from appium.webdriver.common.appiumby import AppiumBy
 from poium.common.exceptions import PageElementError
 from poium.common.exceptions import FindElementTypesError
+from poium.common.exceptions import DriverNoneException
 from poium.common import logging
 from func_timeout import func_set_timeout
 from func_timeout.exceptions import FunctionTimedOut
@@ -43,48 +44,50 @@ LOCATOR_LIST = {
 }
 
 
-class PageBase(object):
+class BasePage:
     """
     Page Object pattern.
     """
 
-    def __init__(self, driver=None, url=None,  print_log: bool = False):
+    def __init__(self, driver=None, url=None, print_log: bool = False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
         :param print_log: `bool` Need to be turned on when used with the seldom framework
-        Root URI to base any calls to the ``PageObject.get`` method. If not defined
-        in the constructor it will try and look it from the webdriver object.
         """
+        self.driver = None
         if driver is not None:
             self.driver = driver
         else:
             try:
                 # support seldom driver
                 from seldom import Seldom
-                if Seldom.driver is None:
-                    raise ValueError("seldom browser is None")
-                else:
+                if Seldom.driver is not None:
                     self.driver = Seldom.driver
             except ImportError:
-                raise ValueError("driver is None, Please set selenium/appium driver.")
+                ...
 
+        if self.driver is None:
+            raise DriverNoneException("driver is None, Please set selenium/appium driver.")
         self.root_uri = url if url else getattr(self.driver, 'url', None)
         config.printLog = print_log
 
     def get(self, uri):
         """
-        :param uri:  URI to GET, based off of the root_uri attribute.
+        go to uri
+        :param uri: URI to GET, based off of the root_uri attribute.
+        :return:
         """
-        warnings.warn("use page.open() instead",
-                      DeprecationWarning, stacklevel=2)
+        warnings.warn("use page.open() instead", DeprecationWarning, stacklevel=2)
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
 
     def open(self, uri):
         """
+        open uri
         :param uri:  URI to GET, based off of the root_uri attribute.
+        :return:
         """
         root_uri = self.root_uri or ''
         self.driver.get(root_uri + uri)
@@ -122,9 +125,8 @@ class Element(object):
         self.send_keys(value)
 
     @func_set_timeout(1)
-    def __elements(self, key, vlaue):
-        elems = Browser.driver.find_elements(key, vlaue)
-        return elems
+    def __elements(self, key, value):
+        return Browser.driver.find_elements(key, value)
 
     def __find_element(self, elem):
         """

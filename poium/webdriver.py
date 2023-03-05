@@ -7,11 +7,11 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import NoAlertPresentException
 from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
 
-from poium.selenium import PageBase
+from poium.selenium import BasePage
 from poium.common.keyboard import KeyEvent
 
 
-class Page(PageBase):
+class Page(BasePage):
     """
     Implement the APIs with javascript,
     and selenium/appium extension APIs。
@@ -35,7 +35,7 @@ class Page(PageBase):
             width = "0"
         if height is None:
             height = "0"
-        js = "window.scrollTo({w},{h});".format(w=str(width), h=(height))
+        js = f"window.scrollTo({width},{height});"
         self.execute_script(js)
 
     @property
