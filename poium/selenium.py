@@ -72,7 +72,7 @@ class BasePage:
     Page Object pattern.
     """
 
-    def __init__(self, driver=None, url=None, print_log: bool = False):
+    def __init__(self, driver=None, url: str = None, print_log: bool = False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
@@ -95,7 +95,7 @@ class BasePage:
         self.root_uri = url if url else getattr(self.driver, 'url', None)
         config.printLog = print_log
 
-    def get(self, uri):
+    def get(self, uri: str) -> None:
         """
         go to uri
         :param uri: URI to GET, based off of the root_uri attribute.
@@ -106,7 +106,7 @@ class BasePage:
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
 
-    def open(self, uri):
+    def open(self, uri: str) -> None:
         """
         open uri
         :param uri:  URI to GET, based off of the root_uri attribute.
@@ -122,7 +122,7 @@ class Element(object):
     Returns an element object
     """
 
-    def __init__(self, selector=None, timeout: int = 5, describe: str = "", index: int = 0, **kwargs):
+    def __init__(self, selector: str = None, timeout: int = 5, describe: str = "", index: int = 0, **kwargs):
         self.selector = selector
         self.times = timeout
         self.index = index
@@ -155,7 +155,7 @@ class Element(object):
         self.send_keys(value)
 
     @staticmethod
-    def selection_checker(selector) -> (str, str):
+    def selection_checker(selector: str) -> (str, str):
         """
         check the location method
         :param selector:
@@ -180,10 +180,10 @@ class Element(object):
         return k, v
 
     @func_set_timeout(1)
-    def find_elements_timeout(self, key, value):
+    def find_elements_timeout(self, key: str, value: str):
         return Browser.driver.find_elements(key, value)
 
-    def find(self, by, value):
+    def find(self, by: str, value: str) -> list:
         """
         Find if the element exists.
         """
@@ -205,18 +205,13 @@ class Element(object):
 
         return elems
 
-    def is_exist(self):
-        """element is existed """
-        return self.exist
-
-    def __get_element(self, by, value):
+    def __get_element(self, by: str, value: str):
         """
         Judge element positioning way, and returns the element.
         """
 
         if by in BY_LIST:
             elem = self.find(by, value)
-            print("elem>>", elem)
             if len(elem) == 0:
                 self.exist = False
                 return None
@@ -245,7 +240,11 @@ class Element(object):
 
         return elem
 
-    def clear(self):
+    def is_exist(self) -> bool:
+        """element is existed """
+        return self.exist
+
+    def clear(self) -> None:
         """Clears the text if it's a text entry element."""
         logging.info("✅ clear.")
         elem = self.__get_element(self.k, self.v)
