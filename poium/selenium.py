@@ -127,6 +127,7 @@ class Element(object):
         self.times = timeout
         self.index = index
         self.desc = describe
+        self.exist = False
 
         if selector is not None:
             self.k, self.v = self.selection_checker(selector)
@@ -189,19 +190,24 @@ class Element(object):
         for i in range(self.times):
             try:
                 elems = self.find_elements_timeout(by, value)
+                break
             except FunctionTimedOut:
-                elems = []
-
-            if len(elems) == 1:
-                logging.info(f"🔍 Find element: {by}={value}. {self.desc}")
-                break
-            elif len(elems) > 1:
-                logging.info(f"❓ Find {len(elems)} elements through: {by}={value}. {self.desc}")
-                break
-            else:
                 sleep(1)
         else:
+            elems = []
+
+        if len(elems) == 1:
+            logging.info(f"🔍 Find element: {by}={value}. {self.desc}")
+        elif len(elems) > 1:
+            logging.info(f"❓ Find {len(elems)} elements through: {by}={value}. {self.desc}")
+        else:
             logging.warning(f"❌ Find 0 elements through: {by}={value}. {self.desc}")
+
+        return elems
+
+    def is_exist(self):
+        """element is existed """
+        return self.exist
 
     def __get_element(self, by, value):
         """
@@ -209,11 +215,17 @@ class Element(object):
         """
 
         if by in BY_LIST:
-            self.find(by, value)
-            elem = Browser.driver.find_elements(by, value)[self.index]
+            elem = self.find(by, value)
+            print("elem>>", elem)
+            if len(elem) == 0:
+                self.exist = False
+                return None
+            else:
+                self.exist = True
+                elem = Browser.driver.find_elements(by, value)[self.index]
         else:
-            raise FindElementTypesError(
-                "Please enter the correct targeting elements")
+            raise FindElementTypesError("Please enter the correct targeting elements")
+
         if Browser.show is True:
             try:
                 style_red = 'arguments[0].style.border="2px solid #FF0000"'
