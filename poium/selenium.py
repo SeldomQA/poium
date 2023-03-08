@@ -162,18 +162,35 @@ class Element(object):
         :return:
         """
         if selector.startswith("text=") and len(selector) > 5:
+            # link_text
             k = By.LINK_TEXT
             v = selector[5:]
         elif selector.startswith("text~=") and len(selector) > 6:
+            # partial_link_text
             k = By.PARTIAL_LINK_TEXT
             v = selector[6:]
+        elif selector.startswith("!") and len(selector) > 1:
+            # id
+            k = By.ID
+            v = selector[1:]
         elif selector.startswith("=") and len(selector) > 1:
+            # name
             k = By.NAME
             v = selector[1:]
+        elif selector.startswith("&") and len(selector) > 1:
+            # class name
+            k = By.CLASS_NAME
+            v = selector[1:]
+        elif selector.startswith("<") and len(selector) > 1:
+            # tag name
+            k = By.TAG_NAME
+            v = selector[1:]
         elif selector.startswith("/") and len(selector) > 3:
+            # xpath
             k = By.XPATH
             v = selector
         else:
+            # css
             k = By.CSS_SELECTOR
             v = selector
 
