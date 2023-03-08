@@ -1,21 +1,26 @@
 
 ![](logo.png)
 
-基于 selenium/appium 的 Page Objects 设计模式测试库。
+> Page Objects design pattern test library; support selenium、appium、playwright, etc
 
-* 简化了Page层的元素定义
+Page Objects 设计模式测试库；支持 selenium、appium、playwright 等。
+
+### Features
+
+* 极简的Page层的元素定义
 * 对原生 API 无损
+* 支持 logger 日志
 
 
 __支持库：__
 
   - [x] [selenium](./docs/selenium_sample.md) ✔️
   - [x] [appium](./docs/appium_sample.md) ✔️
-  - [ ] [playwright](./docs/playwright_sample.md) ✔️
+  - [x] [playwright](./docs/playwright_sample.md) ✔️
   - [ ] uiautomator2 ⌛
-  - [ ] ...
+  - [ ] facebook-wda ⌛
 
-## Installation
+### Installation
 
 pip install:
 
@@ -29,7 +34,7 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-## Sample
+### Demo
 
 通过下面的例子，体会`Page Objects` 设计模式如此简单。
 
@@ -56,39 +61,37 @@ driver.quit()
 
 更多例子，请点击[这里](/sample) 。
 
-## Documentation
+### Documentation
 
 在开使用poium前，请快速阅读下面的文档。
 
 * [Page和Element类](/docs/page_element.md)
-* [Eelment类元素操作](docs/element_operation.md)
+* [Element类元素操作](docs/element_operation.md)
 * [CSSElement类](/docs/csselement.md)
 
-其他用法：
+other：
 * [seldom+poium](docs/seldom_sample.md)
 
-## Project usage
+### Old version
 
-* 在基于pytest的自动化项目中的应用，请点击[这里](https://github.com/defnngj/pyautoTest) 。
+* poium < 0.6.0
 
-* 在基于seldom自动化测试框架的应用，请点击[这里](https://github.com/SeldomQA/seldom) 。
-
-## Old version
-
-> `poium < 0.6.0`版本，主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
+> 主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
 
 [参考文档](./docs/base_old.md)
 
-> `poium>=0.6.0, <1.0.0` 版本，新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+* `poium>=0.6.0, <1.0.0`
+
+>  新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
 
 [参考文档](./docs/base_0.6.0.md)
 
 ## Project History
 
-参考项目：https://github.com/eeaston/page-objects
+* [page-objects](https://github.com/eeaston/page-objects)
 
-参考项目已经不再维护，我阅读了原项目代码，虽然只有100多行，但设计非常精妙。本项目在此基础上进行开发。
+poium 参考page-objects，他项目已经不再维护，原项目代码虽然只有100多行，但设计非常精妙。本项目在此基础上进行开发。
 
-原项目名：https://pypi.org/project/selenium-page-objects/
+* [selenium-page-objects](https://pypi.org/project/selenium-page-objects/)
 
-本项目的核心是 Page Objects设计模式, 于是取了 __PO__，同时支持selenium/appium，于是取了 __ium__，那么新的项目命名为：__poium__。
+selenium-page-objects是poium的前身，为了简化项目名称，改名为poium。__po__ 取自 Page Object 首字母, __ium__ 取自selenium/appium 共同后缀。
