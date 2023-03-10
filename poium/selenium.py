@@ -17,7 +17,6 @@ from func_timeout.exceptions import FunctionTimedOut
 from poium import config
 from poium.config import Browser
 
-
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
     # selenium
@@ -43,13 +42,37 @@ LOCATOR_LIST = {
     'custom': AppiumBy.CUSTOM,
 }
 
+BY_LIST = [
+    # selenium
+    By.CSS_SELECTOR,
+    By.ID,
+    By.NAME,
+    By.XPATH,
+    By.LINK_TEXT,
+    By.PARTIAL_LINK_TEXT,
+    By.TAG_NAME,
+    By.CLASS_NAME,
+    # appium
+    AppiumBy.IOS_UIAUTOMATION,
+    AppiumBy.IOS_PREDICATE,
+    AppiumBy.IOS_CLASS_CHAIN,
+    AppiumBy.ANDROID_UIAUTOMATOR,
+    AppiumBy.ANDROID_VIEWTAG,
+    AppiumBy.ANDROID_DATA_MATCHER,
+    AppiumBy.ANDROID_VIEW_MATCHER,
+    AppiumBy.WINDOWS_UI_AUTOMATION,
+    AppiumBy.ACCESSIBILITY_ID,
+    AppiumBy.IMAGE,
+    AppiumBy.CUSTOM
+]
+
 
 class BasePage:
     """
     Page Object pattern.
     """
 
-    def __init__(self, driver=None, url=None, print_log: bool = False):
+    def __init__(self, driver=None, url: str = None, print_log: bool = False):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
@@ -72,7 +95,7 @@ class BasePage:
         self.root_uri = url if url else getattr(self.driver, 'url', None)
         config.printLog = print_log
 
-    def get(self, uri):
+    def get(self, uri: str) -> None:
         """
         go to uri
         :param uri: URI to GET, based off of the root_uri attribute.
@@ -83,7 +106,7 @@ class BasePage:
         self.driver.get(root_uri + uri)
         self.driver.implicitly_wait(5)
 
-    def open(self, uri):
+    def open(self, uri: str) -> None:
         """
         open uri
         :param uri:  URI to GET, based off of the root_uri attribute.
@@ -99,19 +122,26 @@ class Element(object):
     Returns an element object
     """
 
-    def __init__(self, timeout: int = 5, describe: str = "", index: int = 0, **kwargs):
+    def __init__(self, selector: str = None, timeout: int = 5, describe: str = "", index: int = 0, **kwargs):
+        self.selector = selector
         self.times = timeout
         self.index = index
         self.desc = describe
-        if not kwargs:
-            raise ValueError("Please specify a locator")
-        if len(kwargs) > 1:
-            raise ValueError("Please specify only one locator")
-        self.kwargs = kwargs
-        self.k, self.v = next(iter(kwargs.items()))
+        self.exist = False
 
-        if self.k not in LOCATOR_LIST.keys():
-            raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
+        if selector is not None:
+            self.k, self.v = self.selection_checker(selector)
+        else:
+            if not kwargs:
+                raise ValueError("Please specify a locator")
+            if len(kwargs) > 1:
+                raise ValueError("Please specify only one locator")
+            self.kwargs = kwargs
+            by, self.v = next(iter(kwargs.items()))
+
+            self.k = LOCATOR_LIST.get(by, None)
+            if self.k is None:
+                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
 
     def __get__(self, instance, owner):
         if instance is None:
@@ -124,99 +154,90 @@ class Element(object):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
 
+    @staticmethod
+    def selection_checker(selector: str) -> (str, str):
+        """
+        check the location method
+        :param selector:
+        :return:
+        """
+        if selector.startswith("text=") and len(selector) > 5:
+            # link_text
+            k = By.LINK_TEXT
+            v = selector[5:]
+        elif selector.startswith("text~=") and len(selector) > 6:
+            # partial_link_text
+            k = By.PARTIAL_LINK_TEXT
+            v = selector[6:]
+        elif selector.startswith("id=") and len(selector) > 3:
+            # id
+            k = By.ID
+            v = selector[3:]
+        elif selector.startswith("name=") and len(selector) > 5:
+            # name
+            k = By.NAME
+            v = selector[5:]
+        elif selector.startswith("class=") and len(selector) > 6:
+            # class name
+            k = By.CLASS_NAME
+            v = selector[6:]
+        elif selector.startswith("tag=") and len(selector) > 4:
+            # tag name
+            k = By.TAG_NAME
+            v = selector[4:]
+        elif selector.startswith("/") and len(selector) > 1:
+            # xpath
+            k = By.XPATH
+            v = selector
+        else:
+            # css
+            k = By.CSS_SELECTOR
+            v = selector
+
+        return k, v
+
     @func_set_timeout(1)
-    def __elements(self, key, value):
+    def find_elements_timeout(self, key: str, value: str):
         return Browser.driver.find_elements(key, value)
 
-    def __find_element(self, elem):
+    def find(self, by: str, value: str) -> list:
         """
         Find if the element exists.
         """
         for i in range(self.times):
             try:
-                elems = self.__elements(elem[0], elem[1])
+                elems = self.find_elements_timeout(by, value)
+                break
             except FunctionTimedOut:
-                elems = []
-
-            if len(elems) == 1:
-                logging.info(f"🔍 Find element: {elem[0]}={elem[1]}. {self.desc}")
-                break
-            elif len(elems) > 1:
-                logging.info(f"❓ Find {len(elems)} elements through: {elem[0]}={elem[1]}. {self.desc}")
-                break
-            else:
                 sleep(1)
         else:
-            logging.warning(f"❌ Find 0 elements through: {elem[0]}={elem[1]}. {self.desc}")
+            elems = []
 
-    def __get_element(self, by, value):
+        if len(elems) == 1:
+            logging.info(f"🔍 Find element: {by}={value}. {self.desc}")
+        elif len(elems) > 1:
+            logging.info(f"❓ Find {len(elems)} elements through: {by}={value}. {self.desc}")
+        else:
+            logging.warning(f"❌ Find 0 elements through: {by}={value}. {self.desc}")
+
+        return elems
+
+    def __get_element(self, by: str, value: str):
         """
         Judge element positioning way, and returns the element.
         """
 
-        # selenium
-        if by == "id_":
-            self.__find_element((By.ID, value))
-            elem = Browser.driver.find_elements(By.ID, value)[self.index]
-        elif by == "name":
-            self.__find_element((By.NAME, value))
-            elem = Browser.driver.find_elements(By.NAME, value)[self.index]
-        elif by == "class_name":
-            self.__find_element((By.CLASS_NAME, value))
-            elem = Browser.driver.find_elements(By.CLASS_NAME, value)[self.index]
-        elif by == "tag":
-            self.__find_element((By.TAG_NAME, value))
-            elem = Browser.driver.find_elements(By.TAG_NAME, value)[self.index]
-        elif by == "link_text":
-            self.__find_element((By.LINK_TEXT, value))
-            elem = Browser.driver.find_elements(By.LINK_TEXT, value)[self.index]
-        elif by == "partial_link_text":
-            self.__find_element((By.PARTIAL_LINK_TEXT, value))
-            elem = Browser.driver.find_elements(By.PARTIAL_LINK_TEXT, value)[self.index]
-        elif by == "xpath":
-            self.__find_element((By.XPATH, value))
-            elem = Browser.driver.find_elements(By.XPATH, value)[self.index]
-        elif by == "css":
-            self.__find_element((By.CSS_SELECTOR, value))
-            elem = Browser.driver.find_elements(By.CSS_SELECTOR, value)[self.index]
-
-        # appium
-        elif by == "ios_uiautomation":
-            self.__find_element((AppiumBy.IOS_UIAUTOMATION, value))
-            elem = Browser.driver.find_elements(AppiumBy.IOS_UIAUTOMATION, value)[self.index]
-        elif by == "ios_predicate":
-            self.__find_element((AppiumBy.IOS_PREDICATE, value))
-            elem = Browser.driver.find_elements(AppiumBy.IOS_PREDICATE, value)[self.index]
-        elif by == "ios_class_chain":
-            self.__find_element((AppiumBy.IOS_CLASS_CHAIN, value))
-            elem = Browser.driver.find_elements(AppiumBy.IOS_CLASS_CHAIN, value)[self.index]
-        elif by == "android_uiautomator":
-            self.__find_element((AppiumBy.ANDROID_UIAUTOMATOR, value))
-            elem = Browser.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR, value)[self.index]
-        elif by == "android_viewtag":
-            self.__find_element((AppiumBy.ANDROID_VIEWTAG, value))
-            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEWTAG, value)[self.index]
-        elif by == "android_data_matcher":
-            self.__find_element((AppiumBy.ANDROID_DATA_MATCHER, value))
-            elem = Browser.driver.find_elements(AppiumBy.ANDROID_DATA_MATCHER, value)[self.index]
-        elif by == "accessibility_id":
-            self.__find_element((AppiumBy.ACCESSIBILITY_ID, value))
-            elem = Browser.driver.find_elements(AppiumBy.ACCESSIBILITY_ID, value)[self.index]
-        elif by == "android_view_matcher":
-            self.__find_element((AppiumBy.ANDROID_VIEW_MATCHER, value))
-            elem = Browser.driver.find_elements(AppiumBy.ANDROID_VIEW_MATCHER, value)[self.index]
-        elif by == "windows_uiautomation":
-            self.__find_element((AppiumBy.WINDOWS_UI_AUTOMATION, value))
-            elem = Browser.driver.find_elements(AppiumBy.WINDOWS_UI_AUTOMATION, value)[self.index]
-        elif by == "image":
-            self.__find_element((AppiumBy.IMAGE, value))
-            elem = Browser.driver.find_elements(AppiumBy.IMAGE, value)[self.index]
-        elif by == "custom":
-            self.__find_element((AppiumBy.CUSTOM, value))
-            elem = Browser.driver.find_elements(AppiumBy.CUSTOM, value)[self.index]
+        if by in BY_LIST:
+            elem = self.find(by, value)
+            if len(elem) == 0:
+                self.exist = False
+                return None
+            else:
+                self.exist = True
+                elem = Browser.driver.find_elements(by, value)[self.index]
         else:
-            raise FindElementTypesError(
-                "Please enter the correct targeting elements")
+            raise FindElementTypesError("Please enter the correct targeting elements")
+
         if Browser.show is True:
             try:
                 style_red = 'arguments[0].style.border="2px solid #FF0000"'
@@ -236,7 +257,11 @@ class Element(object):
 
         return elem
 
-    def clear(self):
+    def is_exist(self) -> bool:
+        """element is existed """
+        return self.exist
+
+    def clear(self) -> None:
         """Clears the text if it's a text entry element."""
         logging.info("✅ clear.")
         elem = self.__get_element(self.k, self.v)
