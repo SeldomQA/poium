@@ -1,3 +1,9 @@
+#### 1.3.0
+* 支持 seldom框架，如果是seldom框架调用，则可以不用指`driver`。
+* 增加`is_exist()`方法，返回元素是否存在，`True`/`False`。
+* `Element`/`Elements` 类支持 `selector` 参数，提供新的定位方法，不再强调定位类型。
+* 其他：代码优化，参数增加类型。
+
 #### 1.2.0
 * 全面支持 playwright
 
@@ -40,7 +46,7 @@
 #### 1.0.3
 * 增加`colorLog` 日志开关，例如在jenkins环境上防止编码问题，关闭`colorLog=False`。
 * 即将废弃的API
-  * ~~open()~~即将被移除，请使用`open()/visit()/goto()`任意一个代替。
+  * ~~get()~~ 即将被移除，请使用`open()`任意一个代替。
   * ~~new_window_handle~~ 即将被移除。
   * ~~current_window_handle~~ 即将被移除。
   * ~~window_handles~~ 即将被移除。
