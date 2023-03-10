@@ -5,7 +5,7 @@
 
 Page Objects 设计模式测试库；支持 selenium、appium、playwright 等。
 
-### Features
+## Features
 
 * 极简的Page层的元素定义
 * 对原生 API 无损
@@ -20,7 +20,7 @@ __支持库：__
   - [ ] uiautomator2 ⌛
   - [ ] facebook-wda ⌛
 
-### Installation
+## Installation
 
 pip install:
 
@@ -34,7 +34,7 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-### Demo
+## Demo
 
 通过下面的例子，体会`Page Objects` 设计模式如此简单。
 
@@ -72,17 +72,13 @@ driver.quit()
 other：
 * [seldom+poium](docs/seldom_sample.md)
 
-### Old version
+## Old version
 
 * poium < 0.6.0
 
-> 主要提供了`Page`、`PageElement`、`PageElement`、`PageSelect`、`PageWait`等类。
-
 [参考文档](./docs/base_old.md)
 
-* `poium>=0.6.0, <1.0.0`
-
->  新增了`NewPageElement`类，用新的方式重新实现了`PageElement`类的大部分功能。 推荐使用`NewPageElement` 类。
+* poium>=0.6.0, <1.0.0
 
 [参考文档](./docs/base_0.6.0.md)
 
