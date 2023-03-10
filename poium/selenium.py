@@ -8,14 +8,14 @@ from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
 from appium.webdriver.common.appiumby import AppiumBy
-from poium.common.exceptions import PageElementError
-from poium.common.exceptions import FindElementTypesError
-from poium.common.exceptions import DriverNoneException
-from poium.common import logging
 from func_timeout import func_set_timeout
 from func_timeout.exceptions import FunctionTimedOut
-from poium import config
+from poium.common.exceptions import PageElementError, FindElementTypesError, DriverNoneException
+from poium.common import logging
+from poium.common.selector import selection_checker
 from poium.config import Browser
+from poium import config
+
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -130,7 +130,7 @@ class Element(object):
         self.exist = False
 
         if selector is not None:
-            self.k, self.v = self.selection_checker(selector)
+            self.k, self.v = selection_checker(selector)
         else:
             if not kwargs:
                 raise ValueError("Please specify a locator")
@@ -153,48 +153,6 @@ class Element(object):
     def __set__(self, instance, value):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
-
-    @staticmethod
-    def selection_checker(selector: str) -> (str, str):
-        """
-        check the location method
-        :param selector:
-        :return:
-        """
-        if selector.startswith("text=") and len(selector) > 5:
-            # link_text
-            k = By.LINK_TEXT
-            v = selector[5:]
-        elif selector.startswith("text~=") and len(selector) > 6:
-            # partial_link_text
-            k = By.PARTIAL_LINK_TEXT
-            v = selector[6:]
-        elif selector.startswith("id=") and len(selector) > 3:
-            # id
-            k = By.ID
-            v = selector[3:]
-        elif selector.startswith("name=") and len(selector) > 5:
-            # name
-            k = By.NAME
-            v = selector[5:]
-        elif selector.startswith("class=") and len(selector) > 6:
-            # class name
-            k = By.CLASS_NAME
-            v = selector[6:]
-        elif selector.startswith("tag=") and len(selector) > 4:
-            # tag name
-            k = By.TAG_NAME
-            v = selector[4:]
-        elif selector.startswith("/") and len(selector) > 1:
-            # xpath
-            k = By.XPATH
-            v = selector
-        else:
-            # css
-            k = By.CSS_SELECTOR
-            v = selector
-
-        return k, v
 
     @func_set_timeout(1)
     def find_elements_timeout(self, key: str, value: str):
@@ -603,30 +561,31 @@ class Elements(object):
     Returns a set of element objects
     """
 
-    def __init__(self, context=False, describe: str = "", timeout: int = 5, **kwargs):
+    def __init__(self, selector: str = None, context: bool = False, describe: str = "", timeout: int = 5, **kwargs):
         self.desc = describe
         self.times = timeout
-        if not kwargs:
-            raise ValueError("Please specify a locator")
-        if len(kwargs) > 1:
-            raise ValueError("Please specify only one locator")
-        self.k, self.v = next(iter(kwargs.items()))
-        try:
-            self.locator = (LOCATOR_LIST[self.k], self.v)
-        except KeyError:
-            raise FindElementTypesError(f"Element positioning of type '{self.k}' is not supported. ")
+        if selector is not None:
+            self.k, self.v = selection_checker(selector)
+        else:
+            if not kwargs:
+                raise ValueError("Please specify a locator")
+            if len(kwargs) > 1:
+                raise ValueError("Please specify only one locator")
+            self.k, self.v = next(iter(kwargs.items()))
+
         self.has_context = bool(context)
 
     def find(self, context):
         for i in range(self.times):
-            elems = context.find_elements(*self.locator)
-            if len(elems) == 0:
-                sleep(1)
-            else:
+            elems = context.find_elements(self.k, self.v)
+            if len(elems) > 0:
                 break
+            else:
+                sleep(1)
         else:
             elems = []
-            logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.desc}")
+
+        logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.desc}")
         return elems
 
     def __get__(self, instance, owner, context=None):
