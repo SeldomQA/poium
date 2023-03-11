@@ -217,6 +217,7 @@ class Element(object):
 
     def is_exist(self) -> bool:
         """element is existed """
+        self.__get_element(self.k, self.v)
         return self.exist
 
     def clear(self) -> None:
