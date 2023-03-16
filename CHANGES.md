@@ -1,4 +1,8 @@
 #### 1.3.0
+* 支持 seldom框架，如果是seldom框架调用，则可以不用指`print_log=True`。
+* 修复：`is_exist()`方法总是返回`False`。
+
+#### 1.3.0
 * 支持 seldom框架，如果是seldom框架调用，则可以不用指`driver`。
 * 增加`is_exist()`方法，返回元素是否存在，`True`/`False`。
 * `Element`/`Elements` 类支持 `selector` 参数，提供新的定位方法，不再强调定位类型。
