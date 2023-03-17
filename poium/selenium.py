@@ -573,7 +573,11 @@ class Elements(object):
                 raise ValueError("Please specify a locator")
             if len(kwargs) > 1:
                 raise ValueError("Please specify only one locator")
-            self.k, self.v = next(iter(kwargs.items()))
+            by, self.v = next(iter(kwargs.items()))
+
+            self.k = LOCATOR_LIST.get(by, None)
+            if self.k is None:
+                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
 
         self.has_context = bool(context)
 
