@@ -1,4 +1,7 @@
-#### 1.3.0
+#### 1.3.2
+* 修复：`Elements` 类 kwargs 定位错误。
+
+#### 1.3.1
 * 支持 seldom框架，如果是seldom框架调用，则可以不用指`print_log=True`。
 * 修复：`is_exist()`方法总是返回`False`。
 
