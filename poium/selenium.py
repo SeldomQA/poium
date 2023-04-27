@@ -380,7 +380,7 @@ class Element(object):
         """
         elem = self.__get_element(self.k, self.v)
         ActionChains(Browser.driver).context_click(elem).perform()
-        logging.info(f"✅ double_click().")
+        logging.info(f"✅ context_click().")
 
     def drag_and_drop_by_offset(self, x: int, y: int) -> None:
         """
