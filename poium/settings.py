@@ -5,6 +5,8 @@ BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep)
 
 class Setting:
 
+    driver = None
+
     # 是否通过usb链接设备
     connect_usb = True
 
@@ -15,7 +17,7 @@ class Setting:
     apk_name = ""
 
     # 默认点击截图开关
-    click_screenshots = True
+    click_screenshots = False
 
     # 报告保存路径
     report_path = "."

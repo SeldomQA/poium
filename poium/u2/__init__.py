@@ -32,7 +32,6 @@ LOCATOR_LIST = [
     "resourceIdMatches",
     "index",
     "instance",
-    "xpath",
 ]
 
 current_path = os.path.abspath(__file__)
@@ -448,11 +447,10 @@ class XpathElement(object):
             button = XpathElement('@com.taobao.taobao:id/fl_banner_container')
     """
 
-    driver = None
-
     def __init__(self, xpath, index=None, timeout=10, describe=None):
         self.xpath = xpath
         self.describe = describe
+        self.time_out = timeout
         if index is None:
             self.index = 0
         else:
@@ -462,8 +460,7 @@ class XpathElement(object):
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        global driver
-        driver = instance.driver
+        Setting.driver = instance.driver
         return self
 
     def click(self, screenshots=Setting.click_screenshots):
@@ -472,44 +469,42 @@ class XpathElement(object):
         """
         self.screenshots(describe="点击") if screenshots else (logging.info(msg="点击 ==> " + self.describe), print("\n"))
 
-        driver.xpath(self.xpath).click()
+        Setting.driver.xpath(self.xpath).click()
 
     def set_text(self, value):
         """
         Simulates typing into the element.
         :param value: input text
         """
-        driver.xpath(self.xpath).set_text(value)
+        Setting.driver.xpath(self.xpath).set_text(value)
 
     def get_text(self):
         """
         :return: get text from field
         """
-        return driver.xpath(self.xpath).get_text()
+        return Setting.driver.xpath(self.xpath).get_text()
 
     def match(self):
         """
         :return: None or matched XPathElement
         """
-        return driver.xpath(self.xpath).match()
+        return Setting.driver.xpath(self.xpath).match()
 
     def screenshots(self, describe=None):
         """
         截图，在对应元素上增加水印
         """
-        global driver
-        text = driver.xpath(self.xpath).get_text()
+        text = Setting.driver.xpath(self.xpath).get_text()
         if text == "":
             w, h = None, None
         else:
-            w, h = driver(text=text).center()
+            w, h = Setting.driver(text=text).center()
         screenshots_dir = screenshots_name(describe)
-        driver.screenshot(screenshots_dir)
+        Setting.driver.screenshot(screenshots_dir)
         processing(screenshots_dir, w, h)
 
 
 class Element(object):
-    driver = None
 
     def __init__(self, timeout=10, describe=None, **kwargs):
         self.describe = describe
@@ -527,11 +522,10 @@ class Element(object):
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        global driver
-        driver = instance.driver
+        Setting.driver = instance.driver
         return self
 
-    def click(self, timeout=10, offset=None, screenshots=Setting.click_screenshots):
+    def click(self, timeout=10, offset=None):
         """
         Click UI element.
 
@@ -546,16 +540,13 @@ class Element(object):
         Raises:
             UiObjectNotFoundError
         """
-        global driver
-        driver(**self.kwargs).click(timeout, offset)
+        Setting.driver(**self.kwargs).click(timeout, offset)
 
-    def click_exists(self, timeout=1, screenshots=Setting.click_screenshots):
+    def click_exists(self, timeout=1):
         """
         The element is not clicked until it exists
         """
-
-        global driver
-        return driver(**self.kwargs).click_exists(timeout=timeout)
+        return Setting.driver(**self.kwargs).click_exists(timeout=timeout)
 
     def click_more(self, sleep=.01, times=3):
         """
@@ -563,32 +554,27 @@ class Element(object):
         sleep(float): 间隔时间
         times(int): 点击次数
         """
-        global driver
         x, y = self.center()
         for i in range(times):
-            driver.touch.down(x, y)
+            Setting.driver.touch.down(x, y)
             time.sleep(sleep)
-            driver.touch.up(x, y)
+            Setting.driver.touch.up(x, y)
 
     def exists(self, timeout=0):
         """
         check if the object exists in current window.
         """
 
-        global driver
-
-        return driver(**self.kwargs).exists(timeout=timeout)
+        return Setting.driver(**self.kwargs).exists(timeout=timeout)
 
     def set_text(self, text):
         """
         input text
         :param text:
         """
-        global driver
-
         print("\n")
         logging.info(msg=" 键盘输入 ==> " + text)
-        driver(**self.kwargs).set_text(text=text)
+        Setting.driver(**self.kwargs).set_text(text=text)
 
     def send_keys(self, text, clear=True):
         """
@@ -596,39 +582,34 @@ class Element(object):
         :param text:
         :param clear:
         """
-        global driver
-
-        driver(**self.kwargs).click()
-        driver.send_keys(text=text, clear=clear)
+        Setting.driver(**self.kwargs).click()
+        Setting.driver.send_keys(text=text, clear=clear)
 
     def clear_text(self):
         """
         Clear the text
         """
-        global driver
-
-        driver(**self.kwargs).clear()
+        Setting.driver(**self.kwargs).clear()
 
     def get_text(self):
         """
         get element text
         """
-        global driver
-
-        return driver(**self.kwargs).get_text()
+        return Setting.driver(**self.kwargs).get_text()
 
     def bounds(self):
         """
         Returns the element coordinate position
         :return: left_top_x, left_top_y, right_bottom_x, right_bottom_y
         """
-        global driver
-
-        return driver(**self.kwargs).bounds()
+        return Setting.driver(**self.kwargs).bounds()
 
     def get_position(self):
-        global driver
-        h, w = driver.window_size()
+        """
+        get position
+        :return: x, y
+        """
+        h, w = Setting.driver.window_size()
         x, y = self.center()
         return round(x / h, 4), round(y / w, 4)
 
@@ -637,9 +618,7 @@ class Element(object):
         Returns the center coordinates of the element
         return: center point (x, y)
         """
-        global driver
-
-        return driver(**self.kwargs).center()
+        return Setting.driver(**self.kwargs).center()
 
     def swipe(self, direction, times=1, steps=10):
         """
@@ -650,12 +629,11 @@ class Element(object):
         direction: "left", "right", "up", "down"
         times: move times
         """
-        global driver
         assert direction in ("left", "right", "up", "down")
 
         for i in range(times):
-            driver(**self.kwargs).swipe(direction=direction, steps=steps)
-        time.sleep(1)
+            Setting.driver(**self.kwargs).swipe(direction=direction, steps=steps)
+        time.sleep(0.1)
 
     def sliding(self, h: float = None, click=False):
         """
@@ -670,7 +648,7 @@ class Element(object):
             if self.exists():
                 break
             else:
-                driver.swipe(0.5, 0.7, 0.5, 0.3)
+                Setting.driver.swipe(0.5, 0.7, 0.5, 0.3)
         if h:
             if h <= 0 or h >= 1:
                 raise ValueError("'h' checks the range of values, 0 < h < 1")
@@ -682,9 +660,9 @@ class Element(object):
                         break
                     else:
                         if y > scope[1]:
-                            driver.swipe(0.5, 0.5, 0.5, 0.45)
+                            Setting.driver.swipe(0.5, 0.5, 0.5, 0.45)
                         elif y < scope[0]:
-                            driver.swipe(0.5, 0.45, 0.5, 0.5)
+                            Setting.driver.swipe(0.5, 0.45, 0.5, 0.5)
 
         self.click() if click else None
 
@@ -693,16 +671,14 @@ class Element(object):
         """
         The element information
         """
-        global driver
-        return driver(**self.kwargs).info
+        return Setting.driver(**self.kwargs).info
 
     @property
     def count(self):
         """
         Gets the same number of elements
         """
-        global driver
-        return driver(**self.kwargs).count
+        return Setting.driver(**self.kwargs).count
 
     def instance(self, num):
         """
@@ -721,8 +697,7 @@ class Element(object):
         """
         Wait until UI Element exists or gone
         """
-        global driver
-        return driver(**self.kwargs).wait(exists=True, timeout=timeout)
+        return Setting.driver(**self.kwargs).wait(exists=True, timeout=timeout)
 
     def wait_gone(self, timeout=None):
         """ wait until ui gone
@@ -731,15 +706,13 @@ class Element(object):
         Returns:
             bool if element gone
         """
-        global driver
-        return driver(**self.kwargs).wait_gone(timeout)
+        return Setting.driver(**self.kwargs).wait_gone(timeout)
 
     def screenshots(self, describe=None):
         """
         A screenshot that adds a watermark to the corresponding element
         """
-        global driver
         w, h = self.center()
         screenshots_dir = screenshots_name(describe)
-        driver.screenshot(screenshots_dir)
+        Setting.driver.screenshot(screenshots_dir)
         processing(screenshots_dir, w, h)
