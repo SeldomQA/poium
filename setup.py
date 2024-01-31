@@ -26,7 +26,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'Appium-Python-Client>=2.1.0',
+        'Appium-Python-Client>=3.1.0',
         'loguru>=0.6.0',
         'func-timeout>=4.3.5',
         'playwright>=1.25.2'
@@ -39,9 +39,10 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     extras_require={
