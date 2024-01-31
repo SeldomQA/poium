@@ -39,23 +39,27 @@ If you want to keep up with the latest version, you can install with github repo
 通过下面的例子，体会`Page Objects` 设计模式如此简单。
 
 ```python
-from poium import Page, Element
 from selenium import webdriver
+from poium import Page, Element, Elements
 
 
-class BaiduIndexPage(Page):
-    search_input = Element(name='wd')
-    search_button = Element(id_='su')
+class BaiduPage(Page):
+    input = Element("#kw")
+    button = Element("id=su")
+    result = Elements("//div/h3/a", describe="搜索结果", timeout=2)
 
 
 driver = webdriver.Chrome()
-page = BaiduIndexPage(driver)
+
+page = BaiduPage(driver)
 page.open("https://www.baidu.com")
+page.input.send_keys("baidu")
+page.button.click()
 
-page.search_input.send_keys("poium") 
-page.search_button.click()
+for r in page.result:
+    print(r.text)
 
-driver.quit()
+driver.close()
 ```
 
 
@@ -71,16 +75,6 @@ driver.quit()
 
 other：
 * [seldom+poium](docs/seldom_sample.md)
-
-## Old version
-
-* poium < 0.6.0
-
-[参考文档](./docs/base_old.md)
-
-* poium>=0.6.0, <1.0.0
-
-[参考文档](./docs/base_0.6.0.md)
 
 ## Project History
 
