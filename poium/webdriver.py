@@ -73,15 +73,6 @@ class Page(BasePage):
         else:
             self.driver.set_window_size(self, width, height)
 
-    def switch_to_frame(self, frame_reference):
-        """
-        selenium API
-        Switches focus to the specified frame, by id, name, or webelement.
-        """
-        warnings.warn("use page.elem.switch_to_frame() instead",
-                      DeprecationWarning, stacklevel=2)
-        self.driver.switch_to.frame(frame_reference)
-
     def switch_to_parent_frame(self):
         """
         selenium API
@@ -89,37 +80,6 @@ class Page(BasePage):
         Corresponding relationship with switch_to_frame () method.
         """
         self.driver.switch_to.parent_frame()
-
-    @property
-    def new_window_handle(self):
-        """
-        selenium API
-        Getting a handle to a new window.
-        """
-        warnings.warn("This method is on the verge of obsolescence",
-                      DeprecationWarning, stacklevel=2)
-        all_handle = self.driver.window_handles
-        return all_handle[-1]
-
-    @property
-    def current_window_handle(self):
-        """
-        selenium API
-        Returns the handle of the current window.
-        """
-        warnings.warn("This method is on the verge of obsolescence",
-                      DeprecationWarning, stacklevel=2)
-        return self.driver.current_window_handle
-
-    @property
-    def window_handles(self):
-        """
-        selenium API
-        Returns the handles of all windows within the current session.
-        """
-        warnings.warn("This method is on the verge of obsolescence",
-                      DeprecationWarning, stacklevel=2)
-        return self.driver.window_handles
 
     def switch_to_window(self, index: int) -> None:
         """

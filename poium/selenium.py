@@ -96,17 +96,6 @@ class BasePage:
         self.root_uri = url if url else getattr(self.driver, 'url', None)
         config.printLog = print_log
 
-    def get(self, uri: str) -> None:
-        """
-        go to uri
-        :param uri: URI to GET, based off of the root_uri attribute.
-        :return:
-        """
-        warnings.warn("use page.open() instead", DeprecationWarning, stacklevel=2)
-        root_uri = self.root_uri or ''
-        self.driver.get(root_uri + uri)
-        self.driver.implicitly_wait(5)
-
     def open(self, uri: str) -> None:
         """
         open uri
@@ -345,6 +334,13 @@ class Element(object):
         elem = self.__get_element(self.k, self.v)
         Browser.driver.switch_to.frame(elem)
         logging.info(f"✅ switch_to_frame().")
+
+    def frame(self) -> None:
+        """
+        selenium API
+        Switches focus to the specified frame
+        """
+        return self.switch_to_frame()
 
     def move_to_element(self) -> None:
         """
