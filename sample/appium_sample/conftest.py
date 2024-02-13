@@ -2,6 +2,7 @@ import pytest
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 
+global app_driver
 
 @pytest.fixture(autouse=True)
 def app():
@@ -15,7 +16,7 @@ def app():
         "noReset": True,
     }
     options = UiAutomator2Options().load_capabilities(capabilities)
-    app_driver = webdriver.Remote('http://localhost:4723/wd/hub', options=options)
+    app_driver = webdriver.Remote('http://localhost:4723', options=options)
     return app_driver
 
 
