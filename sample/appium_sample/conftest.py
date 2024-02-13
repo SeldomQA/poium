@@ -11,9 +11,8 @@ def app():
     capabilities = {
         "automationName": "UiAutomator2",
         "platformName": "Android",
-        "appPackage": "com.meizu.flyme.flymebbs",
-        "appActivity": "com.meizu.myplus.ui.splash.SplashActivity",
-        "noReset": True,
+        'appPackage': 'com.android.calculator2',
+        'appActivity': '.Calculator'
     }
     options = UiAutomator2Options().load_capabilities(capabilities)
     app_driver = webdriver.Remote('http://localhost:4723', options=options)
