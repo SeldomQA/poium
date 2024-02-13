@@ -1,20 +1,21 @@
 import pytest
 from appium import webdriver
+from appium.options.android import UiAutomator2Options
 
 
 @pytest.fixture(autouse=True)
 def app():
     global app_driver
     # APP定义运行环境
-    desired_caps = {
-        'deviceName': 'YAL_AL10',
-        'automationName': 'appium',
-        'platformName': 'Android',
-        'platformVersion': '10.0',
-        'appPackage': 'com.android.calculator2',
-        'appActivity': '.Calculator',
+    capabilities = {
+        "automationName": "UiAutomator2",
+        "platformName": "Android",
+        "appPackage": "com.meizu.flyme.flymebbs",
+        "appActivity": "com.meizu.myplus.ui.splash.SplashActivity",
+        "noReset": True,
     }
-    app_driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+    options = UiAutomator2Options().load_capabilities(capabilities)
+    app_driver = webdriver.Remote('http://localhost:4723/wd/hub', options=options)
     return app_driver
 
 
