@@ -2,14 +2,15 @@ import os
 import time
 import warnings
 from time import sleep
-from selenium.common.exceptions import StaleElementReferenceException
+
 from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
-from selenium.webdriver.common.actions import interaction
 
-from poium.selenium import BasePage
+from poium.base_page import BasePage
 from poium.common.keyboard import KeyEvent
 
 
@@ -25,7 +26,7 @@ class Page(BasePage):
         """
         if js is None:
             raise ValueError("Please input js script")
-        
+
         return self.driver.execute_script(js, *args)
 
     def window_scroll(self, width=None, height=None):

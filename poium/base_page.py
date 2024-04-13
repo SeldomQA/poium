@@ -118,18 +118,18 @@ class Element(object):
         self.exist = False
 
         if selector is not None:
-            self.k, self.v = selection_checker(selector)
+            self.by, self.value = selection_checker(selector)
         else:
             if not kwargs:
                 raise ValueError("Please specify a locator")
             if len(kwargs) > 1:
                 raise ValueError("Please specify only one locator")
             self.kwargs = kwargs
-            by, self.v = next(iter(kwargs.items()))
+            by, self.value = next(iter(kwargs.items()))
 
-            self.k = LOCATOR_LIST.get(by, None)
-            if self.k is None:
-                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
+            self.by = LOCATOR_LIST.get(by, None)
+            if self.by is None:
+                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.by))
 
     def __get__(self, instance, owner):
         if instance is None:
@@ -144,6 +144,12 @@ class Element(object):
 
     @func_set_timeout(1)
     def find_elements_timeout(self, key: str, value: str):
+        """
+        set find element timeout.
+        :param key:
+        :param value:
+        :return:
+        """
         return Browser.driver.find_elements(key, value)
 
     def find(self, by: str, value: str) -> list:
@@ -168,10 +174,14 @@ class Element(object):
 
         return elems
 
-    def __get_element(self, by: str, value: str):
+    def get_element_object(self, by: str = None, value: str = None):
         """
         Judge element positioning way, and returns the element.
         """
+        if by is None:
+            by = self.by
+        if value is None:
+            value = self.value
 
         if by in BY_LIST:
             elem = self.find(by, value)
@@ -205,13 +215,13 @@ class Element(object):
 
     def is_exist(self) -> bool:
         """element is existed """
-        self.__get_element(self.k, self.v)
+        self.get_element_object()
         return self.exist
 
     def clear(self) -> None:
         """Clears the text if it's a text entry element."""
         logging.info("✅ clear.")
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.clear()
 
     def send_keys(self, value, clear=False, click=False) -> None:
@@ -219,7 +229,7 @@ class Element(object):
         Simulates typing into the element.
         If clear_before is True, it will clear the content before typing.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         if click is True:
             elem.click()
             sleep(0.5)
@@ -235,7 +245,7 @@ class Element(object):
         """
         Clicks the element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.click()
         logging.info(f"✅ click().")
 
@@ -243,14 +253,14 @@ class Element(object):
         """
         Submits a form.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.submit()
         logging.info(f"✅ submit().")
 
     @property
     def tag_name(self) -> str:
         """This element's ``tagName`` property."""
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         tag_name = elem.tag_name
         logging.info(f"✅ tag_name: {tag_name}.")
         return tag_name
@@ -258,7 +268,7 @@ class Element(object):
     @property
     def text(self) -> str:
         """The text of the element."""
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         text = elem.text
         logging.info(f"✅ text: {text}.")
         return text
@@ -266,7 +276,7 @@ class Element(object):
     @property
     def size(self) -> dict:
         """The size of the element."""
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         size = elem.size
         logging.info(f"✅ size: {size}.")
         return size
@@ -276,7 +286,7 @@ class Element(object):
         The value of a CSS property
         :param property_name:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         property_value = elem.value_of_css_property(property_name)
         logging.info(f"✅ value_of_css_property('{property_name}') -> {property_value}.")
         return property_value
@@ -285,7 +295,7 @@ class Element(object):
         """
         Gets the given property of the element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         value = elem.get_property(name)
         logging.info(f"✅ get_property('{name}') -> {value}.")
         return value
@@ -294,14 +304,14 @@ class Element(object):
         """
         Gets the given attribute or property of the element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         value = elem.get_attribute(name)
         logging.info(f"✅ get_property('{name}') -> {value}.")
         return value
 
     def is_displayed(self) -> bool:
         """Whether the element is visible to a user."""
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         display = elem.is_displayed()
         logging.info(f"✅ is_displayed() -> {display}.")
         return display
@@ -312,14 +322,14 @@ class Element(object):
 
         Can be used to check if a checkbox or radio button is selected.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         select = elem.is_selected()
         logging.info(f"✅ is_selected() -> {select}.")
         return select
 
     def is_enabled(self):
         """Returns whether the element is enabled."""
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         enable = elem.is_enabled()
         logging.info(f"✅ is_enabled() -> {enable}.")
         return enable
@@ -329,7 +339,7 @@ class Element(object):
         selenium API
         Switches focus to the specified frame
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         Browser.driver.switch_to.frame(elem)
         logging.info(f"✅ switch_to_frame().")
 
@@ -345,7 +355,7 @@ class Element(object):
         selenium API
         Moving the mouse to the middle of an element
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         ActionChains(Browser.driver).move_to_element(elem).perform()
         logging.info(f"✅ move_to_element().")
 
@@ -354,7 +364,7 @@ class Element(object):
         selenium API
         Holds down the left mouse button on an element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         ActionChains(Browser.driver).click_and_hold(elem).perform()
         logging.info(f"✅ click_and_hold().")
 
@@ -363,7 +373,7 @@ class Element(object):
         selenium API
         Holds down the left mouse button on an element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         ActionChains(Browser.driver).double_click(elem).perform()
         logging.info(f"✅ double_click().")
 
@@ -372,7 +382,7 @@ class Element(object):
         selenium API
         Performs a context-click (right click) on an element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         ActionChains(Browser.driver).context_click(elem).perform()
         logging.info(f"✅ context_click().")
 
@@ -384,7 +394,7 @@ class Element(object):
         :param x: X offset to move to.
         :param y: Y offset to move to.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         ActionChains(Browser.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
         logging.info(f"✅ drag_and_drop_by_offset('{x}', '{y}').")
 
@@ -393,7 +403,7 @@ class Element(object):
         selenium API
         Refreshes the current page, retrieve elements.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         for i in range(timeout):
             if elem is not None:
                 try:
@@ -420,7 +430,7 @@ class Element(object):
 
            throws NoSuchElementException If there is no option with specisied value in SELECT
         """
-        select_elem = self.__get_element(self.k, self.v)
+        select_elem = self.get_element_object()
         Select(select_elem).select_by_value(value)
         logging.info(f"✅ select_by_value('{value}').")
 
@@ -435,7 +445,7 @@ class Element(object):
 
            throws NoSuchElementException If there is no option with specisied index in SELECT
         """
-        select_elem = self.__get_element(self.k, self.v)
+        select_elem = self.get_element_object()
         Select(select_elem).select_by_index(index)
         logging.info(f"✅ select_by_index('{index}').")
 
@@ -452,7 +462,7 @@ class Element(object):
 
             throws NoSuchElementException If there is no option with specisied text in SELECT
         """
-        select_elem = self.__get_element(self.k, self.v)
+        select_elem = self.get_element_object()
         Select(select_elem).select_by_visible_text(text)
         logging.info(f"✅ select_by_visible_text('{text}').")
 
@@ -461,7 +471,7 @@ class Element(object):
         appium API
         Sends text to the element.
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.set_text(keys)
         logging.info(f"✅ set_text('{keys}').")
         return self
@@ -474,7 +484,7 @@ class Element(object):
         Returns:
             dict: The location of an element relative to the view
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         location = elem.location_in_view
         logging.info(f"✅ location_in_view -> {location}.")
         return location
@@ -484,7 +494,7 @@ class Element(object):
         appium API
         Set the value on this element in the application
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.set_value(value)
         logging.info(f"✅ set_value('{value}').")
         return self
@@ -495,7 +505,7 @@ class Element(object):
         :param text:
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(text)
         logging.info(f"🎹 input('{text}').")
 
@@ -504,7 +514,7 @@ class Element(object):
         Enter key
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(Keys.ENTER)
         logging.info(f"🎹 enter.")
 
@@ -513,7 +523,7 @@ class Element(object):
         select all.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "a")
         else:
@@ -525,7 +535,7 @@ class Element(object):
         cut.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "x")
         else:
@@ -537,7 +547,7 @@ class Element(object):
         copy
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "c")
         else:
@@ -549,7 +559,7 @@ class Element(object):
         paste.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "v")
         else:
@@ -561,7 +571,7 @@ class Element(object):
         Backspace key.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(Keys.BACKSPACE)
         logging.info(f"🎹 backspace.")
 
@@ -570,7 +580,7 @@ class Element(object):
         Delete key.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(Keys.DELETE)
         logging.info(f"🎹 delete.")
 
@@ -579,7 +589,7 @@ class Element(object):
         Tab key.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(Keys.TAB)
         logging.info(f"🎹 tab.")
 
@@ -588,7 +598,7 @@ class Element(object):
         Space key.
         :return:
         """
-        elem = self.__get_element(self.k, self.v)
+        elem = self.get_element_object()
         elem.send_keys(Keys.SPACE)
         logging.info(f"🎹 space.")
 
@@ -602,17 +612,17 @@ class Elements(object):
         self.desc = describe
         self.times = timeout
         if selector is not None:
-            self.k, self.v = selection_checker(selector)
+            self.by, self.value = selection_checker(selector)
         else:
             if not kwargs:
                 raise ValueError("Please specify a locator")
             if len(kwargs) > 1:
                 raise ValueError("Please specify only one locator")
-            by, self.v = next(iter(kwargs.items()))
+            by, self.value = next(iter(kwargs.items()))
 
-            self.k = LOCATOR_LIST.get(by, None)
-            if self.k is None:
-                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.k))
+            self.by = LOCATOR_LIST.get(by, None)
+            if self.by is None:
+                raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.by))
 
         self.has_context = bool(context)
 
@@ -623,7 +633,7 @@ class Elements(object):
         :return:
         """
         for i in range(self.times):
-            elems = context.find_elements(self.k, self.v)
+            elems = context.find_elements(self.by, self.value)
             if len(elems) > 0:
                 break
             else:
@@ -631,7 +641,7 @@ class Elements(object):
         else:
             elems = []
 
-        logging.info(f"✨ Find {len(elems)} elements through: {self.k}={self.v}. {self.desc}")
+        logging.info(f"✨ Find {len(elems)} elements through: {self.by}={self.value}. {self.desc}")
         return elems
 
     def __get__(self, instance, owner, context=None):

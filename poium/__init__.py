@@ -17,10 +17,10 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .webdriver import Page
-from .selenium import Element, Elements
+from .base_page import Element, Elements
 from .config import Browser
 from .javascript import CSSElement
+from .webdriver import Page
 
 __author__ = "fnngj"
 
