@@ -36,7 +36,6 @@ LOCATOR_LIST = {
     'android_viewtag': AppiumBy.ANDROID_VIEWTAG,
     'android_data_matcher': AppiumBy.ANDROID_DATA_MATCHER,
     'android_view_matcher': AppiumBy.ANDROID_VIEW_MATCHER,
-    'windows_uiautomation': AppiumBy.WINDOWS_UI_AUTOMATION,
     'accessibility_id': AppiumBy.ACCESSIBILITY_ID,
     'image': AppiumBy.IMAGE,
     'custom': AppiumBy.CUSTOM,
@@ -60,7 +59,6 @@ BY_LIST = [
     AppiumBy.ANDROID_VIEWTAG,
     AppiumBy.ANDROID_DATA_MATCHER,
     AppiumBy.ANDROID_VIEW_MATCHER,
-    AppiumBy.WINDOWS_UI_AUTOMATION,
     AppiumBy.ACCESSIBILITY_ID,
     AppiumBy.IMAGE,
     AppiumBy.CUSTOM

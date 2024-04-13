@@ -2,10 +2,12 @@ import os
 import time
 import warnings
 from time import sleep
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import NoAlertPresentException
-from appium.webdriver.common.touch_action import TouchAction as MobileTouchAction
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
+from selenium.webdriver.common.actions.pointer_input import PointerInput
+from selenium.webdriver.common.actions import interaction
 
 from poium.selenium import BasePage
 from poium.common.keyboard import KeyEvent
@@ -353,24 +355,14 @@ class Page(BasePage):
         appium API
         Perform a tap action on the element
         """
-        action = MobileTouchAction(self.driver)
-        action.tap(elem, x, y, count).perform()
-
-    def press(self, elem, x, y, pressure):
-        """
-        appium API
-        Begin a chain with a press down action at a particular element or point
-        """
-        action = MobileTouchAction(self.driver)
-        action.press(elem, x, y, pressure).perform()
-
-    def long_press(self, elem, x, y, duration):
-        """
-        appium API
-        Begin a chain with a press down that lasts `duration` milliseconds
-        """
-        action = MobileTouchAction(self.driver)
-        action.long_press(elem, x, y, duration).perform()
+        actions = ActionChains(self.driver)
+        actions.w3c_actions = ActionBuilder(self.driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
+        actions.w3c_actions.pointer_action.move_to_location(x, y)
+        actions.w3c_actions.pointer_action.pointer_down()
+        actions.w3c_actions.pointer_action.pause(0.1)
+        actions.w3c_actions.pointer_action.release()
+        actions.perform()
+        sleep(2)
 
     def swipe(self, start_x, start_y, end_x, end_y, duration=None):
         """
