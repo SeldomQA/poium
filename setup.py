@@ -19,7 +19,7 @@ setup(
     license='BSD',
     author='fnngj',
     author_email='fnngj@126.com',
-    description='Selenium/appium-based Page Objects test library.',
+    description='Page Objects design pattern test library.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
