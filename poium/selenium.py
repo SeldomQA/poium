@@ -1,21 +1,21 @@
-import warnings
 import platform
 from time import sleep
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.select import Select
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.common.exceptions import WebDriverException
+
 from appium.webdriver.common.appiumby import AppiumBy
 from func_timeout import func_set_timeout
 from func_timeout.exceptions import FunctionTimedOut
-from poium.common.exceptions import PageElementError, FindElementTypesError, DriverNoneException
+from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.select import Select
+
+from poium import config
 from poium.common import logging
+from poium.common.exceptions import PageElementError, FindElementTypesError, DriverNoneException
 from poium.common.selector import selection_checker
 from poium.config import Browser
-from poium import config
-
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -490,16 +490,29 @@ class Element(object):
         return self
 
     def input(self, text="") -> None:
+        """
+        input.
+        :param text:
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(text)
         logging.info(f"🎹 input('{text}').")
 
     def enter(self) -> None:
+        """
+        Enter key
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.ENTER)
         logging.info(f"🎹 enter.")
 
     def select_all(self) -> None:
+        """
+        select all.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "a")
@@ -508,6 +521,10 @@ class Element(object):
         logging.info(f"🎹 control + a.")
 
     def cut(self) -> None:
+        """
+        cut.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "x")
@@ -516,6 +533,10 @@ class Element(object):
         logging.info(f"🎹 control + x.")
 
     def copy(self) -> None:
+        """
+        copy
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "c")
@@ -524,6 +545,10 @@ class Element(object):
         logging.info(f"🎹 control + c.")
 
     def paste(self) -> None:
+        """
+        paste.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         if platform.system().lower() == "darwin":
             elem.send_keys(Keys.COMMAND, "v")
@@ -532,21 +557,37 @@ class Element(object):
         logging.info(f"🎹 control + v.")
 
     def backspace(self) -> None:
+        """
+        Backspace key.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.BACKSPACE)
         logging.info(f"🎹 backspace.")
 
     def delete(self) -> None:
+        """
+        Delete key.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.DELETE)
         logging.info(f"🎹 delete.")
 
     def tab(self) -> None:
+        """
+        Tab key.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.TAB)
         logging.info(f"🎹 tab.")
 
     def space(self) -> None:
+        """
+        Space key.
+        :return:
+        """
         elem = self.__get_element(self.k, self.v)
         elem.send_keys(Keys.SPACE)
         logging.info(f"🎹 space.")
@@ -576,6 +617,11 @@ class Elements(object):
         self.has_context = bool(context)
 
     def find(self, context):
+        """
+        find element.
+        :param context:
+        :return:
+        """
         for i in range(self.times):
             elems = context.find_elements(self.k, self.v)
             if len(elems) > 0:
