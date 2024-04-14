@@ -1,10 +1,8 @@
 import os
 import time
-import warnings
 from time import sleep
 
 from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
@@ -256,33 +254,6 @@ class Page(BasePage):
         """
         return self.driver.switch_to.alert.text
 
-    def move_to_element(self, elem):
-        """
-        selenium API
-        Moving the mouse to the middle of an element
-        """
-        warnings.warn("use page.elem.move_to_element() instead",
-                      DeprecationWarning, stacklevel=2)
-        ActionChains(self.driver).move_to_element(elem).perform()
-
-    def click_and_hold(self, elem):
-        """
-        selenium API
-        Holds down the left mouse button on an element.
-        """
-        warnings.warn("use page.elem.click_and_hold() instead",
-                      DeprecationWarning, stacklevel=2)
-        ActionChains(self.driver).click_and_hold(elem).perform()
-
-    def double_click(self, elem):
-        """
-        selenium API
-        Double-clicks an element.
-        """
-        warnings.warn("use page.elem.double_click() instead",
-                      DeprecationWarning, stacklevel=2)
-        ActionChains(self.driver).double_click(elem).perform()
-
     def move_by_offset(self, x, y, click=False):
         """
         selenium API
@@ -294,8 +265,9 @@ class Page(BasePage):
         """
         if click is True:
             ActionChains(self.driver).move_by_offset(x, y).click().perform()
-        else:
-            ActionChains(self.driver).move_by_offset(x, y).perform()
+            return
+
+        ActionChains(self.driver).move_by_offset(x, y).perform()
 
     def release(self):
         """
@@ -303,53 +275,6 @@ class Page(BasePage):
         Releasing a held mouse button on an element.
         """
         ActionChains(self.driver).release().perform()
-
-    def context_click(self, elem):
-        """
-        selenium API
-        Performs a context-click (right click) on an element.
-        """
-        warnings.warn("use page.elem.context_click() instead",
-                      DeprecationWarning, stacklevel=2)
-        ActionChains(self.driver).context_click(elem).perform()
-
-    def drag_and_drop_by_offset(self, elem, x, y):
-        """
-        selenium API
-        Holds down the left mouse button on the source element,
-           then moves to the target offset and releases the mouse button.
-        :param elem: The element to mouse down.
-        :param x: X offset to move to.
-        :param y: Y offset to move to.
-        """
-        warnings.warn("use page.elem.drag_and_drop_by_offset(x, y) instead",
-                      DeprecationWarning, stacklevel=2)
-        ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
-
-    def refresh_element(self, elem, timeout=10):
-        """
-        selenium API
-        Refreshes the current page, retrieve elements.
-        """
-        warnings.warn("use page.elem.refresh_element() instead",
-                      DeprecationWarning, stacklevel=2)
-        try:
-            timeout_int = int(timeout)
-        except TypeError:
-            raise ValueError("Type 'timeout' error, must be type int() ")
-
-        for i in range(timeout_int):
-            if elem is not None:
-                try:
-                    elem
-                except StaleElementReferenceException:
-                    self.driver.refresh()
-                else:
-                    break
-            else:
-                sleep(1)
-        else:
-            raise TimeoutError("stale element reference: element is not attached to the page document.")
 
     def top(self, elem, x, y, count):
         """
