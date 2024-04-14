@@ -11,12 +11,12 @@ class BingPage(Page):
 def test_playwright(page):
     # 获得元素
     page.goto("https://cn.bing.com")
-    bing_page = BingPage(page)
-    bing_page.search_input.highlight()
-    bing_page.search_input.fill("playwright")
-    bing_page.search_icon.highlight()
-    bing_page.search_icon.screenshot(path="./image/search_icon.png")
-    bing_page.search_icon.click()
+    bp = BingPage(page)
+    bp.search_input.highlight()
+    bp.search_input.fill("playwright")
+    bp.search_icon.highlight()
+    bp.search_icon.screenshot(path="./image/search_icon.png")
+    bp.search_icon.click()
 
     # 断言URL
     expect(page).to_have_title(re.compile("playwright"))
