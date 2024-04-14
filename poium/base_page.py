@@ -1,3 +1,7 @@
+"""
+author：bugmaster
+
+"""
 import platform
 from time import sleep
 
@@ -67,7 +71,7 @@ BY_LIST = [
 
 class BasePage:
     """
-    Page Object pattern.
+    Page Object pattern base class.
     """
 
     def __init__(self, driver=None, url: str = None, print_log: bool = False):
@@ -97,7 +101,7 @@ class BasePage:
     def open(self, uri: str) -> None:
         """
         open uri
-        :param uri:  URI to GET, based off of the root_uri attribute.
+        :param uri: URI to GET, based off of the root_uri attribute.
         :return:
         """
         root_uri = self.root_uri or ''
@@ -281,6 +285,54 @@ class Element(object):
         logging.info(f"✅ size: {size}.")
         return size
 
+    @property
+    def location(self) -> dict:
+        """The location of the element in the renderable canvas."""
+        elem = self.get_element_object()
+        loc = elem.location
+        logging.info(f"✅ location: {loc}.")
+        return loc
+
+    @property
+    def rect(self) -> dict:
+        """A dictionary with the size and location of the element."""
+        elem = self.get_element_object()
+        rect = elem.rect
+        logging.info(f"✅ rect: {rect}.")
+        return rect
+
+    @property
+    def aria_role(self) -> str:
+        """Returns the ARIA role of the current web element."""
+        elem = self.get_element_object()
+        aria_role = elem.aria_role
+        logging.info(f"✅ aria_role: {aria_role}.")
+        return aria_role
+
+    @property
+    def accessible_name(self) -> str:
+        """Returns the ARIA Level of the current webelement."""
+        elem = self.get_element_object()
+        accessible_name = elem.accessible_name
+        logging.info(f"✅ accessible_name: {accessible_name}.")
+        return accessible_name
+
+    def screenshot(self, filename: str = None):
+        """
+        element screenshot.
+        :param filename:
+        :return:
+        """
+        elem = self.get_element_object()
+        if filename is not None:
+            result = elem.screenshot(filename)
+            logging.info(f"✅ screenshot save to: {filename}.")
+            return result
+
+        b64 = elem.screenshot_as_png
+        logging.info(f"✅ screenshot save base64.")
+        return b64
+
     def value_of_css_property(self, property_name):
         """
         The value of a CSS property
@@ -300,13 +352,20 @@ class Element(object):
         logging.info(f"✅ get_property('{name}') -> {value}.")
         return value
 
+    def get_dom_attribute(self, name) -> str:
+        """Gets the given attribute of the element."""
+        elem = self.get_element_object()
+        value = elem.get_dom_attribute(name)
+        logging.info(f"✅ get_dom_attribute('{name}') -> {value}.")
+        return value
+
     def get_attribute(self, name) -> str:
         """
         Gets the given attribute or property of the element.
         """
         elem = self.get_element_object()
         value = elem.get_attribute(name)
-        logging.info(f"✅ get_property('{name}') -> {value}.")
+        logging.info(f"✅ get_attribute('{name}') -> {value}.")
         return value
 
     def is_displayed(self) -> bool:
@@ -316,7 +375,7 @@ class Element(object):
         logging.info(f"✅ is_displayed() -> {display}.")
         return display
 
-    def is_selected(self):
+    def is_selected(self) -> bool:
         """
         Returns whether the element is selected.
 
@@ -327,7 +386,7 @@ class Element(object):
         logging.info(f"✅ is_selected() -> {select}.")
         return select
 
-    def is_enabled(self):
+    def is_enabled(self) -> bool:
         """Returns whether the element is enabled."""
         elem = self.get_element_object()
         enable = elem.is_enabled()
