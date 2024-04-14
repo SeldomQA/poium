@@ -2,8 +2,8 @@ import time
 
 from poium.common import logging
 from poium.common.assert_des import insert_assert
+from poium.config import App
 from poium.processing import processing, screenshots_name
-from poium.settings import Setting
 
 LOCATOR_LIST = [
     "id",
@@ -45,7 +45,7 @@ class Page(object):
         """
         self.driver.close()
 
-    def click(self, x: float = None, y: float = None, text: str = None, screenshots=Setting.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None, screenshots=App.click_screenshots):
         """
         点击坐标
         Args：
@@ -393,11 +393,11 @@ class Page(object):
 
         if text_1 == text_2:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("预期结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("预期结果: " + text_1 + "," + text_2 + " 不相等")
 
     @staticmethod
@@ -412,11 +412,11 @@ class Page(object):
 
         if text_1 == text_2:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
 
 
@@ -441,7 +441,7 @@ class Element(object):
         driver = instance.driver
         return self
 
-    def click(self, focus=None, beyond=None, screenshots=Setting.click_screenshots):
+    def click(self, focus=None, beyond=None, screenshots=App.click_screenshots):
 
         """
         点击元素, 根据坐标去点击

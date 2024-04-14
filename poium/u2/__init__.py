@@ -3,8 +3,8 @@ import time
 
 from poium.common import logging
 from poium.common.assert_des import insert_assert
+from poium.config import App
 from poium.processing import processing, screenshots_name
-from poium.settings import Setting
 
 LOCATOR_LIST = [
     "text",
@@ -67,7 +67,7 @@ class Page(object):
         """
         return self.driver.app_list()
 
-    def app_info(self, pkg_name=Setting.apk_name):
+    def app_info(self, pkg_name=App.apk_name):
         """
         Get app info
 
@@ -88,7 +88,7 @@ class Page(object):
         """
         return self.driver.app_info(pkg_name)
 
-    def click(self, x: float = None, y: float = None, text: str = None, screenshots=Setting.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None, screenshots=App.click_screenshots):
         """
         Args:
             x : width / percentage of width
@@ -366,11 +366,11 @@ class Page(object):
         logging.info("预期结果: " + describe + " 文案存在")
         if text_exists is True:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("实际结果: " + describe + " 文案存在")
         else:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("实际结果: " + describe + " 文案不存在")
 
     def assert_not_contain_text(self, text, describe, sleep=0, timeout=10):
@@ -390,11 +390,11 @@ class Page(object):
         logging.info("预期结果: " + describe + " 文案不存在")
         if text_exists is True:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("实际结果: " + describe + " 文案存在")
         else:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("实际结果: " + describe + " 文案不存在")
 
     @staticmethod
@@ -409,12 +409,12 @@ class Page(object):
 
         if text_1 == text_2:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("实际结果: " + text_1 + "," + text_2 + " 相等")
 
         else:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("实际结果: " + text_1 + "," + text_2 + " 不相等")
 
     @staticmethod
@@ -428,11 +428,11 @@ class Page(object):
         logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
         if text_1 == text_2:
             result = [describe, False]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
         else:
             result = [describe, True]
-            Setting.assert_result.append(result)
+            App.assert_result.append(result)
             logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
 
 
@@ -460,47 +460,48 @@ class XpathElement(object):
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        Setting.driver = instance.driver
+        App.driver = instance.driver
         return self
 
-    def click(self, screenshots=Setting.click_screenshots):
+    def click(self, screenshots=App.click_screenshots):
         """
         Click element.
         """
-        self.screenshots(describe="点击") if screenshots else (logging.info(msg="点击 ==> " + self.describe), print("\n"))
+        self.screenshots(describe="点击") if screenshots else (
+        logging.info(msg="点击 ==> " + self.describe), print("\n"))
 
-        Setting.driver.xpath(self.xpath).click()
+        App.driver.xpath(self.xpath).click()
 
     def set_text(self, value):
         """
         Simulates typing into the element.
         :param value: input text
         """
-        Setting.driver.xpath(self.xpath).set_text(value)
+        App.driver.xpath(self.xpath).set_text(value)
 
     def get_text(self):
         """
         :return: get text from field
         """
-        return Setting.driver.xpath(self.xpath).get_text()
+        return App.driver.xpath(self.xpath).get_text()
 
     def match(self):
         """
         :return: None or matched XPathElement
         """
-        return Setting.driver.xpath(self.xpath).match()
+        return App.driver.xpath(self.xpath).match()
 
     def screenshots(self, describe=None):
         """
         截图，在对应元素上增加水印
         """
-        text = Setting.driver.xpath(self.xpath).get_text()
+        text = App.driver.xpath(self.xpath).get_text()
         if text == "":
             w, h = None, None
         else:
-            w, h = Setting.driver(text=text).center()
+            w, h = App.driver(text=text).center()
         screenshots_dir = screenshots_name(describe)
-        Setting.driver.screenshot(screenshots_dir)
+        App.driver.screenshot(screenshots_dir)
         processing(screenshots_dir, w, h)
 
 
@@ -522,7 +523,7 @@ class Element(object):
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        Setting.driver = instance.driver
+        App.driver = instance.driver
         return self
 
     def click(self, timeout=10, offset=None):
@@ -540,13 +541,13 @@ class Element(object):
         Raises:
             UiObjectNotFoundError
         """
-        Setting.driver(**self.kwargs).click(timeout, offset)
+        App.driver(**self.kwargs).click(timeout, offset)
 
     def click_exists(self, timeout=1):
         """
         The element is not clicked until it exists
         """
-        return Setting.driver(**self.kwargs).click_exists(timeout=timeout)
+        return App.driver(**self.kwargs).click_exists(timeout=timeout)
 
     def click_more(self, sleep=.01, times=3):
         """
@@ -556,16 +557,16 @@ class Element(object):
         """
         x, y = self.center()
         for i in range(times):
-            Setting.driver.touch.down(x, y)
+            App.driver.touch.down(x, y)
             time.sleep(sleep)
-            Setting.driver.touch.up(x, y)
+            App.driver.touch.up(x, y)
 
     def exists(self, timeout=0):
         """
         check if the object exists in current window.
         """
 
-        return Setting.driver(**self.kwargs).exists(timeout=timeout)
+        return App.driver(**self.kwargs).exists(timeout=timeout)
 
     def set_text(self, text):
         """
@@ -574,7 +575,7 @@ class Element(object):
         """
         print("\n")
         logging.info(msg=" 键盘输入 ==> " + text)
-        Setting.driver(**self.kwargs).set_text(text=text)
+        App.driver(**self.kwargs).set_text(text=text)
 
     def send_keys(self, text, clear=True):
         """
@@ -582,34 +583,34 @@ class Element(object):
         :param text:
         :param clear:
         """
-        Setting.driver(**self.kwargs).click()
-        Setting.driver.send_keys(text=text, clear=clear)
+        App.driver(**self.kwargs).click()
+        App.driver.send_keys(text=text, clear=clear)
 
     def clear_text(self):
         """
         Clear the text
         """
-        Setting.driver(**self.kwargs).clear()
+        App.driver(**self.kwargs).clear()
 
     def get_text(self):
         """
         get element text
         """
-        return Setting.driver(**self.kwargs).get_text()
+        return App.driver(**self.kwargs).get_text()
 
     def bounds(self):
         """
         Returns the element coordinate position
         :return: left_top_x, left_top_y, right_bottom_x, right_bottom_y
         """
-        return Setting.driver(**self.kwargs).bounds()
+        return App.driver(**self.kwargs).bounds()
 
     def get_position(self):
         """
         get position
         :return: x, y
         """
-        h, w = Setting.driver.window_size()
+        h, w = App.driver.window_size()
         x, y = self.center()
         return round(x / h, 4), round(y / w, 4)
 
@@ -618,7 +619,7 @@ class Element(object):
         Returns the center coordinates of the element
         return: center point (x, y)
         """
-        return Setting.driver(**self.kwargs).center()
+        return App.driver(**self.kwargs).center()
 
     def swipe(self, direction, times=1, steps=10):
         """
@@ -632,7 +633,7 @@ class Element(object):
         assert direction in ("left", "right", "up", "down")
 
         for i in range(times):
-            Setting.driver(**self.kwargs).swipe(direction=direction, steps=steps)
+            App.driver(**self.kwargs).swipe(direction=direction, steps=steps)
         time.sleep(0.1)
 
     def sliding(self, h: float = None, click=False):
@@ -648,7 +649,7 @@ class Element(object):
             if self.exists():
                 break
             else:
-                Setting.driver.swipe(0.5, 0.7, 0.5, 0.3)
+                App.driver.swipe(0.5, 0.7, 0.5, 0.3)
         if h:
             if h <= 0 or h >= 1:
                 raise ValueError("'h' checks the range of values, 0 < h < 1")
@@ -660,9 +661,9 @@ class Element(object):
                         break
                     else:
                         if y > scope[1]:
-                            Setting.driver.swipe(0.5, 0.5, 0.5, 0.45)
+                            App.driver.swipe(0.5, 0.5, 0.5, 0.45)
                         elif y < scope[0]:
-                            Setting.driver.swipe(0.5, 0.45, 0.5, 0.5)
+                            App.driver.swipe(0.5, 0.45, 0.5, 0.5)
 
         self.click() if click else None
 
@@ -671,14 +672,14 @@ class Element(object):
         """
         The element information
         """
-        return Setting.driver(**self.kwargs).info
+        return App.driver(**self.kwargs).info
 
     @property
     def count(self):
         """
         Gets the same number of elements
         """
-        return Setting.driver(**self.kwargs).count
+        return App.driver(**self.kwargs).count
 
     def instance(self, num):
         """
@@ -697,7 +698,7 @@ class Element(object):
         """
         Wait until UI Element exists or gone
         """
-        return Setting.driver(**self.kwargs).wait(exists=True, timeout=timeout)
+        return App.driver(**self.kwargs).wait(exists=True, timeout=timeout)
 
     def wait_gone(self, timeout=None):
         """ wait until ui gone
@@ -706,7 +707,7 @@ class Element(object):
         Returns:
             bool if element gone
         """
-        return Setting.driver(**self.kwargs).wait_gone(timeout)
+        return App.driver(**self.kwargs).wait_gone(timeout)
 
     def screenshots(self, describe=None):
         """
@@ -714,5 +715,5 @@ class Element(object):
         """
         w, h = self.center()
         screenshots_dir = screenshots_name(describe)
-        Setting.driver.screenshot(screenshots_dir)
+        App.driver.screenshot(screenshots_dir)
         processing(screenshots_dir, w, h)

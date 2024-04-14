@@ -1,18 +1,20 @@
 import os
+
 import uiautomator2 as u2
-from poium.settings import Setting
+
+from poium.config import App
 
 
 def connect():
     """
     设备连接
     """
-    if Setting.connect_usb:
-        if Setting.device_id is None:
+    if App.connect_usb:
+        if App.device_id is None:
             device_id = get_device_id()
-            Setting.device_id = device_id
+            App.device_id = device_id
 
-        d = u2.connect_usb(Setting.device_id)
+        d = u2.connect_usb(App.device_id)
 
         return d
 
@@ -22,13 +24,13 @@ def start_app(driver, apk=None):
     启动APP
     """
     if apk is None:
-        apk = Setting.apk_name
+        apk = App.apk_name
     driver.app_start(apk, use_monkey=True)
-    driver.app_wait(apk, front=True, timeout=Setting.app_wait)
+    driver.app_wait(apk, front=True, timeout=App.app_wait)
     driver.jsonrpc.setConfigurator({"waitForIdleTimeout": 100})
 
     session = driver.session(apk, attach=True)
-    session.implicitly_wait(Setting.implicitly_wait)
+    session.implicitly_wait(App.implicitly_wait)
     return session
 
 
@@ -36,7 +38,7 @@ def close_app(driver, apk=None):
     """
     关闭APP
     """
-    driver.app_stop(apk) if apk is not None else driver.app_stop(Setting.apk_name)
+    driver.app_stop(apk) if apk is not None else driver.app_stop(App.apk_name)
 
 
 def get_device_id():
