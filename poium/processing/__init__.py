@@ -1,10 +1,12 @@
 import os
 import time
 
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFont
-
+try:
+    from PIL import Image
+    from PIL import ImageDraw
+    from PIL import ImageFont
+except ImportError:
+    raise ImportError("Please install 'Pillow' library")
 from poium.common import logging
 from poium.config import App
 from poium.config import BASE_DIR

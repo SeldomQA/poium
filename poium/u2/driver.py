@@ -1,7 +1,9 @@
 import os
 
-import uiautomator2 as u2
-
+try:
+    import uiautomator2 as u2
+except ImportError:
+    raise ImportError("Please install 'uiautomator2' library")
 from poium.config import App
 
 

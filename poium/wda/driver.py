@@ -1,4 +1,7 @@
-import wda
+try:
+    import wda
+except ImportError:
+    raise ImportError("Please install 'facebook-wda' library")
 
 from poium.common import logging
 from poium.config import App
