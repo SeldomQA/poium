@@ -20,6 +20,9 @@ LOCATOR_LIST = [
 
 
 class Page(object):
+    """
+    facebook-wda page class
+    """
 
     def __init__(self, dr):
         self.driver = dr
@@ -421,6 +424,10 @@ class Page(object):
 
 
 class Element(object):
+    """
+    element class
+    """
+
     driver = None
 
     def __init__(self, timeout=10, describe=None, **kwargs):
@@ -437,8 +444,8 @@ class Element(object):
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        global driver
-        driver = instance.driver
+
+        self.driver = instance.driver
         return self
 
     def click(self, focus=None, beyond=None, screenshots=App.click_screenshots):
@@ -450,10 +457,9 @@ class Element(object):
             beyond(list): 以传的元素为基准，点击相该元素以外的其他位置
             screenshots(bool): 当screenshots等于True， 会先截图再点击坐标；默认关闭
         """
-        global driver
 
         # 通过坐标点击
-        w, h = driver.window_size()
+        w, h = self.driver.window_size()
         if self.k == "focus":
             if type(self.v) is not list:
                 raise ValueError("The argument must be a list")
@@ -462,7 +468,7 @@ class Element(object):
             x, y = self.v[0] * w, self.v[1] * h
             self.screenshots(x, y, describe="点击, {}".format(self.describe)) if screenshots else \
                 (print("\n"), logging.info(msg=" 点击 ==> " + self.describe))
-            driver.click(self.v[0], self.v[1])
+            self.driver.click(self.v[0], self.v[1])
         else:
             if focus is not None:
                 x, y = self.focus(focus)
@@ -474,7 +480,7 @@ class Element(object):
 
                 self.screenshots(x, y, describe="点击, {}".format(self.describe)) if screenshots else \
                     (print("\n"), logging.info(msg=" 点击 ==> " + self.describe))
-            driver.click(x / w, y / h)
+            self.driver.click(x / w, y / h)
 
     def click_exists(self, timeout=0):
         """
@@ -482,9 +488,8 @@ class Element(object):
         Args:
             timeout(int): 最大等待时间
         """
-        global driver
 
-        return driver(**self.kwargs).click_exists(timeout)
+        return self.driver(**self.kwargs).click_exists(timeout)
 
     def wait(self, timeout=10):
         """
@@ -493,9 +498,8 @@ class Element(object):
         Args：
             timeout(int)：等待时间
         """
-        global driver
         time.sleep(1)
-        driver(**self.kwargs).wait(timeout=timeout)
+        self.driver(**self.kwargs).wait(timeout=timeout)
 
     def get(self, timeout=10, raise_error=False):
         """
@@ -510,8 +514,7 @@ class Element(object):
         Raises:
             WDAElementNotFoundError if raise_error is True else None
         """
-        global driver
-        driver(**self.kwargs).get(timeout=timeout, raise_error=raise_error)
+        self.driver(**self.kwargs).get(timeout=timeout, raise_error=raise_error)
 
     def wait_gone(self, timeout=10):
         """
@@ -520,8 +523,7 @@ class Element(object):
         Args：
             timeout(int)：等待时间
         """
-        global driver
-        driver(**self.kwargs).wait_gone(timeout=timeout)
+        self.driver(**self.kwargs).wait_gone(timeout=timeout)
 
     def find_elements(self, text=False):
         """
@@ -530,9 +532,8 @@ class Element(object):
         Args：
             text(bool): 返回元素对应的文本内容
         """
-        global driver
         text_list = []
-        data = driver(**self.kwargs).find_elements()
+        data = self.driver(**self.kwargs).find_elements()
         logging.info("查找到匹配数量有==> {}个".format(len(data)))
         if text is True:
             for text_data in data:
@@ -561,8 +562,7 @@ class Element(object):
         """
         清空输入框
         """
-        global driver
-        driver(**self.kwargs).clear_text()
+        self.driver(**self.kwargs).clear_text()
 
     def set_text(self, text):
         """
@@ -570,18 +570,16 @@ class Element(object):
         Args:
             text(str): 输入栏输入的文本
         """
-        global driver
         text = str(text)
         self.clear_text()
         logging.info(msg=" 键盘输入 ==> " + text)
-        driver(**self.kwargs).set_text(text)
+        self.driver(**self.kwargs).set_text(text)
 
     def get_text(self):
         """
         获取元素对应的文本
         """
-        global driver
-        return driver(**self.kwargs).text
+        return self.driver(**self.kwargs).text
 
     def swipe(self, direction, times=1, distance=1.0):
         """
@@ -590,11 +588,10 @@ class Element(object):
         times(int): 滑动次数
         distance(float): 滑动距离
         """
-        global driver
         assert direction in ("left", "right", "up", "down")
 
         for i in range(times):
-            driver(**self.kwargs).scroll(direction=direction, distance=distance)
+            self.driver(**self.kwargs).scroll(direction=direction, distance=distance)
         time.sleep(1)
 
     def focus(self, position):
@@ -603,13 +600,12 @@ class Element(object):
         Args:
             position(list): 元素板块内的坐标
         """
-        global driver
         self.get()
         if type(position) is not list:
             raise NameError("The argument must be a list")
         elif position[0] > 1 or position[1] > 1:
             raise NameError("Coordinates range from 0 to 1")
-        rect = driver(**self.kwargs).bounds
+        rect = self.driver(**self.kwargs).bounds
         x = rect.x + rect.width * position[0]
         y = rect.y + rect.height * position[1]
         return x, y
@@ -620,10 +616,9 @@ class Element(object):
         Args:
             percentage(bool): percentage等于True,坐标是百分比； 默认是真实坐标
         """
-        global driver
         self.get()
-        w, h = driver.window_size()
-        rect = driver(**self.kwargs).bounds
+        w, h = self.driver.window_size()
+        rect = self.driver(**self.kwargs).bounds
         x = rect.x + rect.width / 2
         y = rect.y + rect.height / 2
         if percentage is True:
@@ -635,11 +630,10 @@ class Element(object):
         """
         判断元素是否存在
         """
-        global driver
         if "index" in self.kwargs:
             return True if len(self.find_elements()) > 0 else False
         else:
-            return True if driver(**self.kwargs).exists and driver(**self.kwargs).displayed else False
+            return True if self.driver(**self.kwargs).exists and self.driver(**self.kwargs).displayed else False
 
     def scroll(self, direction='visible', distance=1.0):
         """
@@ -653,8 +647,7 @@ class Element(object):
 
         distance=1.0 means, element (width or height) multiply 1.0
         """
-        global driver
-        driver(**self.kwargs).scroll(direction=direction, distance=distance)
+        self.driver(**self.kwargs).scroll(direction=direction, distance=distance)
 
     def scroll_search(self, click=False, direction="down"):
         """
@@ -664,29 +657,26 @@ class Element(object):
             click(bool): 定位到元素后，是否点击
             direction(str): 滑动的方向，只能是'down' 或 'or'
         """
-        global driver
         for i in range(20):
             if self.exists() is True:
                 break
             else:
                 if direction == "down":
-                    driver.swipe(0.5, 0.5, 0.5, 0.4)
+                    self.driver.swipe(0.5, 0.5, 0.5, 0.4)
                 elif direction == "up":
-                    driver.swipe(0.5, 0.5, 0.5, 0.6)
+                    self.driver.swipe(0.5, 0.5, 0.5, 0.6)
                 else:
                     raise ValueError("The direction parameter can only be 'down' or 'up'")
         if click is True:
             self.click(screenshots=True)
 
-    @staticmethod
-    def screenshots(w=None, h=None, describe=None):
+    def screenshots(self, w=None, h=None, describe=None):
         """
         截图
         """
-        global driver
         screenshots_dir = screenshots_name(describe)
-        driver.screenshot().save(screenshots_dir)
-        multiple = driver.scale
+        self.driver.screenshot().save(screenshots_dir)
+        multiple = self.driver.scale
         w, h = multiple * w, multiple * h
         processing(screenshots_dir, w, h)
 
@@ -697,8 +687,7 @@ class Element(object):
         Args:
             duration (float): seconds of hold time
         """
-        global driver
-        driver(**self.kwargs).tap_hold(duration=duration)
+        self.driver(**self.kwargs).tap_hold(duration=duration)
 
     def sliding(self, height=0.5, click=False, direction="down"):
         """
@@ -713,7 +702,7 @@ class Element(object):
             height_max = height + 0.05
             height_min = height - 0.05
             if direction == "down":
-                self.scroll_search(direction="down")
+                self.scroll_search()
             elif direction == "up":
                 self.scroll_search(direction="up")
             else:
@@ -725,14 +714,14 @@ class Element(object):
                 move_y = height - y
                 if move_y > 0:
                     if move_y >= 0.26:
-                        driver.swipe(0.5, 0.5, 0.5, 0.6)
+                        self.driver.swipe(0.5, 0.5, 0.5, 0.6)
                     elif move_y < 0.26:
-                        driver.swipe(0.5, 0.5, 0.5, 0.52, duration=0.5)
+                        self.driver.swipe(0.5, 0.5, 0.5, 0.52, duration=0.5)
                 elif move_y < 0:
                     if move_y <= -0.26:
-                        driver.swipe(0.5, 0.5, 0.5, 0.4)
+                        self.driver.swipe(0.5, 0.5, 0.5, 0.4)
                     elif move_y < 0.26:
-                        driver.swipe(0.5, 0.5, 0.5, 0.48, duration=0.5)
+                        self.driver.swipe(0.5, 0.5, 0.5, 0.48, duration=0.5)
                 x, y = self.get_position()
             time.sleep(1)
             if click is True:

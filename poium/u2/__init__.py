@@ -1,4 +1,3 @@
-import os
 import time
 
 from poium.common import logging
@@ -34,11 +33,11 @@ LOCATOR_LIST = [
     "instance",
 ]
 
-current_path = os.path.abspath(__file__)
-BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep + "..")
-
 
 class Page(object):
+    """
+    uiautomator2 page class
+    """
 
     def __init__(self, dr):
         self.driver = dr
@@ -468,7 +467,7 @@ class XpathElement(object):
         Click element.
         """
         self.screenshots(describe="点击") if screenshots else (
-        logging.info(msg="点击 ==> " + self.describe), print("\n"))
+            logging.info(msg="点击 ==> " + self.describe), print("\n"))
 
         App.driver.xpath(self.xpath).click()
 
@@ -506,6 +505,9 @@ class XpathElement(object):
 
 
 class Element(object):
+    """
+    element class
+    """
 
     def __init__(self, timeout=10, describe=None, **kwargs):
         self.describe = describe
