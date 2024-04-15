@@ -1,6 +1,6 @@
 #### 1.5.1
 
-* 支持`uiautomator2/facebook-wda` 截图功能，极大缩减poium体积。
+* 移除支持`uiautomator2/facebook-wda` 截图功能以相关依赖，极大缩减poium体积。
 * 修复`uiautomator2` 中 `sleep()` 方法使用报错。
 
 #### 1.5.0
