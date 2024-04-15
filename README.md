@@ -24,6 +24,9 @@ pip install:
 
 ```shell
 > pip install poium
+> pip install playwright [可选]
+> pip install uiautomator2 [可选]
+> pip install facebook-wda [可选]
 ```
 
 If you want to keep up with the latest version, you can install with github repository url:

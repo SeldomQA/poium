@@ -28,7 +28,6 @@ python = "^3.8"
 Appium-Python-Client = "^3.1.0"
 loguru = "~0.6.0"
 func-timeout = "^4.3.5"
-playwright = "^1.25.2"
 
 [build-system]
 requires = ["poetry-core"]
