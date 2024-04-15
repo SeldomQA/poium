@@ -15,8 +15,8 @@ __支持库：__
 - [x] selenium ✔️
 - [x] appium ✔️
 - [x] playwright ✔️
-- [x] uiautomator2 ✔️（⚠️）
-- [x] facebook-wda ✔️（⚠️）
+- [x] uiautomator2 ⚠️
+- [x] facebook-wda ️ ⚠️
 
 ## Installation
 
@@ -38,7 +38,7 @@ If you want to keep up with the latest version, you can install with github repo
 
 `poium` 对 `selenium/appium` 提供了良好的支持。
 
-👉查看[详细文档](./sample/selenium_sample/README.md)
+👉 [详细文档](./sample/selenium_sample)
 
 * selenium
 
@@ -107,7 +107,7 @@ driver.quit()
 
 `poium 1.2` 版本支持playwright库, 目前仅支持`sync`的用法.
 
-👉查看[详细文档](./sample/playwright_sample/README.md)
+👉 [详细文档](./sample/playwright_sample)
 
 ```python
 import re
@@ -150,7 +150,7 @@ with sync_playwright() as p:
 
 `openatx` 有国内是非常流行的移动App自动化工具，`poium`同样对它做了支持。
 
-👉查看[详细文档](./sample/playwright_sample/README.md)
+👉 [详细文档](./sample/u2_sample)
 
 * uiautomator2
 
@@ -185,17 +185,44 @@ d.app_stop("com.microsoft.bing")
 
 seldom是一个全功能自动化测试框架。
 
-👉查看[详细文档](./sample/seldom_sample/README.md)
+👉 [详细文档](./sample/seldom_sample)
 
 ```python
+import seldom
+from poium import Page, Element
 
+
+class BaiduPage(Page):
+    """baidu page"""
+    input = Element(id_="kw", describe="搜索输入框")
+    button = Element(id_="su", describe="搜索按钮")
+
+
+class BaiduTest(seldom.TestCase):
+    """Baidu search test case"""
+
+    def test_case(self):
+        """A simple test"""
+        page = BaiduPage(self.driver, print_log=True)
+        page.open("https://www.baidu.com")
+        page.input.send_keys("seldom")
+        page.button.click()
+        self.assertTitle("seldom_百度搜索")
+
+
+if __name__ == '__main__':
+    seldom.main(browser='edge')
 ```
+
+### Star History
+
+![Star History Chart](https://api.star-history.com/svg?repos=SeldomQA/poium&type=Date)
 
 ## Project History
 
 * [page-objects](https://github.com/eeaston/page-objects)
 
-poium 参考page-objects，他项目已经不再维护，原项目代码虽然只有100多行，但设计非常精妙。本项目在此基础上进行开发。
+poium 参考 page-objects，他项目已经不再维护，原项目代码虽然只有100多行，但设计非常精妙。本项目在此基础上进行开发。
 
 * [selenium-page-objects](https://pypi.org/project/selenium-page-objects/)
 
