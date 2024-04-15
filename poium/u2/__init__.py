@@ -2,7 +2,6 @@ from poium.base import BaseMethod
 from poium.common import logging
 from poium.common.assert_des import insert_assert
 from poium.config import App
-from poium.processing import processing, screenshots_name
 
 LOCATOR_LIST = [
     "text",
@@ -224,19 +223,6 @@ class Page(BaseMethod):
                     raise NameError
         else:
             raise TimeoutError("Timeout, element not found")
-
-    def screenshots(self, w=None, h=None, describe=None):
-        """
-        截图
-        """
-        if w and h:
-            if w < 1 and h < 1:
-                x, y = self.window_size()
-                w, h = x * w, y * h
-
-        screenshots_dir = screenshots_name(describe)
-        self.driver.screenshot(screenshots_dir)
-        processing(screenshots_dir, w, h)
 
     def press(self, key):
         """
@@ -479,21 +465,8 @@ class XpathElement(object):
         """
         return App.driver.xpath(self.xpath).match()
 
-    def screenshots(self, describe=None):
-        """
-        截图，在对应元素上增加水印
-        """
-        text = App.driver.xpath(self.xpath).get_text()
-        if text == "":
-            w, h = None, None
-        else:
-            w, h = App.driver(text=text).center()
-        screenshots_dir = screenshots_name(describe)
-        App.driver.screenshot(screenshots_dir)
-        processing(screenshots_dir, w, h)
 
-
-class Element(object):
+class Element(BaseMethod):
     """
     element class
     """
@@ -549,7 +522,7 @@ class Element(object):
         x, y = self.center()
         for i in range(times):
             App.driver.touch.down(x, y)
-            time.sleep(sleep)
+            self.sleep(sleep)
             App.driver.touch.up(x, y)
 
     def exists(self, timeout=0):
@@ -625,7 +598,7 @@ class Element(object):
 
         for i in range(times):
             App.driver(**self.kwargs).swipe(direction=direction, steps=steps)
-        time.sleep(0.1)
+        self.sleep(0.1)
 
     def sliding(self, h: float = None, click=False):
         """
@@ -677,7 +650,6 @@ class Element(object):
         Click on the list of elements
         """
         _list = []
-        time.sleep(1)
         self.wait()
         data = self.count
         for i in range(data):
@@ -699,12 +671,3 @@ class Element(object):
             bool if element gone
         """
         return App.driver(**self.kwargs).wait_gone(timeout)
-
-    def screenshots(self, describe=None):
-        """
-        A screenshot that adds a watermark to the corresponding element
-        """
-        w, h = self.center()
-        screenshots_dir = screenshots_name(describe)
-        App.driver.screenshot(screenshots_dir)
-        processing(screenshots_dir, w, h)

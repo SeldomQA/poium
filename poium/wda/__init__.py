@@ -2,7 +2,6 @@ from poium.base import BaseMethod
 from poium.common import logging
 from poium.common.assert_des import insert_assert
 from poium.config import App
-from poium.processing import processing, screenshots_name
 
 LOCATOR_LIST = [
     "id",
@@ -171,19 +170,6 @@ class Page(BaseMethod):
                     raise NameError
         else:
             raise TimeoutError("Timeout, element not found")
-
-    def screenshots(self, w=None, h=None, describe=None):
-        """
-        截图
-        """
-        if w is not None and h is not None:
-            if float(w) < 1 and float(h) < 1:
-                multiple = self.driver.scale
-                w, h = multiple * w, multiple * h
-
-        screenshots_dir = screenshots_name(describe)
-        self.driver.screenshot().save(screenshots_dir)
-        processing(screenshots_dir, w, h)
 
     def who_exists(self, element=None, text=None):
         """
@@ -653,16 +639,6 @@ class Element(object):
                     raise ValueError("The direction parameter can only be 'down' or 'up'")
         if click is True:
             self.click()
-
-    def screenshots(self, w=None, h=None, describe=None):
-        """
-        截图
-        """
-        screenshots_dir = screenshots_name(describe)
-        self.driver.screenshot().save(screenshots_dir)
-        multiple = self.driver.scale
-        w, h = multiple * w, multiple * h
-        processing(screenshots_dir, w, h)
 
     def tap_hold(self, duration=1.0):
         """
