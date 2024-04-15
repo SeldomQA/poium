@@ -1,4 +1,3 @@
-
 ![](logo.png)
 
 > Page Objects design pattern test library; support selenium、appium、playwright, etc
@@ -7,18 +6,17 @@ Page Objects 设计模式测试库；支持 selenium、appium、playwright 等�
 
 ## Features
 
-* 极简的Page层的元素定义
-* 对原生 API 无损
-* 支持 logger 日志
-
+* 极简的Page层的元素定义。
+* 支持主流的 Web/App UI库。
+* 对原生 API 无损。
 
 __支持库：__
 
-  - [x] [selenium](./docs/selenium_sample.md) ✔️
-  - [x] [appium](./docs/appium_sample.md) ✔️
-  - [x] [playwright](./docs/playwright_sample.md) ✔️
-  - [ ] uiautomator2 ⌛
-  - [ ] facebook-wda ⌛
+- [x] selenium ✔️
+- [x] appium ✔️
+- [x] playwright ✔️
+- [x] uiautomator2 ✔️（⚠️）
+- [x] facebook-wda ✔️（⚠️）
 
 ## Installation
 
@@ -34,21 +32,29 @@ If you want to keep up with the latest version, you can install with github repo
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
 ```
 
-## Demo
+## Sample
 
-通过下面的例子，体会`Page Objects` 设计模式如此简单。
+### selenium/appium
+
+`poium` 对 `selenium/appium` 提供了良好的支持。
+
+👉查看[详细文档](./sample/selenium_sample/README.md)
+
+* selenium
 
 ```python
 from selenium import webdriver
 from poium import Page, Element, Elements
 
 
+# page
 class BaiduPage(Page):
     input = Element("#kw")
     button = Element("id=su")
     result = Elements("//div/h3/a", describe="搜索结果", timeout=2)
 
 
+# selenium
 driver = webdriver.Chrome()
 
 page = BaiduPage(driver)
@@ -62,19 +68,128 @@ for r in page.result:
 driver.close()
 ```
 
+* appium
 
-更多例子，请点击[这里](/sample) 。
+```python
+from appium import webdriver
+from appium.options.android import UiAutomator2Options
+from poium import Page, Element
 
-### Documentation
 
-在开使用poium前，请快速阅读下面的文档。
+# page
+class CalculatorPage(Page):
+    number_1 = Element(id_="com.android.calculator2:id/digit_1")
+    number_2 = Element(id_="com.android.calculator2:id/digit_2")
+    add = Element(id_="com.android.calculator2:id/op_add")
+    eq = Element(id_="com.android.calculator2:id/eq")
 
-* [Page和Element类](/docs/page_element.md)
-* [Element类元素操作](docs/element_operation.md)
-* [CSSElement类](/docs/csselement.md)
 
-other：
-* [seldom+poium](docs/seldom_sample.md)
+# appium
+capabilities = {
+    "automationName": "UiAutomator2",
+    "platformName": "Android",
+    'appPackage': 'com.android.calculator2',
+    'appActivity': '.Calculator'
+}
+options = UiAutomator2Options().load_capabilities(capabilities)
+driver = webdriver.Remote('http://localhost:4723/wd/hub', options=options)
+
+page = CalculatorPage(driver)
+page.number_1.click()
+page.add.click()
+page.number_2.click()
+page.eq.click()
+
+driver.quit()
+```
+
+### playwright
+
+`poium 1.2` 版本支持playwright库, 目前仅支持`sync`的用法.
+
+👉查看[详细文档](./sample/playwright_sample/README.md)
+
+```python
+import re
+from playwright.sync_api import sync_playwright
+from playwright.sync_api import expect
+from poium.playwright import Page, Locator
+
+
+# page
+class BingPage(Page):
+    search_input = Locator('id=sb_form_q', describe="bing搜索框")
+    search_icon = Locator('id=search_icon', describe="bing搜索按钮")
+
+
+# playwright
+with sync_playwright() as p:
+    # 启动浏浏览器
+    browser = p.chromium.launch(headless=False)
+    # 创建新的页面
+    page = browser.new_page()
+    # 进入指定URL
+    page.goto("https://cn.bing.com")
+
+    # 获得元素
+    search_page = BingPage(page)
+    search_page.search_input.highlight()
+    search_page.search_input.fill("playwright")
+    search_page.search_icon.highlight()
+    search_page.search_icon.screenshot(path="./docs/abc.png")
+    search_page.search_icon.click()
+
+    # 断言URL
+    expect(page).to_have_title(re.compile("playwright"))
+
+    # 关闭浏览器
+    browser.close()
+```
+
+### openatx
+
+`openatx` 有国内是非常流行的移动App自动化工具，`poium`同样对它做了支持。
+
+👉查看[详细文档](./sample/playwright_sample/README.md)
+
+* uiautomator2
+
+```python
+import uiautomator2 as u2
+
+from poium.u2 import Page, XpathElement
+
+
+class BingPage(Page):
+    search = XpathElement('//*[@resource-id="com.microsoft.bing:id/sa_hp_header_search_box"]')
+    search_input = XpathElement('//*[@resource-id="com.microsoft.bing:id/sapphire_search_header_input"]')
+    search_count = XpathElement('//*[@resource-id="count"]')
+
+
+d = u2.connect()
+d.app_start("com.microsoft.bing")
+page = BingPage(d)
+page.search.click()
+
+page.search_input.click()
+page.search_input.set_text("uiautomator2")
+page.press("enter")
+page.sleep(2)
+result = page.search_count.get_text()
+assert "个结果" in result
+
+d.app_stop("com.microsoft.bing")
+```
+
+### seldom
+
+seldom是一个全功能自动化测试框架。
+
+👉查看[详细文档](./sample/seldom_sample/README.md)
+
+```python
+
+```
 
 ## Project History
 
@@ -84,4 +199,5 @@ poium 参考page-objects，他项目已经不再维护，原项目代码虽然�
 
 * [selenium-page-objects](https://pypi.org/project/selenium-page-objects/)
 
-selenium-page-objects是poium的前身，为了简化项目名称，改名为poium。__po__ 取自 Page Object 首字母, __ium__ 取自selenium/appium 共同后缀。
+selenium-page-objects是poium的前身，为了简化项目名称，改名为poium。__po__ 取自 Page Object 首字母, __ium__
+取自selenium/appium 共同后缀。
