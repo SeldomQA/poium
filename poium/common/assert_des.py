@@ -1,4 +1,4 @@
-from poium.settings import Setting
+from poium.config import App
 
 
 def insert_assert(describe, result):
@@ -8,4 +8,4 @@ def insert_assert(describe, result):
         result(bool): Assertion results
     """
     result = [describe, bool(result)]
-    Setting.assert_result.append(result)
+    App.assert_result.append(result)
