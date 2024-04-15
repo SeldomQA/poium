@@ -1,5 +1,4 @@
-import time
-
+from poium.base import BaseMethod
 from poium.common import logging
 from poium.common.assert_des import insert_assert
 from poium.config import App
@@ -19,7 +18,7 @@ LOCATOR_LIST = [
 ]
 
 
-class Page(object):
+class Page(BaseMethod):
     """
     facebook-wda page class
     """
@@ -34,13 +33,6 @@ class Page(object):
         multiple = self.driver.scale
         w, h = self.driver.window_size()
         return multiple * w, multiple * h
-
-    @staticmethod
-    def wait(sleep=2):
-        """
-        休眠时间
-        """
-        time.sleep(sleep)
 
     def close(self):
         """
@@ -96,7 +88,7 @@ class Page(object):
         """
         self.driver.swipe(fx, fy, tx, ty, duration=duration)
         if screenshots is True:
-            time.sleep(0.5)
+            self.sleep(0.5)
             self.screenshots()
 
     def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, times=1, duration=0, screenshots=True):
@@ -221,7 +213,7 @@ class Page(object):
             else:
                 raise ValueError("Must pass parameter")
 
-            time.sleep(1)
+            self.sleep(1)
 
         else:
             raise TypeError("The text or element is not exists")
@@ -249,7 +241,7 @@ class Page(object):
                     self.driver.alert.click(click)
                 return True
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             return False
@@ -264,7 +256,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
         logging.info("预期结果: " + describe + " 文案存在")
         for i in range(timeout):
             text_exists = self.driver(text=text).exists
@@ -273,7 +265,7 @@ class Page(object):
                 logging.info("实际结果: " + describe + " 文案存在")
                 break
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             insert_assert(describe, False)
@@ -290,7 +282,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
         logging.info("预期结果: " + describe + " 文案存在")
         for i in range(timeout):
             text_exists = self.driver(nameContains=text).exists
@@ -299,7 +291,7 @@ class Page(object):
                 logging.info("实际结果: " + describe + " 文案存在")
                 break
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             insert_assert(describe, False)
@@ -316,7 +308,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
         logging.info("预期结果: " + describe + " 元素存在")
         for i in range(timeout):
             element_exists = element.exists()
@@ -325,7 +317,7 @@ class Page(object):
                 logging.info("实际结果: " + describe + " 元素存在")
                 break
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             insert_assert(describe, False)
@@ -342,7 +334,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
         logging.info("预期结果: " + describe + " 文案不存在")
         for i in range(timeout):
             text_exists = self.driver(text=text).exists
@@ -351,7 +343,7 @@ class Page(object):
                 logging.warning("实际结果: " + describe + " 文案存在")
                 break
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             insert_assert(describe, True)
@@ -368,7 +360,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
         logging.info("预期结果: " + describe + " 元素不存在")
         for i in range(timeout):
             element_exists = element.exists()
@@ -377,7 +369,7 @@ class Page(object):
                 logging.warning("实际结果: " + describe + " 元素存在")
                 break
             else:
-                time.sleep(1)
+                self.sleep(1)
                 continue
         else:
             insert_assert(describe, True)
@@ -492,7 +484,6 @@ class Element(object):
         Args：
             timeout(int)：等待时间
         """
-        time.sleep(1)
         self.driver(**self.kwargs).wait(timeout=timeout)
 
     def get(self, timeout=10, raise_error=False):
@@ -586,7 +577,6 @@ class Element(object):
 
         for i in range(times):
             self.driver(**self.kwargs).scroll(direction=direction, distance=distance)
-        time.sleep(1)
 
     def focus(self, position):
         """
@@ -662,7 +652,7 @@ class Element(object):
                 else:
                     raise ValueError("The direction parameter can only be 'down' or 'up'")
         if click is True:
-            self.click(screenshots=True)
+            self.click()
 
     def screenshots(self, w=None, h=None, describe=None):
         """
@@ -717,8 +707,8 @@ class Element(object):
                     elif move_y < 0.26:
                         self.driver.swipe(0.5, 0.5, 0.5, 0.48, duration=0.5)
                 x, y = self.get_position()
-            time.sleep(1)
+
             if click is True:
-                self.click(screenshots=True)
+                self.click()
         else:
             raise ValueError

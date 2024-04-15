@@ -8,11 +8,12 @@ from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 
+from poium.base import BaseMethod
 from poium.base_page import BasePage
 from poium.common.keyboard import KeyEvent
 
 
-class Page(BasePage):
+class Page(BasePage, BaseMethod):
     """
     Implement the APIs with javascript,
     and selenium/appium extension APIs。
@@ -304,14 +305,6 @@ class Page(BasePage):
     def home(self):
         """press home"""
         self.driver.home()
-
-    @staticmethod
-    def sleep(sec: int) -> None:
-        """
-        Usage:
-            page.sleep(seconds)
-        """
-        time.sleep(sec)
 
     def wait(self, secs: int = 10) -> None:
         """

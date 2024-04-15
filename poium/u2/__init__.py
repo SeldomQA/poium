@@ -1,5 +1,4 @@
-import time
-
+from poium.base import BaseMethod
 from poium.common import logging
 from poium.common.assert_des import insert_assert
 from poium.config import App
@@ -34,20 +33,13 @@ LOCATOR_LIST = [
 ]
 
 
-class Page(object):
+class Page(BaseMethod):
     """
     uiautomator2 page class
     """
 
     def __init__(self, dr):
         self.driver = dr
-
-    @staticmethod
-    def wait(sleep=1):
-        """
-        Sleep time
-        """
-        time.sleep(sleep)
 
     def window_size(self):
         """
@@ -117,7 +109,7 @@ class Page(object):
         x, y = (w * x, h * y) if x < 1 and y < 1 else x, y
         for i in range(times):
             self.driver.touch.down(x, y)
-            time.sleep(sleep)
+            self.sleep(sleep)
             self.driver.touch.up(x, y)
 
     def swipe(self, fx, fy, tx, ty, duration=0.1, steps=None):
@@ -151,7 +143,7 @@ class Page(object):
         """
         for i in range(times):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            time.sleep(between)
+            self.sleep(between)
 
     def swipe_up(self, fx=0.5, fy=0.5, tx=0.5, ty=0.8, duration=0.1, times=1, between=0):
         """
@@ -169,7 +161,7 @@ class Page(object):
         """
         for i in range(times):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            time.sleep(between)
+            self.sleep(between)
 
     def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, duration=0.1, times=1, between=0):
         """
@@ -188,7 +180,7 @@ class Page(object):
         """
         for i in range(times):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            time.sleep(between)
+            self.sleep(between)
 
     def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, duration=0.1, times=1, between=0):
         """
@@ -206,7 +198,7 @@ class Page(object):
         """
         for i in range(times):
             self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            time.sleep(between)
+            self.sleep(between)
 
     def swipe_search(self, text, direction="down", x: float = None, y: float = None):
         """
@@ -271,7 +263,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         text_exists = self.driver(text=text).exists(timeout)
         self.screenshots(describe="断言")
@@ -293,7 +285,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         element_exists = element.exists(timeout)
         self.screenshots(describe="断言")
@@ -315,7 +307,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         text_exists = self.driver(text=text).exists(timeout)
         self.screenshots(describe="断言")
@@ -336,7 +328,7 @@ class Page(object):
             element(object): element object
             describe(str): Assertion description information
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         element_exists = element.exists(timeout)
         self.screenshots(describe="断言")
@@ -358,7 +350,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         text_exists = self.driver(textContains=text).exists(timeout)
         self.screenshots(describe="断言")
@@ -382,7 +374,7 @@ class Page(object):
             describe(str): Assertion description information
             timeout(int): Maximum waiting time
         """
-        time.sleep(sleep)
+        self.sleep(sleep)
 
         text_exists = self.driver(textContains=text).exists(timeout)
         self.screenshots(describe="断言")
