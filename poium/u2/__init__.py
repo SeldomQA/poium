@@ -440,7 +440,7 @@ class XpathElement(object):
     Only CSS selectors are supported.
     https://github.com/openatx/uiautomator2/blob/master/XPATH.md
 
-    >> from sabre import Page, XpathElement
+    >> from poium.u2 import Page, XpathElement
     >> class MyPage(Page):
             input = XpathElement('//android.widget.EditText')
             button = XpathElement('@com.taobao.taobao:id/fl_banner_container')
@@ -462,13 +462,10 @@ class XpathElement(object):
         App.driver = instance.driver
         return self
 
-    def click(self, screenshots=App.click_screenshots):
+    def click(self):
         """
         Click element.
         """
-        self.screenshots(describe="点击") if screenshots else (
-            logging.info(msg="点击 ==> " + self.describe), print("\n"))
-
         App.driver.xpath(self.xpath).click()
 
     def set_text(self, value):

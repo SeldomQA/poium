@@ -448,14 +448,13 @@ class Element(object):
         self.driver = instance.driver
         return self
 
-    def click(self, focus=None, beyond=None, screenshots=App.click_screenshots):
+    def click(self, focus=None, beyond=None):
 
         """
         点击元素, 根据坐标去点击
         Args:
             focus(list): 点击元素区域的位置，默认点击元素的中心
             beyond(list): 以传的元素为基准，点击相该元素以外的其他位置
-            screenshots(bool): 当screenshots等于True， 会先截图再点击坐标；默认关闭
         """
 
         # 通过坐标点击
@@ -465,9 +464,6 @@ class Element(object):
                 raise ValueError("The argument must be a list")
             elif self.v[0] > 1 or self.v[1] > 1:
                 raise ValueError
-            x, y = self.v[0] * w, self.v[1] * h
-            self.screenshots(x, y, describe="点击, {}".format(self.describe)) if screenshots else \
-                (print("\n"), logging.info(msg=" 点击 ==> " + self.describe))
             self.driver.click(self.v[0], self.v[1])
         else:
             if focus is not None:
@@ -478,8 +474,6 @@ class Element(object):
             else:
                 x, y = self.focus([0.5, 0.5])
 
-                self.screenshots(x, y, describe="点击, {}".format(self.describe)) if screenshots else \
-                    (print("\n"), logging.info(msg=" 点击 ==> " + self.describe))
             self.driver.click(x / w, y / h)
 
     def click_exists(self, timeout=0):
