@@ -129,9 +129,9 @@ class Element(object):
             if len(kwargs) > 1:
                 raise ValueError("Please specify only one locator")
             self.kwargs = kwargs
-            by, self.value = next(iter(kwargs.items()))
+            self.by, self.value = next(iter(kwargs.items()))
 
-            self.by = LOCATOR_LIST.get(by, None)
+            self.by = LOCATOR_LIST.get(self.by, None)
             if self.by is None:
                 raise FindElementTypesError("Element positioning of type '{}' is not supported.".format(self.by))
 
@@ -139,7 +139,7 @@ class Element(object):
         if instance is None:
             return None
 
-        Browser.driver = instance.driver
+        self.driver = instance.driver
         return self
 
     def __set__(self, instance, value):
@@ -147,14 +147,14 @@ class Element(object):
         self.send_keys(value)
 
     @func_set_timeout(1)
-    def find_elements_timeout(self, key: str, value: str):
+    def find_elements_timeout(self, by: str, value: str):
         """
         set find element timeout.
-        :param key:
+        :param by:
         :param value:
         :return:
         """
-        return Browser.driver.find_elements(key, value)
+        return self.driver.find_elements(by, value)
 
     def find(self, by: str, value: str) -> list:
         """
@@ -182,21 +182,20 @@ class Element(object):
         """
         Judge element positioning way, and returns the element.
         """
-        if by is None:
+        if by is None or value is None:
             by = self.by
-        if value is None:
             value = self.value
 
-        if by in BY_LIST:
-            elem = self.find(by, value)
-            if len(elem) == 0:
-                self.exist = False
-                return None
-            else:
-                self.exist = True
-                elem = Browser.driver.find_elements(by, value)[self.index]
-        else:
+        if by not in BY_LIST:
             raise FindElementTypesError("Please enter the correct targeting elements")
+
+        elems = self.find(by, value)
+        if len(elems) == 0:
+            self.exist = False
+            return None
+        else:
+            self.exist = True
+            elem = elems[self.index]
 
         if Browser.show is True:
             try:
@@ -205,13 +204,13 @@ class Element(object):
                 style_null = 'arguments[0].style.border=""'
 
                 for _ in range(2):
-                    Browser.driver.execute_script(style_red, elem)
+                    self.driver.execute_script(style_red, elem)
                     sleep(0.1)
-                    Browser.driver.execute_script(style_blue, elem)
+                    self.driver.execute_script(style_blue, elem)
                     sleep(0.1)
-                Browser.driver.execute_script(style_blue, elem)
+                self.driver.execute_script(style_blue, elem)
                 sleep(0.5)
-                Browser.driver.execute_script(style_null, elem)
+                self.driver.execute_script(style_null, elem)
             except WebDriverException:
                 pass
 
@@ -399,7 +398,7 @@ class Element(object):
         Switches focus to the specified frame
         """
         elem = self.get_element_object()
-        Browser.driver.switch_to.frame(elem)
+        self.driver.switch_to.frame(elem)
         logging.info(f"✅ switch_to_frame().")
 
     def frame(self) -> None:
@@ -415,7 +414,7 @@ class Element(object):
         Moving the mouse to the middle of an element
         """
         elem = self.get_element_object()
-        ActionChains(Browser.driver).move_to_element(elem).perform()
+        ActionChains(self.driver).move_to_element(elem).perform()
         logging.info(f"✅ move_to_element().")
 
     def click_and_hold(self) -> None:
@@ -424,7 +423,7 @@ class Element(object):
         Holds down the left mouse button on an element.
         """
         elem = self.get_element_object()
-        ActionChains(Browser.driver).click_and_hold(elem).perform()
+        ActionChains(self.driver).click_and_hold(elem).perform()
         logging.info(f"✅ click_and_hold().")
 
     def double_click(self) -> None:
@@ -433,7 +432,7 @@ class Element(object):
         Holds down the left mouse button on an element.
         """
         elem = self.get_element_object()
-        ActionChains(Browser.driver).double_click(elem).perform()
+        ActionChains(self.driver).double_click(elem).perform()
         logging.info(f"✅ double_click().")
 
     def context_click(self) -> None:
@@ -442,7 +441,7 @@ class Element(object):
         Performs a context-click (right click) on an element.
         """
         elem = self.get_element_object()
-        ActionChains(Browser.driver).context_click(elem).perform()
+        ActionChains(self.driver).context_click(elem).perform()
         logging.info(f"✅ context_click().")
 
     def drag_and_drop_by_offset(self, x: int, y: int) -> None:
@@ -454,7 +453,7 @@ class Element(object):
         :param y: Y offset to move to.
         """
         elem = self.get_element_object()
-        ActionChains(Browser.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
+        ActionChains(self.driver).drag_and_drop_by_offset(elem, xoffset=x, yoffset=y).perform()
         logging.info(f"✅ drag_and_drop_by_offset('{x}', '{y}').")
 
     def refresh_element(self, timeout: int = 10) -> None:
@@ -468,7 +467,7 @@ class Element(object):
                 try:
                     elem
                 except StaleElementReferenceException:
-                    Browser.driver.refresh()
+                    self.driver.refresh()
                 else:
                     break
             else:
