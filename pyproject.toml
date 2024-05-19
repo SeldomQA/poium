@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poium"
-version = "1.5.1"
+version = "1.5.2"
 description = "Page Objects design pattern test library."
 authors = ["fnngj <fnngj@126.com>"]
 license = "Apache-2.0"
@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.11"
 Appium-Python-Client = "^3.1.0"
 loguru = "~0.6.0"
 func-timeout = "^4.3.5"
@@ -32,3 +32,7 @@ func-timeout = "^4.3.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "douban"
+url = "https://pypi.doubanio.com/simple"

@@ -1,3 +1,10 @@
+#### 1.5.2
+
+* 增加多线程支持。
+  * `selenium` 移除全局变量 `Browser.driver`。
+  * `playwright` 移除全局变量 `Browser.page`。
+  * `loguru` 增加`线程名`信息。
+
 #### 1.5.1
 
 * 移除支持`uiautomator2/facebook-wda` 截图功能以相关依赖，极大缩减poium体积。
