@@ -1,7 +1,6 @@
 import sys
 import pathlib
 from poium.common import logging
-from poium.config import Browser
 
 from typing import (
     Any,
@@ -77,7 +76,7 @@ class Locator:
 
     @property
     def find(self):
-        elem = Browser.page.locator(self.selector)
+        elem = self.driver.locator(self.selector)
         if self.desc == "":
             logging.info(f"✨ Find element.")
         else:
@@ -88,7 +87,7 @@ class Locator:
         if instance is None:
             return None
 
-        Browser.page = instance.page
+        self.driver = instance.page
         return self
 
     def __set__(self, instance, value):

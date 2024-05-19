@@ -11,10 +11,10 @@ class Browser:
     """
     web config
     """
-    # Default browser driver
+    # Default browser driver (abandon)
     driver = None
 
-    # Default playwright page driver
+    # Default playwright page driver (abandon)
     page = None
 
     # Adds a border to the action element of the operation
