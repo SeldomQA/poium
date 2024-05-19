@@ -9,7 +9,7 @@ class Logger:
     def __init__(self, level: str = "DEBUG", colorlog: bool = True):
         self.logger = logger
         self._colorlog = colorlog
-        self._console_format = "<green>{time:YYYY-MM-DD HH:mm:ss}</> {file} <level>| {level} | {message}</level>"
+        self._console_format = "<green>{time:YYYY-MM-DD HH:mm:ss}</> {file} <level>| {thread.name} | {level} | {message}</level>"
         self._level = level
         self.set_level(self._colorlog, self._console_format, self._level)
 
