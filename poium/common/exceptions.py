@@ -56,3 +56,10 @@ class CSSFindElementError(PoiumException):
     Find element types Error
     """
     pass
+
+
+class FuncTimeoutException(Exception):
+    """
+    function timeout Error
+    """
+    pass

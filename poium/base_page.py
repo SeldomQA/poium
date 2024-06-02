@@ -6,8 +6,6 @@ import platform
 from time import sleep
 
 from appium.webdriver.common.appiumby import AppiumBy
-from func_timeout import func_set_timeout
-from func_timeout.exceptions import FunctionTimedOut
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.action_chains import ActionChains
@@ -17,9 +15,11 @@ from selenium.webdriver.support.select import Select
 
 from poium import config
 from poium.common import logging
+from poium.common.exceptions import FuncTimeoutException
 from poium.common.exceptions import PageElementError, FindElementTypesError, DriverNoneException
 from poium.common.selector import selection_checker
 from poium.config import Browser
+from poium.libs.func_timeout import func_timeout
 
 # Map PageElement constructor arguments to webdriver locator enums
 LOCATOR_LIST = {
@@ -146,7 +146,7 @@ class Element(object):
         self.__get__(instance, instance.__class__)
         self.send_keys(value)
 
-    @func_set_timeout(1)
+    @func_timeout(1)
     def find_elements_timeout(self, by: str, value: str):
         """
         set find element timeout.
@@ -164,7 +164,7 @@ class Element(object):
             try:
                 elems = self.find_elements_timeout(by, value)
                 break
-            except FunctionTimedOut:
+            except FuncTimeoutException:
                 sleep(1)
         else:
             elems = []
