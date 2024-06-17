@@ -78,21 +78,20 @@ class Page(BaseMethod):
         """
         return self.driver.app_info(pkg_name)
 
-    def click(self, x: float = None, y: float = None, text: str = None, screenshots=App.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None):
         """
         Args:
             x : width / percentage of width
             y : height / percentage of height
             text: text
-            screenshots : screenshots
         Documents:
             click position
         """
         if not x and not y and not text:
             raise ValueError
         (x, y) = self.driver(text=text).center() if text else (x, y)
-        self.screenshots(x, y, describe="点击") if screenshots else \
-            (print("\n"), logging.info(msg=" 点击 ==> " + "点击坐标{},{}".format(x, y)))
+
+        logging.info(msg=f" 点击 ==> 点击坐标: {x}, {y}")
 
         self.driver.click(x, y)
 
@@ -252,7 +251,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         text_exists = self.driver(text=text).exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 文案存在")
         if text_exists is True:
             insert_assert(describe, True)
@@ -274,7 +272,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         element_exists = element.exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 元素存在")
         if element_exists is True:
             insert_assert(describe, True)
@@ -296,7 +293,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         text_exists = self.driver(text=text).exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 文案不存在")
         if text_exists is True:
             insert_assert(describe, False)
@@ -317,7 +313,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         element_exists = element.exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 元素不存在")
         if element_exists is True:
             insert_assert(describe, False)
@@ -339,7 +334,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         text_exists = self.driver(textContains=text).exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 文案存在")
         if text_exists is True:
             result = [describe, True]
@@ -363,7 +357,6 @@ class Page(BaseMethod):
         self.sleep(sleep)
 
         text_exists = self.driver(textContains=text).exists(timeout)
-        self.screenshots(describe="断言")
         logging.info("预期结果: " + describe + " 文案不存在")
         if text_exists is True:
             result = [describe, False]
@@ -497,7 +490,6 @@ class Element(BaseMethod):
         Args:
             timeout: seconds wait element show up
             offset: (xoff, yoff) default (0.5, 0.5) -> center
-            screenshots: screenshots
 
         The click method does the same logic as java uiautomator does.
         1. waitForExists 2. get VisibleBounds center 3. send click event

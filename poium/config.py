@@ -32,19 +32,10 @@ class App:
     connect_usb = True
 
     # 设备ID，deviceID，如果为空，则自动获取连接本地pc的第一个可用设备
-    device_id = ""
+    device_id = None
 
     # 打开APP的包名
     apk_name = ""
-
-    # 默认点击截图开关
-    click_screenshots = False
-
-    # 报告保存路径
-    report_path = "."
-
-    # 报告截图路径
-    report_snapshot = "."
 
     # 断言结果
     assert_result = []
@@ -54,6 +45,3 @@ class App:
 
     # 设置元素查找等待时间
     implicitly_wait = 10
-
-    # 设置首页加载完成等待时间
-    loading_finish = 10

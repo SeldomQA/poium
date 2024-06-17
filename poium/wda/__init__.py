@@ -39,20 +39,20 @@ class Page(BaseMethod):
         """
         self.driver.close()
 
-    def click(self, x: float = None, y: float = None, text: str = None, screenshots=App.click_screenshots):
+    def click(self, x: float = None, y: float = None, text: str = None):
         """
         点击坐标
         Args：
             x(float): x坐标
             y(float): y坐标
             text(str): 文本
-            screenshots(bool): 当screenshots等于True， 会先截图再点击坐标；默认关闭
         """
         if not x and not y and not text:
             raise ValueError
         (x, y) = self.get_position(text=text) if text else (x, y)
-        self.screenshots(x, y, describe="点击坐标, {},{}".format(x, y)) if screenshots else \
-            (print("\n"), logging.info(msg=" 点击 ==> " + "点击坐标{},{}".format(x, y)))
+
+        logging.info(msg=f" 点击 ==> 点击坐标: {x}, {y}")
+
         self.driver.click(x, y)
 
     def get_position(self, text=None, element=None):
@@ -74,7 +74,7 @@ class Page(BaseMethod):
         y = rect.y + rect.height / 2
         return x / w, y / h
 
-    def swipe(self, fx: float, fy: float, tx: float, ty: float, duration=0, screenshots=True):
+    def swipe(self, fx: float, fy: float, tx: float, ty: float, duration=0):
         """
         滑动
         Args:
@@ -83,14 +83,10 @@ class Page(BaseMethod):
             tx(float): 终点横坐标
             ty(float): 终点纵坐标
             duration(float): 滑动过程的时间 (seconds)
-            screenshots(bool): 滑动后截图开关
         """
         self.driver.swipe(fx, fy, tx, ty, duration=duration)
-        if screenshots is True:
-            self.sleep(0.5)
-            self.screenshots()
 
-    def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, times=1, duration=0, screenshots=True):
+    def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, times=1, duration=0):
         """
         滑向左边
         Args:
@@ -100,12 +96,11 @@ class Page(BaseMethod):
             ty(float): 终点纵坐标
             times(int): 滑动的次数
             duration(float): 滑动过程的时间 (seconds)
-            screenshots(bool): 滑动后截图开关
         """
         for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, screenshots=screenshots)
+            self.swipe(fx, fy, tx, ty, duration=duration)
 
-    def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, times=1, duration=0, screenshots=True):
+    def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, times=1, duration=0):
         """
         滑向右边
         Args:
@@ -115,12 +110,11 @@ class Page(BaseMethod):
             ty(float): 终点纵坐标
             times(int): 滑动的次数
             duration(float): 滑动过程的时间 (seconds)
-            screenshots(bool): 滑动后截图开关
         """
         for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, screenshots=screenshots)
+            self.swipe(fx, fy, tx, ty, duration=duration)
 
-    def swipe_up(self, fx=0.5, fy=0.5, tx=0.5, ty=0.8, times=1, duration=0, screenshots=True):
+    def swipe_up(self, fx=0.5, fy=0.5, tx=0.5, ty=0.8, times=1, duration=0):
         """
         滑向上边
         Args:
@@ -130,12 +124,11 @@ class Page(BaseMethod):
             ty(float): 终点纵坐标
             times(int): 滑动的次数
             duration(float): 滑动过程的时间 (seconds)
-            screenshots(bool): 滑动后截图开关
         """
         for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, screenshots=screenshots)
+            self.swipe(fx, fy, tx, ty, duration=duration)
 
-    def swipe_down(self, fx=0.5, fy=0.5, tx=0.5, ty=0.2, times=1, duration=0, screenshots=True):
+    def swipe_down(self, fx=0.5, fy=0.5, tx=0.5, ty=0.2, times=1, duration=0):
         """
         滑向下边
         Args:
@@ -145,10 +138,9 @@ class Page(BaseMethod):
             ty(float): 终点纵坐标
             times(int): 滑动的次数
             duration(float): 滑动过程的时间 (seconds)
-            screenshots(bool): 滑动后截图开关
         """
         for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, screenshots=screenshots)
+            self.swipe(fx, fy, tx, ty, duration=duration)
 
     def swipe_search(self, text, direction="down"):
         """
@@ -211,18 +203,12 @@ class Page(BaseMethod):
                 text = self.driver.alert.text
                 logging.info(msg="弹窗，提示⚠{text}，选项按钮{button}".format(text=text, button=_list))
                 if click == "first":
-                    position = self.get_position(text=_list[0])
-                    self.screenshots(position[0], position[1])
                     logging.info(msg="👆 ==> {}".format(_list[0]))
                     self.driver.alert.accept()
                 elif click == "second":
-                    position = self.get_position(text=_list[1])
-                    self.screenshots(position[0], position[1])
                     logging.info(msg="👆 ==> {}".format(_list[1]))
                     self.driver.alert.dismiss()
                 else:
-                    position = self.get_position(text=click)
-                    self.screenshots(position[0], position[1])
                     logging.info(msg="👆 ==> {}".format(click))
                     self.driver.alert.click(click)
                 return True
@@ -256,7 +242,6 @@ class Page(BaseMethod):
         else:
             insert_assert(describe, False)
             logging.warning("实际结果: " + describe + " 文案不存在")
-        self.screenshots(describe="断言")
 
     def assert_text_contains(self, text: str, describe, sleep=0, timeout=10):
         """
@@ -282,7 +267,6 @@ class Page(BaseMethod):
         else:
             insert_assert(describe, False)
             logging.warning("实际结果: " + describe + " 文案不存在")
-        self.screenshots(describe="断言")
 
     def assert_element_exists(self, element, describe, sleep=0, timeout=10):
         """
@@ -308,7 +292,6 @@ class Page(BaseMethod):
         else:
             insert_assert(describe, False)
             logging.warning("实际结果: " + describe + " 元素不存在")
-        self.screenshots(describe="断言")
 
     def assert_text_not_exists(self, text: str, describe, sleep=0, timeout=10):
         """
@@ -334,7 +317,6 @@ class Page(BaseMethod):
         else:
             insert_assert(describe, True)
             logging.info("实际结果: " + describe + " 文案不存在")
-        self.screenshots(describe="断言")
 
     def assert_element_not_exists(self, element, describe, sleep=0, timeout=10):
         """
@@ -360,7 +342,6 @@ class Page(BaseMethod):
         else:
             insert_assert(describe, True)
             logging.info("实际结果: " + describe + " 元素不存在")
-        self.screenshots(describe="断言")
 
     @staticmethod
     def assert_text_equals(text_1, text_2, describe):
