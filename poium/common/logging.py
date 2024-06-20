@@ -1,7 +1,6 @@
 import sys
-import time
+
 from loguru import logger
-from poium import config
 
 
 class Logger:
@@ -16,53 +15,74 @@ class Logger:
     def set_level(self, colorlog: bool = True, format: str = None, level: str = "DEBUG"):
         if format is None:
             format = self._console_format
-        logger.remove()
-        logger.add(sys.stderr, level=level, colorize=colorlog, format=format)
+        try:
+            from seldom.running.config import BrowserConfig
+            from seldom import Seldom
+            if Seldom.driver is not None:
+                logfile = BrowserConfig.LOG_PATH
+                _file_format = " {time:YYYY-MM-DD HH:mm:ss} | {file: <10} | {thread.name} | {level: <8} | {message}"
+                logger.remove()
+                logger.add(sys.stderr, level=level, colorize=colorlog, format=format)
+                logger.add(logfile, level=level, colorize=colorlog, format=_file_format, encoding="utf-8")
+        except ImportError:
+            logger.remove()
+            logger.add(sys.stderr, level=level, colorize=colorlog, format=format)
 
     def trace(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | TRACE | {str(msg)}")
+        """
+        trace log
+        :param msg:
+        :return:
+        """
         return self.logger.trace(msg)
 
     def debug(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | DEBUG | {str(msg)}")
+        """
+        debug log
+        :param msg:
+        :return:
+        """
         return self.logger.debug(msg)
 
     def info(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | INFO | {str(msg)}")
-        return self.logger.info(msg)
+        """
+        info log
+        :param msg:
+        :return:
+        """
+        self.logger.info(msg)
 
     def success(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | SUCCESS | {str(msg)}")
+        """
+        success log
+        :param msg:
+        :return:
+        """
         return self.logger.success(msg)
 
     def warning(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | WARNING | {str(msg)}")
+        """
+        warning log
+        :param msg:
+        :return:
+        """
         return self.logger.warning(msg)
 
     def error(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | ERROR | {str(msg)}")
+        """
+        error log
+        :param msg:
+        :return:
+        """
         return self.logger.error(msg)
 
     def critical(self, msg: str):
-        if config.printLog is True:
-            now = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{now} | CRITICAL | {str(msg)}")
+        """
+        critical log
+        :param msg:
+        :return:
+        """
         return self.logger.critical(msg)
-
-    def printf(self, msg: str):
-        return self.logger.success(msg)
 
 
 # log level: TRACE < DEBUG < INFO < SUCCESS < WARNING < ERROR
