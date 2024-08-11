@@ -8,12 +8,11 @@ from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 
-from poium.base import BaseMethod
 from poium.base_page import BasePage
 from poium.common.keyboard import KeyEvent
 
 
-class Page(BasePage, BaseMethod):
+class Page(BasePage):
     """
     Implement the APIs with javascript,
     and selenium/appium extension APIs。
@@ -331,3 +330,12 @@ class Page(BasePage, BaseMethod):
             page.wait_page_load_timeout(10)
         """
         self.driver.set_page_load_timeout(time_to_wait)
+
+    @staticmethod
+    def sleep(sec) -> None:
+        """
+        sleep
+        :param sec:
+        :return:
+        """
+        time.sleep(sec)
