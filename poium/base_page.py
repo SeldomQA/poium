@@ -33,7 +33,6 @@ LOCATOR_LIST = {
     'tag': By.TAG_NAME,
     'class_name': By.CLASS_NAME,
     # appium
-    'ios_uiautomation': AppiumBy.IOS_UIAUTOMATION,
     'ios_predicate': AppiumBy.IOS_PREDICATE,
     'ios_class_chain': AppiumBy.IOS_CLASS_CHAIN,
     'android_uiautomator': AppiumBy.ANDROID_UIAUTOMATOR,
