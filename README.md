@@ -15,8 +15,8 @@ __支持库：__
 - [x] selenium ✔️
 - [x] appium ✔️
 - [x] playwright ✔️
-- [x] uiautomator2 ⚠️
-- [x] facebook-wda ️ ⚠️
+- [x] uiautomator2 ✔️
+- [x] facebook-wda ️ ✔️
 
 ## Installation
 
