@@ -230,15 +230,13 @@ class Element:
     def __init__(self, timeout=10, describe=None, **kwargs):
         self.describe = describe
         self.timeout = timeout
-        if self.describe is None:
-            self.describe = "NONE"
         if not kwargs:
             raise ValueError("Please specify a locator")
         self.kwargs = kwargs
         self.k, self.v = next(iter(kwargs.items()))
 
         if self.k not in LOCATOR_LIST:
-            raise KeyError("Element positioning of type '{}' is not supported.".format(self.k))
+            raise KeyError(f"Element positioning of type '{self.k}' is not supported.")
 
     def __get__(self, instance, owner):
         if instance is None:
@@ -319,7 +317,9 @@ class Element:
         """
         get element text
         """
-        return self.driver(**self.kwargs).get_text()
+        text = self.driver(**self.kwargs).get_text()
+        logging.info(f"✅ get text: {text}.")
+        return text
 
     def bounds(self):
         """
@@ -358,29 +358,29 @@ class Element:
         :return:
         """
         assert direction in ("left", "right", "up", "down")
-        logging.info(f"👆 {direction} swipe, times: {times} ")
+        logging.info(f"👆 {direction} swipe, times: {times}.")
         for i in range(times):
             self.driver(**self.kwargs).swipe(direction=direction, steps=steps)
         time.sleep(0.1)
 
-    def sliding(self, h: float = None):
+    def sliding(self, height: float = 0.5):
         """
         Determine if the element is on the current page, and if it isn't, slide down until you find it on the screen
             If present, slide the expected position
-        :param h: The screen height 0 ~ 1
+        :param height: The screen height 0 ~ 1
         :return:
         """
-        logging.info(f"👆 sliding found, h: {h}")
+        logging.info(f"👆 sliding found, height: {height}")
         for i in range(30):
             if self.exists():
                 break
             else:
                 self.driver.swipe(0.5, 0.7, 0.5, 0.3)
-        if h:
-            if h <= 0 or h >= 1:
+        if height:
+            if height <= 0 or height >= 1:
                 raise ValueError("'h' checks the range of values, 0 < h < 1")
             else:
-                scope = [h - 0.05, h + 0.05]
+                scope = [height - 0.05, height + 0.05]
                 for i in range(30):
                     x, y = self.get_position()
                     if scope[0] <= y <= scope[1]:
@@ -409,7 +409,7 @@ class Element:
         logging.info(f"✅ count().")
         return count
 
-    def instance(self, num: int):
+    def instance(self, num: int = 0):
         """
         Click on the list of elements
         """
@@ -426,15 +426,13 @@ class Element:
         """
         Wait until UI Element exists or gone
         """
-        wait = self.driver(**self.kwargs).wait(exists=True, timeout=self.timeout)
-        logging.info(f"🕣 wait.")
-        return wait
+        logging.info(f"🕣 wait {self.timeout}s.")
+        return self.driver(**self.kwargs).wait(exists=True, timeout=self.timeout)
 
     def wait_gone(self):
         """
         wait until ui gone
         :return:
         """
-        wait = self.driver(**self.kwargs).wait_gone(self.timeout)
-        logging.info(f"🕣 wait gone.")
-        return wait
+        logging.info(f"🕣 wait {self.timeout}s gone.")
+        return self.driver(**self.kwargs).wait_gone(self.timeout)
