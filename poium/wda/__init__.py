@@ -1,3 +1,5 @@
+import time
+
 from poium.common import logging
 from poium.common.openatx import BasePage
 
@@ -169,7 +171,7 @@ class Element(object):
     driver = None
 
     def __init__(self, timeout=10, describe=None, **kwargs):
-        self.time_out = timeout
+        self.timeout = timeout
         self.describe = describe
         if not kwargs:
             raise ValueError("Please specify a locator")
@@ -177,7 +179,7 @@ class Element(object):
         self.k, self.v = next(iter(kwargs.items()))
 
         if self.k not in LOCATOR_LIST:
-            raise KeyError("Element positioning of type '{}' is not supported.".format(self.k))
+            raise KeyError(f"Element positioning of type '{self.k}' is not supported.")
 
     def __get__(self, instance, owner):
         if instance is None:
@@ -187,15 +189,13 @@ class Element(object):
         return self
 
     def click(self, focus=None, beyond=None):
-
         """
-        点击元素, 根据坐标去点击
-        Args:
-            focus(list): 点击元素区域的位置，默认点击元素的中心
-            beyond(list): 以传的元素为基准，点击相该元素以外的其他位置
+        click coordinate position element.
+        :param focus: Click the location of the element area, the default click is the center of the element
+        :param beyond: Based on the passed element, click on a location other than that element
+        :return:
         """
-
-        # 通过坐标点击
+        logging.info(f"✅ click().")
         w, h = self.driver.window_size()
         if self.k == "focus":
             if type(self.v) is not list:
@@ -214,47 +214,39 @@ class Element(object):
 
             self.driver.click(x / w, y / h)
 
-    def click_exists(self, timeout=0):
+    def click_exists(self):
         """
-        元素存在，点击元素，不存在就pass
-        Args:
-            timeout(int): 最大等待时间
+        The element is not clicked until it exists
+        :return:
         """
+        is_exists = self.driver(**self.kwargs).click_exists(self.timeout)
+        logging.info(f"✅ click_exists().")
+        return is_exists
 
-        return self.driver(**self.kwargs).click_exists(timeout)
-
-    def wait(self, timeout=10):
+    def wait(self):
         """
-        等待元素出现
-
-        Args：
-            timeout(int)：等待时间
+        Wait until UI Element exists
+        :return:
         """
-        self.driver(**self.kwargs).wait(timeout=timeout)
+        logging.info(f"🕣 wait {self.timeout}s.")
+        return self.driver(**self.kwargs).wait(timeout=self.timeout)
 
-    def get(self, timeout=10, raise_error=False):
+    def wait_gone(self):
         """
-        Args:
-            timeout (float): timeout for query element, unit seconds
-                Default 10s
-            raise_error (bool): whether to raise error if element not found
-
-        Returns:
-            Element: UI Element
-
-        Raises:
-            WDAElementNotFoundError if raise_error is True else None
+        wait until ui gone
+        :return:
         """
-        self.driver(**self.kwargs).get(timeout=timeout, raise_error=raise_error)
+        logging.info(f"🕣 wait {self.timeout}s gone.")
+        return self.driver(**self.kwargs).wait_gone(timeout=self.timeout)
 
-    def wait_gone(self, timeout=10):
+    def get(self, raise_error: bool = False):
         """
-        等待元素消失
-
-        Args：
-            timeout(int)：等待时间
+        Get UI Element
+        :param raise_error: whether to raise error if element not found
+        :return:
         """
-        self.driver(**self.kwargs).wait_gone(timeout=timeout)
+        logging.info(f"✅ get UI element.")
+        return self.driver(**self.kwargs).get(timeout=self.timeout, raise_error=raise_error)
 
     def find_elements(self, text=False):
         """
@@ -263,17 +255,19 @@ class Element(object):
         Args：
             text(bool): 返回元素对应的文本内容
         """
-        text_list = []
+        logging.info(f"🔍 find elements: {text}.")
         data = self.driver(**self.kwargs).find_elements()
-        logging.info("查找到匹配数量有==> {}个".format(len(data)))
+        logging.info(f"I found {len(data)} of them.")
+
         if text is True:
+            text_list = []
             for text_data in data:
                 text_list.append(text_data.get_text())
             return text_list
         else:
             return data
 
-    def instance(self, num=1):
+    def instance(self, num: int = 0):
         """
         Click on the list of elements
         """
@@ -283,150 +277,129 @@ class Element(object):
         for i in range(data):
             _list.append(i)
         if self.k == "xpath":
-            self.kwargs = {"xpath": self.v + "[{}]".format(_list[num] + 1)}
+            self.kwargs = {"xpath": self.v + "[{}]".format(_list[num])}
             element = Element(**self.kwargs)
         else:
-            element = Element(**self.kwargs, index=_list[num] + 1)
+            element = Element(**self.kwargs, index=_list[num])
+
+        logging.info(f"✅ click {num} element.")
+
         return element
+
+    def set_text(self, text: str):
+        """
+        input text
+        :param text:
+        """
+        logging.info(f"⌨️ set text: {text}.")
+        self.clear_text()
+        self.driver(**self.kwargs).set_text(text)
 
     def clear_text(self):
         """
-        清空输入框
+        Clear the text
         """
+        logging.info(f"🧹 clear text.")
         self.driver(**self.kwargs).clear_text()
-
-    def set_text(self, text):
-        """
-        输入文本内容
-        Args:
-            text(str): 输入栏输入的文本
-        """
-        text = str(text)
-        self.clear_text()
-        logging.info(msg=" 键盘输入 ==> " + text)
-        self.driver(**self.kwargs).set_text(text)
 
     def get_text(self):
         """
         获取元素对应的文本
         """
-        return self.driver(**self.kwargs).text
+        text = self.driver(**self.kwargs).text
+        logging.info(f"✅ get text: {text}.")
+        return text
 
     def swipe(self, direction, times=1, distance=1.0):
         """
-        基于元素滑动
+        Element-based sliding
 
-        times(int): 滑动次数
-        distance(float): 滑动距离
+        :param direction: "left", "right", "up", "down"
+        :param times: move times
+        :param distance: 滑动距离
+        :return:
         """
         assert direction in ("left", "right", "up", "down")
-
+        logging.info(f"👆 {direction} swipe, times: {times}.")
         for i in range(times):
             self.driver(**self.kwargs).scroll(direction=direction, distance=distance)
+        time.sleep(0.1)
 
-    def focus(self, position):
+    def focus(self, position: list):
         """
-        定位元素区域内的坐标
-        Args:
-            position(list): 元素板块内的坐标
+        Locate coordinates within the element region
+        :param position: Coordinates on the element region
+        :return:
         """
+        logging.info(f"👆 focus, position: {position}.")
         self.get()
         if type(position) is not list:
             raise NameError("The argument must be a list")
         elif position[0] > 1 or position[1] > 1:
             raise NameError("Coordinates range from 0 to 1")
+
         rect = self.driver(**self.kwargs).bounds
         x = rect.x + rect.width * position[0]
         y = rect.y + rect.height * position[1]
         return x, y
 
-    def get_position(self, percentage=True):
+    def get_position(self, percentage: bool = False):
         """
-        获取元素坐标
-        Args:
-            percentage(bool): percentage等于True,坐标是百分比； 默认是真实坐标
+        Get element coordinates
+        :param percentage: True: percentage , False: Default is real coordinates
+        :return:
         """
+
         self.get()
         w, h = self.driver.window_size()
         rect = self.driver(**self.kwargs).bounds
         x = rect.x + rect.width / 2
         y = rect.y + rect.height / 2
         if percentage is True:
-            return round(x / w, 6), round(y / h, 6)
-        elif percentage is False:
-            return x, y
+            x, y = round(x / w, 6), round(y / h, 6)
+        logging.info(f"ℹ️ get element position: [{x}, {y}].")
+        return x, y
 
     def exists(self):
         """
-        判断元素是否存在
+        check if the object exists in current window.
         """
+        logging.info(f"✅ exists().")
         if "index" in self.kwargs:
             return True if len(self.find_elements()) > 0 else False
         else:
             return True if self.driver(**self.kwargs).exists and self.driver(**self.kwargs).displayed else False
 
-    def scroll(self, direction='visible', distance=1.0):
+    def swipe_search(self, direction="up"):
         """
-        滚动定位到对应的元素
-        Args:
-            direction (str): one of "visible", "up", "down", "left", "right"
-            distance (float): swipe distance, only works when direction is not "visible"
-
-        Raises:
-            ValueError
-
-        distance=1.0 means, element (width or height) multiply 1.0
+        Scroll to locate the corresponding element
+        :param direction: 'down' or 'up'
+        :return:
         """
-        self.driver(**self.kwargs).scroll(direction=direction, distance=distance)
-
-    def scroll_search(self, click=False, direction="down"):
-        """
-        滚动定位到对应的元素
-
-        Args:
-            click(bool): 定位到元素后，是否点击
-            direction(str): 滑动的方向，只能是'down' 或 'or'
-        """
+        logging.info(f"🔍 swipe search.")
         for i in range(20):
             if self.exists() is True:
                 break
             else:
-                if direction == "down":
-                    self.driver.swipe(0.5, 0.5, 0.5, 0.4)
-                elif direction == "up":
-                    self.driver.swipe(0.5, 0.5, 0.5, 0.6)
+                if direction == "up":
+                    self.driver.swipe(0.5, 0.6, 0.5, 0.4)
+                elif direction == "down":
+                    self.driver.swipe(0.5, 0.4, 0.5, 0.6)
                 else:
                     raise ValueError("The direction parameter can only be 'down' or 'up'")
-        if click is True:
-            self.click()
 
-    def tap_hold(self, duration=1.0):
+    def sliding(self, height: float = 0.5):
         """
-        长按
-
-        Args:
-            duration (float): seconds of hold time
+         Determine if the element is on the current page, and if it isn't, slide down until you find it on the screen
+            If present, slide the expected position
+        :param height:  The screen height 0 ~ 1
+        :return:
         """
-        self.driver(**self.kwargs).tap_hold(duration=duration)
-
-    def sliding(self, height=0.5, click=False, direction="down"):
-        """
-        将元素滑动到想要的位置
-        Args:
-            height(float): 预期将元素滑动到的位置， 位置的范围是 0 ~ 1， 默认是中间
-            click(bool): 当click等于True，把元素滑动到预期的位置后，进行点击操作； 默认不点击，只滑动到预期的位置
-            direction(str): 滑动的方向，只能是'down' 或 'or'
-        """
+        logging.info(f"👆 sliding found, height: {height}")
         if 0 < height < 1:
             height = height
             height_max = height + 0.05
             height_min = height - 0.05
-            if direction == "down":
-                self.scroll_search()
-            elif direction == "up":
-                self.scroll_search(direction="up")
-            else:
-                raise ValueError("The direction parameter can only be 'down' or 'up'")
             x, y = self.get_position()
             for i in range(20):
                 if height_min <= y <= height_max:
@@ -444,7 +417,5 @@ class Element(object):
                         self.driver.swipe(0.5, 0.5, 0.5, 0.48, duration=0.5)
                 x, y = self.get_position()
 
-            if click is True:
-                self.click()
         else:
-            raise ValueError
+            raise ValueError("height: The screen height 0 ~ 1")
