@@ -1,9 +1,16 @@
+#### 1.6.1
+
+* `u2(uiautomator)` 和 `wda(facebook-wda)` 的`API`重写, 增加运行日志。
+* `appium`支持最新的`4.0.1`版本。
+* 移除`func_timeout`库依赖，自己实现`@func_timeout`装饰器。
+* 移除`setup.py`, 后续包管理使用`pyproject.toml`。
+
 #### 1.5.2
 
 * 增加多线程支持。
-  * `selenium` 移除全局变量 `Browser.driver`。
-  * `playwright` 移除全局变量 `Browser.page`。
-  * `loguru` 增加`线程名`信息。
+    * `selenium` 移除全局变量 `Browser.driver`。
+    * `playwright` 移除全局变量 `Browser.page`。
+    * `loguru` 增加`线程名`信息。
 
 #### 1.5.1
 

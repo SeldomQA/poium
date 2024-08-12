@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "poium"
-version = "1.5.2"
+version = "1.6.1"
 description = "Page Objects design pattern test library."
 authors = ["fnngj <fnngj@126.com>"]
 license = "Apache-2.0"
