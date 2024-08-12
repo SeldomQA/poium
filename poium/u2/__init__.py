@@ -1,8 +1,8 @@
 from typing import Union
 
 from poium.common import logging
+from poium.common.openatx import BasePage
 from poium.config import App
-from poium.openatx import BasePage
 
 LOCATOR_LIST = [
     "text",
@@ -121,62 +121,10 @@ class Page(BasePage):
         :param orientation:
         :return:
         """
-        logging.info(f"👆 {orientation} swipe: {fx}, {fy} =>  {tx}, {ty}, times: {times} ")
+        logging.info(f"👆 {orientation} swipe: [{fx}, {fy}] => [{tx}, {ty}], times: {times} ")
         for _ in range(times):
             self.driver.swipe(fx, fy, tx, ty, duration, steps)
             self.sleep(1)
-
-    def swipe_down(self, fx=0.5, fy=0.2, tx=0.5, ty=0.8, duration=0.1, times=1):
-        """
-        swipe down
-        :param fx:
-        :param fy:
-        :param tx:
-        :param ty:
-        :param duration:
-        :param times:
-        :return:
-        """
-        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="down")
-
-    def swipe_up(self, fx=0.5, fy=0.8, tx=0.5, ty=0.2, duration=0, times=1):
-        """
-        swipe up
-        :param fx:
-        :param fy:
-        :param tx:
-        :param ty:
-        :param duration:
-        :param times:
-        :return:
-        """
-        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="up")
-
-    def swipe_left(self, fx=0.8, fy=0.5, tx=0.2, ty=0.5, duration=0, times=1):
-        """
-        swipe left
-        :param fx:
-        :param fy:
-        :param tx:
-        :param ty:
-        :param duration:
-        :param times:
-        :return:
-        """
-        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="left")
-
-    def swipe_right(self, fx=0.2, fy=0.5, tx=0.8, ty=0.5, duration=0.1, times=1):
-        """
-        swipe right
-        :param fx:
-        :param fy:
-        :param tx:
-        :param ty:
-        :param duration:
-        :param times:
-        :return:
-        """
-        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="right")
 
     def swipe_search(self, text: str, direction: str = "up", x: float = None, y: float = None):
         """

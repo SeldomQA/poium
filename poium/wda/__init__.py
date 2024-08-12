@@ -1,7 +1,5 @@
-from poium.base import BaseMethod
 from poium.common import logging
-from poium.common.assert_des import insert_assert
-from poium.config import App
+from poium.common.openatx import BasePage
 
 LOCATOR_LIST = [
     "id",
@@ -17,51 +15,40 @@ LOCATOR_LIST = [
 ]
 
 
-class Page(BaseMethod):
+class Page(BasePage):
     """
     facebook-wda page class
     """
 
-    def __init__(self, dr):
-        self.driver = dr
-
     def native_resolution(self):
         """
-        获取屏幕原始分辨率
+        Gets the original screen resolution.
         """
         multiple = self.driver.scale
         w, h = self.driver.window_size()
         return multiple * w, multiple * h
 
-    def close(self):
-        """
-        关闭App
-        """
-        self.driver.close()
-
     def click(self, x: float = None, y: float = None, text: str = None):
         """
-        点击坐标
-        Args：
-            x(float): x坐标
-            y(float): y坐标
-            text(str): 文本
+        click position
+        :param x:
+        :param y:
+        :param text:
+        :return:
         """
         if not x and not y and not text:
             raise ValueError
         (x, y) = self.get_position(text=text) if text else (x, y)
 
-        logging.info(msg=f" 点击 ==> 点击坐标: {x}, {y}")
-
+        logging.info(f"👆 click: {x}, {y}")
         self.driver.click(x, y)
 
     def get_position(self, text=None, element=None):
         """
-        获取元素或文本坐标
-
-        Args:
-            text(str): 文案
-            element(object): atx原生的元素对象
+        Gets element or text position
+        :param text:
+        :param element:
+        :return:
         """
         w, h = self.driver.window_size()
         if text is not None:
@@ -74,82 +61,31 @@ class Page(BaseMethod):
         y = rect.y + rect.height / 2
         return x / w, y / h
 
-    def swipe(self, fx: float, fy: float, tx: float, ty: float, duration=0):
+    def swipe(self, fx: float, fy: float, tx: float, ty: float, duration=0, times=1, orientation: str = ""):
         """
-        滑动
-        Args:
-            fx(float): 起始横坐标
-            fy(float): 起始纵坐标
-            tx(float): 终点横坐标
-            ty(float): 终点纵坐标
-            duration(float): 滑动过程的时间 (seconds)
+        swipe
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param times:
+        :param orientation:
+        :return:
         """
-        self.driver.swipe(fx, fy, tx, ty, duration=duration)
+        logging.info(f"👆 {orientation} swipe: [{fx}, {fy} =>  {tx}, {ty}], times: {times} ")
+        for _ in range(times):
+            self.driver.swipe(fx, fy, tx, ty, duration=duration)
+            self.sleep(1)
 
-    def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, times=1, duration=0):
+    def swipe_search(self, text, direction="up"):
         """
-        滑向左边
-        Args:
-            fx(float): 起始横坐标
-            fy(float): 起始纵坐标
-            tx(float): 终点横坐标
-            ty(float): 终点纵坐标
-            times(int): 滑动的次数
-            duration(float): 滑动过程的时间 (seconds)
+        swipe search text
+        :param text:
+        :param direction: "down" or "up"
+        :return:
         """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration)
-
-    def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, times=1, duration=0):
-        """
-        滑向右边
-        Args:
-            fx(float): 起始横坐标
-            fy(float): 起始纵坐标
-            tx(float): 终点横坐标
-            ty(float): 终点纵坐标
-            times(int): 滑动的次数
-            duration(float): 滑动过程的时间 (seconds)
-        """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration)
-
-    def swipe_up(self, fx=0.5, fy=0.5, tx=0.5, ty=0.8, times=1, duration=0):
-        """
-        滑向上边
-        Args:
-            fx(float): 起始横坐标
-            fy(float): 起始纵坐标
-            tx(float): 终点横坐标
-            ty(float): 终点纵坐标
-            times(int): 滑动的次数
-            duration(float): 滑动过程的时间 (seconds)
-        """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration)
-
-    def swipe_down(self, fx=0.5, fy=0.5, tx=0.5, ty=0.2, times=1, duration=0):
-        """
-        滑向下边
-        Args:
-            fx(float): 起始横坐标
-            fy(float): 起始纵坐标
-            tx(float): 终点横坐标
-            ty(float): 终点纵坐标
-            times(int): 滑动的次数
-            duration(float): 滑动过程的时间 (seconds)
-        """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration)
-
-    def swipe_search(self, text, direction="down"):
-        """
-        文本搜索(不基于元素对象)
-
-        Args:
-            text(str): 搜索的内容
-            direction(str): "down" 或 "up"
-        """
+        logging.info(f"🔍 swipe search: {text}")
         for i in range(20):
             if self.driver(text=text).exists and self.driver(text=text).displayed:
                 break
@@ -163,15 +99,15 @@ class Page(BaseMethod):
         else:
             raise TimeoutError("Timeout, element not found")
 
-    def who_exists(self, element=None, text=None):
+    def who_exists(self, element: list = None, text: list = None):
         """
-        判断不同页面的多个元素或文本，看哪一个先出现，判断页面的状态
-        Args：
-            element(list): 元素列表，不同页面的元素对象
-            text(list): 文本列表，不同页面的文本
-        Return:
-            element_child(object): 返回当前页面存在的元素
-            text_child(text): 返回当前页面存在的文本
+            Determine multiple elements or text for different pages,
+        see which comes first, and determine the state of the page
+        :param element: Element objects for different pages.
+        :param text: text for different pages.
+        :return:
+            element_child(object): Returns the elements that exist on the current page
+            text_child(text): Returns the text that exists on the current page
         """
         for i in range(10):
             if element is not None:
@@ -197,19 +133,25 @@ class Page(BaseMethod):
             raise TypeError("The text or element is not exists")
 
     def alert(self, click=None, timeout=5) -> bool:
+        """
+        click error alert.
+        :param click:
+        :param timeout:
+        :return:
+        """
         for i in range(timeout):
             if "error" not in self.driver.alert.buttons():
                 _list = self.driver.alert.buttons()
                 text = self.driver.alert.text
-                logging.info(msg="弹窗，提示⚠{text}，选项按钮{button}".format(text=text, button=_list))
+                logging.info(f"alert prompt:⚠ {text}, option button: {_list}")
                 if click == "first":
-                    logging.info(msg="👆 ==> {}".format(_list[0]))
+                    logging.info(f"👆 ==> {_list[0]}")
                     self.driver.alert.accept()
                 elif click == "second":
-                    logging.info(msg="👆 ==> {}".format(_list[1]))
+                    logging.info(f"👆 ==> {_list[1]}")
                     self.driver.alert.dismiss()
                 else:
-                    logging.info(msg="👆 ==> {}".format(click))
+                    logging.info(f"👆 ==> {click}")
                     self.driver.alert.click(click)
                 return True
             else:
@@ -217,169 +159,6 @@ class Page(BaseMethod):
                 continue
         else:
             return False
-
-    def assert_text_exists(self, text: str, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-        logging.info("预期结果: " + describe + " 文案存在")
-        for i in range(timeout):
-            text_exists = self.driver(text=text).exists
-            if text_exists is True:
-                insert_assert(describe, True)
-                logging.info("实际结果: " + describe + " 文案存在")
-                break
-            else:
-                self.sleep(1)
-                continue
-        else:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 文案不存在")
-
-    def assert_text_contains(self, text: str, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-        logging.info("预期结果: " + describe + " 文案存在")
-        for i in range(timeout):
-            text_exists = self.driver(nameContains=text).exists
-            if text_exists is True:
-                insert_assert(describe, True)
-                logging.info("实际结果: " + describe + " 文案存在")
-                break
-            else:
-                self.sleep(1)
-                continue
-        else:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 文案不存在")
-
-    def assert_element_exists(self, element, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            element: element
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-        logging.info("预期结果: " + describe + " 元素存在")
-        for i in range(timeout):
-            element_exists = element.exists()
-            if element_exists is True:
-                insert_assert(describe, True)
-                logging.info("实际结果: " + describe + " 元素存在")
-                break
-            else:
-                self.sleep(1)
-                continue
-        else:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 元素不存在")
-
-    def assert_text_not_exists(self, text: str, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-        logging.info("预期结果: " + describe + " 文案不存在")
-        for i in range(timeout):
-            text_exists = self.driver(text=text).exists
-            if text_exists is True:
-                insert_assert(describe, False)
-                logging.warning("实际结果: " + describe + " 文案存在")
-                break
-            else:
-                self.sleep(1)
-                continue
-        else:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 文案不存在")
-
-    def assert_element_not_exists(self, element, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            element: element
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-        logging.info("预期结果: " + describe + " 元素不存在")
-        for i in range(timeout):
-            element_exists = element.exists()
-            if element_exists is True:
-                insert_assert(describe, False)
-                logging.warning("实际结果: " + describe + " 元素存在")
-                break
-            else:
-                self.sleep(1)
-                continue
-        else:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 元素不存在")
-
-    @staticmethod
-    def assert_text_equals(text_1, text_2, describe):
-        """
-        Asserts that two texts are equal
-
-        Args：
-            text(list): text
-        """
-        logging.info("预期结果: " + text_1 + "," + text_2 + " 相等")
-
-        if text_1 == text_2:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("预期结果: " + text_1 + "," + text_2 + " 相等")
-        else:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("预期结果: " + text_1 + "," + text_2 + " 不相等")
-
-    @staticmethod
-    def assert_text_not_equals(text_1, text_2, describe):
-        """
-        Asserts that two texts are not equal
-
-        Args：
-            text(list): text
-        """
-        logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
-
-        if text_1 == text_2:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
-        else:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
 
 
 class Element(object):
