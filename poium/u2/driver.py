@@ -1,4 +1,4 @@
-import os
+from poium.common import logging
 
 try:
     import uiautomator2 as u2
@@ -7,56 +7,85 @@ except ImportError:
 from poium.config import App
 
 
-def connect():
+class Android:
     """
-    设备连接
+    Android driver
     """
-    if App.connect_usb:
-        if App.device_id is None:
-            device_id = get_device_id()
-            App.device_id = device_id
 
-        d = u2.connect_usb(App.device_id)
+    def __init__(self, device_id=None, package_name: str = None):
+        self.device_id = device_id
+        self.package_name = package_name
+        self.driver = None
 
-        return d
+    def get_device_id(self) -> list:
+        """
+        get device ID
+        """
+        import subprocess
 
+        # 执行 adb devices 命令并捕获输出
+        result = subprocess.run(['adb', 'devices'], capture_output=True, text=True)
 
-def start_app(driver, apk=None):
-    """
-    启动APP
-    """
-    if apk is None:
-        apk = App.apk_name
-    driver.app_start(apk, use_monkey=True)
-    driver.app_wait(apk, front=True, timeout=App.app_wait)
-    driver.jsonrpc.setConfigurator({"waitForIdleTimeout": 100})
+        # 检查命令是否成功执行
+        if result.returncode == 0:
+            # 如果有输出，处理输出
+            devices_info = result.stdout
 
-    session = driver.session(apk, attach=True)
-    session.implicitly_wait(App.implicitly_wait)
-    return session
+            # 移除首行的 "List of devices attached"
+            devices_info_lines = devices_info.strip().split('\n')[1:]
 
+            # 提取设备信息
+            devices = []
+            for line in devices_info_lines:
+                if line.strip():  # 忽略空行
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        device_id, device_status = parts[:2]
+                        devices.append(device_id)
 
-def close_app(driver, apk=None):
-    """
-    关闭APP
-    """
-    driver.app_stop(apk) if apk is not None else driver.app_stop(App.apk_name)
+            logging.info(f"📱 device ID:{devices}")
+            return devices
+        else:
+            print("执行 adb devices 失败")
 
+    def connect(self, device_id=None):
+        """
+        connect device
+        """
+        if device_id is None and self.device_id is None:
+            device_id = self.get_device_id()[0]
+        elif device_id is None:
+            device_id = self.device_id
 
-def get_device_id():
-    """
-    获取设备的 device ID
-    """
-    status_code = os.system("adb devices")
-    if status_code != 0:
-        raise SystemError("Verify that adb is properly installed and started")
+        logging.info(f"📱 connect: {device_id}")
+        self.driver = u2.connect(device_id)
 
-    _list = os.popen("adb devices | grep -w 'device' | head -1 ")
-    device = _list.read()
+        return self.driver
 
-    if device is None:
-        raise NameError("")
-    else:
-        device_id = device.split("\t")[0]
+    def start_app(self, package_name=None):
+        """
+        start App
+        :param package_name:
+        :return:
+        """
+        if package_name is None:
+            package_name = self.package_name
 
-        return device_id
+        logging.info(f"📱 start App:{package_name}")
+        self.driver.app_start(package_name, use_monkey=True)
+        self.driver.app_wait(package_name, front=True, timeout=App.app_wait)
+        self.driver.jsonrpc.setConfigurator({"waitForIdleTimeout": 100})
+
+        session = self.driver.session(package_name, attach=True)
+        session.implicitly_wait(App.implicitly_wait)
+        return session
+
+    def close_app(self, package_name=None):
+        """
+        close App
+        """
+        if package_name is None:
+            package_name = self.package_name
+
+        logging.info(f"📱 close App:{package_name}")
+        self.driver.app_stop(package_name) if package_name is not None else self.driver.app_stop(package_name)
