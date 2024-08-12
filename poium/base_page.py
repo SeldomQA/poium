@@ -55,7 +55,6 @@ BY_LIST = [
     By.TAG_NAME,
     By.CLASS_NAME,
     # appium
-    AppiumBy.IOS_UIAUTOMATION,
     AppiumBy.IOS_PREDICATE,
     AppiumBy.IOS_CLASS_CHAIN,
     AppiumBy.ANDROID_UIAUTOMATOR,
