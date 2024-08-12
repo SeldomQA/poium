@@ -1,7 +1,8 @@
-from poium.base import BaseMethod
+from typing import Union
+
 from poium.common import logging
-from poium.common.assert_des import insert_assert
 from poium.config import App
+from poium.openatx import BasePage
 
 LOCATOR_LIST = [
     "text",
@@ -32,182 +33,161 @@ LOCATOR_LIST = [
 ]
 
 
-class Page(BaseMethod):
+class Page(BasePage):
     """
     uiautomator2 page class
     """
 
-    def __init__(self, dr):
-        self.driver = dr
-
     def window_size(self):
         """
-        Documents:
-            Resolution size
+        Resolution size
+        :return: (width, height)
+        """
+        size = self.driver.window_size()
+        logging.info(f"📱 window high: {size[1]} wight: {size[0]}")
+        return size
 
-        Return:
-            return (width, height)
+    def app_list(self) -> list:
         """
-        return self.driver.window_size()
-
-    def app_list(self):
+        Get app list
+        :return:
         """
-        Returns:
-            list of apps by filter
-        """
+        logging.info(f"📱 app list")
         return self.driver.app_list()
 
-    def app_info(self, pkg_name=App.apk_name):
+    def app_info(self, package_name=None):
         """
         Get app info
-
-        Args:
-            pkg_name (str): package name
-
-        Return example:
-            {
-                "mainActivity": "com.github.uiautomator.MainActivity",
-                "label": "ATX",
-                "versionName": "1.1.7",
-                "versionCode": 1001007,
-                "size":1760809
-            }
-
-        Raises:
-            UiaError
+        :param package_name:
+        :return:
         """
-        return self.driver.app_info(pkg_name)
+        if package_name is not None:
+            pkg = package_name
+        elif self.package_name is not None:
+            pkg = self.package_name
+        else:
+            raise NameError("package name is None")
+
+        logging.info(f"📱 app info: {pkg}")
+        return self.driver.app_info(pkg)
 
     def click(self, x: float = None, y: float = None, text: str = None):
         """
-        Args:
-            x : width / percentage of width
-            y : height / percentage of height
-            text: text
-        Documents:
-            click position
+        click position
+        :param x:
+        :param y:
+        :param text:
+        :return:
         """
         if not x and not y and not text:
             raise ValueError
         (x, y) = self.driver(text=text).center() if text else (x, y)
 
-        logging.info(msg=f" 点击 ==> 点击坐标: {x}, {y}")
+        logging.info(f"👆 click: {x}, {y}")
 
         self.driver.click(x, y)
 
-    def click_more(self, x, y, sleep=.01, times=3):
+    def click_more(self, x, y, sleep=0, times=3):
         """
-        连续点击
-        x: 横坐标
-        y: 纵坐标
-        sleep(float): 间隔时间
-        times(int): 点击次数
+        Multiple clicks.
+        :param x:
+        :param y:
+        :param sleep: interval time
+        :param times: click times
+        :return:
         """
         w, h = self.window_size()
         x, y = (w * x, h * y) if x < 1 and y < 1 else x, y
-        for i in range(times):
+
+        logging.info(f"👆 click {times} times: {x}, {y}")
+
+        for _ in range(times):
             self.driver.touch.down(x, y)
             self.sleep(sleep)
             self.driver.touch.up(x, y)
 
-    def swipe(self, fx, fy, tx, ty, duration=0.1, steps=None):
+    def swipe(self, fx: float, fy: float, tx: float, ty: float, duration: float = 0, steps=None, times: int = 1,
+              orientation: str = ""):
         """
-        Args:
-            fx: from position
-            fy: from position
-            tx: to position
-            ty: to position
-            duration (float): duration
-            steps: 1 steps is about 5ms, if set, duration will be ignore
+        UiAutoMatTor use steps instead of duration
+          As the document say: Each step execution is throttled to 5ms per step.
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param steps: 1 step is about 5ms, if set, duration will be ignored
+        :param times:
+        :param orientation:
+        :return:
+        """
+        logging.info(f"👆 {orientation} swipe: {fx}, {fy} =>  {tx}, {ty}, times: {times} ")
+        for _ in range(times):
+            self.driver.swipe(fx, fy, tx, ty, duration, steps)
+            self.sleep(1)
 
-        Documents:
-            UiAutoMatTor use steps instead of duration
-            As the document say: Each step execution is throttled to 5ms per step.
+    def swipe_down(self, fx=0.5, fy=0.2, tx=0.5, ty=0.8, duration=0.1, times=1):
         """
-        self.driver.swipe(fx, fy, tx, ty, duration, steps)
+        swipe down
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param times:
+        :return:
+        """
+        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="down")
 
-    def swipe_down(self, fx=0.5, fy=0.5, tx=0.5, ty=0.2, duration=0.1, times=1, between=0):
+    def swipe_up(self, fx=0.5, fy=0.8, tx=0.5, ty=0.2, duration=0, times=1):
         """
-        Args:
-            fx: from position
-            fy: from position
-            tx: to position
-            ty: to position
-            duration (float): duration
-            times (int): Slide number
-            between (float): Time interval between
-        Documents:
-            To the following
+        swipe up
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param times:
+        :return:
         """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            self.sleep(between)
+        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="up")
 
-    def swipe_up(self, fx=0.5, fy=0.5, tx=0.5, ty=0.8, duration=0.1, times=1, between=0):
+    def swipe_left(self, fx=0.8, fy=0.5, tx=0.2, ty=0.5, duration=0, times=1):
         """
-        Args:
-            fx: from position
-            fy: from position
-            tx: to position
-            ty: to position
-            duration (float): duration
-            times (int): Slide number
-            between (float): Time interval between
-
-        Documents:
-            To the above
+        swipe left
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param times:
+        :return:
         """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            self.sleep(between)
+        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="left")
 
-    def swipe_left(self, fx=0.3, fy=0.5, tx=0.7, ty=0.5, duration=0.1, times=1, between=0):
+    def swipe_right(self, fx=0.2, fy=0.5, tx=0.8, ty=0.5, duration=0.1, times=1):
         """
-        Args:
-            fx: from position
-            fy: from position
-            tx: to position
-            ty: to position
-            duration (float): duration
-            times (int): Slide number
-            between (float): Time interval between
-
-
-        Documents:
-            Slide to the left
+        swipe right
+        :param fx:
+        :param fy:
+        :param tx:
+        :param ty:
+        :param duration:
+        :param times:
+        :return:
         """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            self.sleep(between)
+        self.swipe(fx, fy, tx, ty, duration=duration, times=times, orientation="right")
 
-    def swipe_right(self, fx=0.7, fy=0.5, tx=0.3, ty=0.5, duration=0.1, times=1, between=0):
+    def swipe_search(self, text: str, direction: str = "up", x: float = None, y: float = None):
         """
-        Args:
-            fx: from position
-            fy: from position
-            tx: to position
-            ty: to position
-            duration (float): duration
-            times (int): Slide number
-            between (float): Time interval between
-
-        Documents:
-            Slide to the left
+        swipe search text
+        :param text:
+        :param direction: "down" or "up"
+        :param x:
+        :param y:
+        :return:
         """
-        for i in range(times):
-            self.swipe(fx, fy, tx, ty, duration=duration, steps=None)
-            self.sleep(between)
-
-    def swipe_search(self, text, direction="down", x: float = None, y: float = None):
-        """
-        文本搜索(不基于元素对象)
-
-        Args:
-            text(str): 搜索的内容
-            direction(str): "down" 或 "up"
-            x(float): 横坐标滑动起始点
-            y(float): 纵坐标滑动起始点
-        """
+        logging.info(f"🔍 swipe search: {text}")
         x = 0.5 if not x else x
         y = 0.5 if not y else y
         for i in range(20):
@@ -215,15 +195,15 @@ class Page(BaseMethod):
                 break
             else:
                 if direction == "down":
-                    self.swipe_down(fx=x, fy=y, tx=x, ty=y - 0.2, between=1)
+                    self.swipe_down(fx=x, fy=y, tx=x, ty=y - 0.2)
                 elif direction == "up":
-                    self.swipe_up(fx=x, fy=y, tx=x, ty=y + 0.2, between=1)
+                    self.swipe_up(fx=x, fy=y, tx=x, ty=y + 0.2)
                 else:
-                    raise NameError
+                    raise NameError(f"direction {direction} error.")
         else:
             raise TimeoutError("Timeout, element not found")
 
-    def press(self, key):
+    def press(self, key: Union[int, str], meta=None):
         """
         Documents:
             press key via name or key code. Supported key name includes:
@@ -231,179 +211,8 @@ class Page(BaseMethod):
             delete(or del), recent(recent apps), volume_up, volume_down,
             volume_mute, camera, power.
         """
-        names = ["home", "back", "left", "right", "up", "down", "center", "menu", "search", "enter", "delete", "recent",
-                 "volume_up", "volume_down", "volume_mute", "camera", "power"]
-        if key in names:
-            self.driver.press(key)
-        else:
-            raise NameError("Check the input text")
-
-    def assert_text_exists(self, text: str, describe: str, sleep=0, timeout=10):
-        """
-        Asserts that the text exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-
-        text_exists = self.driver(text=text).exists(timeout)
-        logging.info("预期结果: " + describe + " 文案存在")
-        if text_exists is True:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 文案存在")
-        else:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 文案不存在")
-
-    def assert_element_exists(self, element, describe, sleep=0, timeout=10):
-        """
-        Asserts that the element exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            element(object): element object
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-
-        element_exists = element.exists(timeout)
-        logging.info("预期结果: " + describe + " 元素存在")
-        if element_exists is True:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 元素存在")
-        else:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 元素不存在")
-
-    def assert_text_not_exists(self, text, describe, sleep=0, timeout=10):
-        """
-        Asserts that the text not exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-
-        text_exists = self.driver(text=text).exists(timeout)
-        logging.info("预期结果: " + describe + " 文案不存在")
-        if text_exists is True:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 文案存在")
-        else:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 文案不存在")
-
-    def assert_element_not_exists(self, element, describe, sleep=0, timeout=10):
-        """
-        Asserts that the element not exists on the current page
-
-        Args：
-            sleep(int): sleep time
-            element(object): element object
-            describe(str): Assertion description information
-        """
-        self.sleep(sleep)
-
-        element_exists = element.exists(timeout)
-        logging.info("预期结果: " + describe + " 元素不存在")
-        if element_exists is True:
-            insert_assert(describe, False)
-            logging.warning("实际结果: " + describe + " 元素存在")
-        else:
-            insert_assert(describe, True)
-            logging.info("实际结果: " + describe + " 元素不存在")
-
-    def assert_contain_text(self, text, describe, sleep=0, timeout=10):
-        """
-        Asserts that two texts are not equal
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-
-        text_exists = self.driver(textContains=text).exists(timeout)
-        logging.info("预期结果: " + describe + " 文案存在")
-        if text_exists is True:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("实际结果: " + describe + " 文案存在")
-        else:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("实际结果: " + describe + " 文案不存在")
-
-    def assert_not_contain_text(self, text, describe, sleep=0, timeout=10):
-        """
-        Asserts that two texts are not equal
-
-        Args：
-            sleep(int): sleep time
-            text(str): text
-            describe(str): Assertion description information
-            timeout(int): Maximum waiting time
-        """
-        self.sleep(sleep)
-
-        text_exists = self.driver(textContains=text).exists(timeout)
-        logging.info("预期结果: " + describe + " 文案不存在")
-        if text_exists is True:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("实际结果: " + describe + " 文案存在")
-        else:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("实际结果: " + describe + " 文案不存在")
-
-    @staticmethod
-    def assert_text_equals(text_1, text_2, describe):
-        """
-        Asserts that two texts are equal
-
-        Args：
-            text(list): text
-        """
-        logging.info("预期结果: " + text_1 + "," + text_2 + " 相等")
-
-        if text_1 == text_2:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("实际结果: " + text_1 + "," + text_2 + " 相等")
-
-        else:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("实际结果: " + text_1 + "," + text_2 + " 不相等")
-
-    @staticmethod
-    def assert_text_not_equals(text_1, text_2, describe):
-        """
-        Asserts that two texts are not equal
-
-        Args：
-            text(list): text
-        """
-        logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
-        if text_1 == text_2:
-            result = [describe, False]
-            App.assert_result.append(result)
-            logging.warning("预期结果: " + text_1 + "," + text_2 + " 相等")
-        else:
-            result = [describe, True]
-            App.assert_result.append(result)
-            logging.info("预期结果: " + text_1 + "," + text_2 + " 不相等")
+        logging.info(f"👆 press: {key}")
+        self.driver.press(key, meta=meta)
 
 
 class XpathElement(object):
@@ -459,7 +268,7 @@ class XpathElement(object):
         return App.driver.xpath(self.xpath).match()
 
 
-class Element(BaseMethod):
+class Element:
     """
     element class
     """
