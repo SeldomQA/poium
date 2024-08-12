@@ -37,9 +37,6 @@ class App:
     # 打开APP的包名
     apk_name = ""
 
-    # 断言结果
-    assert_result = []
-
     # 打开APP等待启动时间
     app_wait = 10
 

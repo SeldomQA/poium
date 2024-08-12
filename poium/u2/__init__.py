@@ -1,8 +1,8 @@
+import time
 from typing import Union
 
 from poium.common import logging
 from poium.common.openatx import BasePage
-from poium.config import App
 
 LOCATOR_LIST = [
     "text",
@@ -174,46 +174,52 @@ class XpathElement(object):
             button = XpathElement('@com.taobao.taobao:id/fl_banner_container')
     """
 
-    def __init__(self, xpath, index=None, timeout=10, describe=None):
+    def __init__(self, xpath: str, index: int = None, timeout: int = 10, describe: str = None):
         self.xpath = xpath
         self.describe = describe
-        self.time_out = timeout
+        self.timeout = timeout
         if index is None:
             self.index = 0
-        else:
-            self.index = int(index)
         self.desc = describe
 
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        App.driver = instance.driver
+        self.driver = instance.driver
         return self
 
     def click(self):
         """
         Click element.
         """
-        App.driver.xpath(self.xpath).click()
+        self.driver.xpath(self.xpath).click()
+        logging.info(f"✅ Xpath:{self.xpath}, click().")
 
     def set_text(self, value):
         """
         Simulates typing into the element.
         :param value: input text
         """
-        App.driver.xpath(self.xpath).set_text(value)
+        self.driver.xpath(self.xpath).set_text(value)
+        logging.info(f"✅ Xpath:{self.xpath}, set_text('{value}').")
 
     def get_text(self):
         """
-        :return: get text from field
+        get text from field
+        :return
         """
-        return App.driver.xpath(self.xpath).get_text()
+        text = self.driver.xpath(self.xpath).get_text()
+        logging.info(f"✅ Xpath:{self.xpath}, get_text().")
+        return text
 
     def match(self):
         """
-        :return: None or matched XPathElement
+        None or matched XPathElement
+        :return:
         """
-        return App.driver.xpath(self.xpath).match()
+        match = self.driver.xpath(self.xpath).match()
+        logging.info(f"✅ Xpath:{self.xpath}, match().")
+        return match
 
 
 class Element:
@@ -223,7 +229,7 @@ class Element:
 
     def __init__(self, timeout=10, describe=None, **kwargs):
         self.describe = describe
-        self.time_out = timeout
+        self.timeout = timeout
         if self.describe is None:
             self.describe = "NONE"
         if not kwargs:
@@ -237,93 +243,99 @@ class Element:
     def __get__(self, instance, owner):
         if instance is None:
             return None
-        App.driver = instance.driver
+        self.driver = instance.driver
         return self
 
-    def click(self, timeout=10, offset=None):
+    def click(self, offset=None):
         """
         Click UI element.
-
-        Args:
-            timeout: seconds wait element show up
-            offset: (xoff, yoff) default (0.5, 0.5) -> center
 
         The click method does the same logic as java uiautomator does.
         1. waitForExists 2. get VisibleBounds center 3. send click event
 
-        Raises:
+        :raises:
             UiObjectNotFoundError
+        :param offset: (xoff, yoff) default (0.5, 0.5) -> center
+        :return:
         """
-        App.driver(**self.kwargs).click(timeout, offset)
+        logging.info(f"✅ click().")
+        self.driver(**self.kwargs).click(self.timeout, offset)
 
-    def click_exists(self, timeout=1):
+    def click_exists(self) -> bool:
         """
         The element is not clicked until it exists
         """
-        return App.driver(**self.kwargs).click_exists(timeout=timeout)
+        is_exists = self.driver(**self.kwargs).click_exists(timeout=self.timeout)
+        logging.info(f"✅ click_exists().")
+        return is_exists
 
-    def click_more(self, sleep=.01, times=3):
+    def click_more(self, sleep: float = .01, times: int = 3):
         """
-        连续点击
-        sleep(float): 间隔时间
-        times(int): 点击次数
+        Multiple clicks
+        sleep:
+        times:
         """
+        logging.info(f"✅ click_more(times={times}).")
         x, y = self.center()
         for i in range(times):
-            App.driver.touch.down(x, y)
-            self.sleep(sleep)
-            App.driver.touch.up(x, y)
+            self.driver.touch.down(x, y)
+            time.sleep(sleep)
+            self.driver.touch.up(x, y)
 
-    def exists(self, timeout=0):
+    def exists(self):
         """
         check if the object exists in current window.
         """
+        logging.info(f"✅ exists().")
+        is_exists = self.driver(**self.kwargs).exists(timeout=self.timeout)
+        return is_exists
 
-        return App.driver(**self.kwargs).exists(timeout=timeout)
-
-    def set_text(self, text):
+    def set_text(self, text: str):
         """
         input text
         :param text:
         """
-        print("\n")
-        logging.info(msg=" 键盘输入 ==> " + text)
-        App.driver(**self.kwargs).set_text(text=text)
+        logging.info(f"⌨️ set text: {text}.")
+        self.driver(**self.kwargs).set_text(text=text)
 
-    def send_keys(self, text, clear=True):
+    def send_keys(self, text: str, clear=True):
         """
         alias of set_text
         :param text:
         :param clear:
         """
-        App.driver(**self.kwargs).click()
-        App.driver.send_keys(text=text, clear=clear)
+        logging.info(f"⌨️ send key: {text}.")
+        self.driver(**self.kwargs).click()
+        self.driver.send_keys(text=text, clear=clear)
 
     def clear_text(self):
         """
         Clear the text
         """
-        App.driver(**self.kwargs).clear()
+        logging.info(f"🧹 clear text.")
+        self.driver(**self.kwargs).clear()
 
     def get_text(self):
         """
         get element text
         """
-        return App.driver(**self.kwargs).get_text()
+        return self.driver(**self.kwargs).get_text()
 
     def bounds(self):
         """
         Returns the element coordinate position
         :return: left_top_x, left_top_y, right_bottom_x, right_bottom_y
         """
-        return App.driver(**self.kwargs).bounds()
+        logging.info(f"✅ bounds().")
+        return self.driver(**self.kwargs).bounds()
 
     def get_position(self):
         """
         get position
         :return: x, y
         """
-        h, w = App.driver.window_size()
+        logging.info(f"✅ get_position().")
+        h, w = self.driver.window_size()
         x, y = self.center()
         return round(x / h, 4), round(y / w, 4)
 
@@ -332,37 +344,38 @@ class Element:
         Returns the center coordinates of the element
         return: center point (x, y)
         """
-        return App.driver(**self.kwargs).center()
+        logging.info(f"✅ center().")
+        return self.driver(**self.kwargs).center()
 
     def swipe(self, direction, times=1, steps=10):
         """
         Performs the swipe action on the UiObject.
         Swipe from center
-        Args:
-        steps: 1 steps is about 5ms, if set, duration will be ignore
-        direction: "left", "right", "up", "down"
-        times: move times
+
+        :param direction: "left", "right", "up", "down"
+        :param times: move times
+        :param steps: 1 step is about 5ms, if set, duration will be ignored
+        :return:
         """
         assert direction in ("left", "right", "up", "down")
-
+        logging.info(f"👆 {direction} swipe, times: {times} ")
         for i in range(times):
-            App.driver(**self.kwargs).swipe(direction=direction, steps=steps)
-        self.sleep(0.1)
+            self.driver(**self.kwargs).swipe(direction=direction, steps=steps)
+        time.sleep(0.1)
 
-    def sliding(self, h: float = None, click=False):
+    def sliding(self, h: float = None):
         """
-        Args:
-            h(float): The screen height 0 ~ 1
-            click(bool): True click the element, False skip
-        Documents:
-            Determine if the element is on the current page, and if it isn't, slide down until you find it on the screen
+        Determine if the element is on the current page, and if it isn't, slide down until you find it on the screen
             If present, slide the expected position
+        :param h: The screen height 0 ~ 1
+        :return:
         """
+        logging.info(f"👆 sliding found, h: {h}")
         for i in range(30):
             if self.exists():
                 break
             else:
-                App.driver.swipe(0.5, 0.7, 0.5, 0.3)
+                self.driver.swipe(0.5, 0.7, 0.5, 0.3)
         if h:
             if h <= 0 or h >= 1:
                 raise ValueError("'h' checks the range of values, 0 < h < 1")
@@ -374,27 +387,29 @@ class Element:
                         break
                     else:
                         if y > scope[1]:
-                            App.driver.swipe(0.5, 0.5, 0.5, 0.45)
+                            self.driver.swipe(0.5, 0.5, 0.5, 0.45)
                         elif y < scope[0]:
-                            App.driver.swipe(0.5, 0.45, 0.5, 0.5)
-
-        self.click() if click else None
+                            self.driver.swipe(0.5, 0.45, 0.5, 0.5)
 
     @property
     def info(self):
         """
         The element information
         """
-        return App.driver(**self.kwargs).info
+        info = self.driver(**self.kwargs).info
+        logging.info(f"✅ element info: {info}.")
+        return info
 
     @property
     def count(self):
         """
         Gets the same number of elements
         """
-        return App.driver(**self.kwargs).count
+        count = self.driver(**self.kwargs).count
+        logging.info(f"✅ count().")
+        return count
 
-    def instance(self, num):
+    def instance(self, num: int):
         """
         Click on the list of elements
         """
@@ -404,19 +419,22 @@ class Element:
         for i in range(data):
             _list.append(i)
         element = Element(**self.kwargs, instance=_list[num])
+        logging.info(f"✅ click {num} element.")
         return element
 
-    def wait(self, timeout=10):
+    def wait(self):
         """
         Wait until UI Element exists or gone
         """
-        return App.driver(**self.kwargs).wait(exists=True, timeout=timeout)
+        wait = self.driver(**self.kwargs).wait(exists=True, timeout=self.timeout)
+        logging.info(f"🕣 wait.")
+        return wait
 
-    def wait_gone(self, timeout=None):
-        """ wait until ui gone
-        Args:
-            timeout (float): wait element gone timeout
-        Returns:
-            bool if element gone
+    def wait_gone(self):
         """
-        return App.driver(**self.kwargs).wait_gone(timeout)
+        wait until ui gone
+        :return:
+        """
+        wait = self.driver(**self.kwargs).wait_gone(self.timeout)
+        logging.info(f"🕣 wait gone.")
+        return wait
