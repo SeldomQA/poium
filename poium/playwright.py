@@ -1,7 +1,6 @@
 import sys
 import pathlib
 from poium.common import logging
-
 from typing import (
     Any,
     Dict,
@@ -76,6 +75,10 @@ class Locator:
 
     @property
     def find(self):
+        """
+        playwright locator, find element and return object.
+        :return:
+        """
         elem = self.driver.locator(self.selector)
         if self.desc == "":
             logging.info(f"✨ Find element.")
@@ -129,6 +132,32 @@ class Locator:
             force=self.force,
         )
 
+    def clear(self) -> None:
+        """
+        Clear the input field.
+        :return:
+        """
+        return self.find.clear(
+            timeout=self.timeout,
+            no_wait_after=self.no_wait_after,
+            force=self.force,
+        )
+
+    def press_sequentially(self, text: str, delay: Optional[float] = None) -> None:
+        """
+            Focuses the element, and then sends a `keydown`, `keypress`/`input`, and `keyup` event for each character in the
+        text.
+        :param delay:
+        :param text:
+        :return:
+        """
+        return self.find.press_sequentially(
+            text=text,
+            delay=delay,
+            timeout=self.timeout,
+            no_wait_after=self.no_wait_after,
+        )
+
     def check(self) -> None:
         """
         Check the checkbox.
@@ -148,6 +177,21 @@ class Locator:
         :return:
         """
         return self.find.uncheck(
+            position=self.position,
+            timeout=self.timeout,
+            force=self.force,
+            no_wait_after=self.no_wait_after,
+            trial=self.trial
+        )
+
+    def set_checked(self, checked: bool):
+        """
+        Set the state of a checkbox or a radio element.
+        :param checked:
+        :return:
+        """
+        return self.find.set_checked(
+            checked=checked,
             position=self.position,
             timeout=self.timeout,
             force=self.force,
@@ -304,6 +348,14 @@ class Locator:
         """
         return self.find.nth(index=index)
 
+    def all(self) -> List["Locator"]:
+        """
+        When the locator points to a list of elements, this returns an array of locators, pointing to their respective
+        elements.
+        :return:
+        """
+        return self.find.all()
+
     @property
     def page(self) -> "Page":
         """
@@ -311,6 +363,23 @@ class Locator:
         :return:
         """
         return self.find.page()
+
+    @property
+    def content_frame(self) -> "FrameLocator":
+        """
+        Returns a `FrameLocator` object pointing to the same `iframe` as this locator.
+        :return:
+        """
+        return self.find.content_frame
+
+    def frame_locator(self, selector: str) -> "FrameLocator":
+        """
+        When working with iframes, you can create a frame locator that will enter the iframe and allow locating elements in
+        that iframe:
+        :param selector:
+        :return:
+        """
+        return self.find.frame_locator(selector=selector)
 
     def filter(
             self,
@@ -324,6 +393,14 @@ class Locator:
         :return:
         """
         return self.find.filter(has_text=has_text, has=has)
+
+    def input_value(self, timeout: Optional[float] = None) -> str:
+        """
+        Returns the value for the matching `<input>` or `<textarea>` or `<select>` element.
+        :param timeout:
+        :return:
+        """
+        return self.find.input_value(timeout=timeout)
 
     def get_attribute(self, name: str):
         """
@@ -478,6 +555,13 @@ class Locator:
         :return:
         """
         return self.find.focus(timeout=self.timeout)
+
+    def blur(self) -> None:
+        """
+        Calls [blur](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/blur) on the element.
+        :return:
+        """
+        return self.find.blur(timeout=self.timeout)
 
     def inner_html(self) -> str:
         """
