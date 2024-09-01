@@ -26,8 +26,8 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.8"
-appium-python-client = "^4.0.1"
 loguru = "~0.7.0"
+appium-python-client = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
