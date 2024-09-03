@@ -1,3 +1,16 @@
+#### 1.6.2
+
+* playwright 增加api:
+    * `blur`
+    * `input_value`
+    * `frame_locator`
+    * `content_frame`
+    * `all`
+    * `set_checked`
+    * `press_sequentially`
+    * `clear`
+* 升级 `appium-python-client = ^4.1.0`
+
 #### 1.6.1
 
 * `u2(uiautomator)` 和 `wda(facebook-wda)` 的`API`重写, 增加运行日志。
