@@ -3,19 +3,19 @@
 * 安装依赖
 
 ```shell
-pip install pytest-playwright
+> pip install pytest-playwright
 ```
 
 * 安装浏览器
 
 ```shell
-playwright install chromium
+> playwright install chromium
 ```
 
 * 运行sample
 
 ```shell
-pytest playwright_sample.py
+> pytest --browser=chromium --headed test_playwright.py
 ```
 
 ### playwright中使用poium

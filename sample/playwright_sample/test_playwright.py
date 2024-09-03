@@ -13,6 +13,7 @@ def test_playwright(page):
     page.goto("https://cn.bing.com")
     bp = BingPage(page)
     bp.search_input.highlight()
+    bp.search_input.clear()
     bp.search_input.fill("playwright")
     bp.search_icon.highlight()
     bp.search_icon.screenshot(path="./image/search_icon.png")
