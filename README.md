@@ -41,7 +41,7 @@ If you want to keep up with the latest version, you can install with github repo
 
 `poium` 对 `selenium/appium` 提供了良好的支持。
 
-👉 [详细文档](./sample/selenium_sample)
+👉 [详细文档](./tests/selenium_sample)
 
 * selenium
 
@@ -110,7 +110,7 @@ driver.quit()
 
 `poium 1.2` 版本支持playwright库, 目前仅支持`sync`的用法.
 
-👉 [详细文档](./sample/playwright_sample)
+👉 [详细文档](./tests/playwright_sample)
 
 ```python
 import re
@@ -153,7 +153,7 @@ with sync_playwright() as p:
 
 `openatx` 有国内是非常流行的移动App自动化工具，`poium`同样对它做了支持。
 
-👉 [详细文档](./sample/u2_sample)
+👉 [详细文档](./tests/u2_sample)
 
 * uiautomator2
 
@@ -188,7 +188,7 @@ d.app_stop("com.microsoft.bing")
 
 seldom是一个全功能自动化测试框架。
 
-👉 [详细文档](./sample/seldom_sample)
+👉 [详细文档](./tests/seldom_sample)
 
 ```python
 import seldom
