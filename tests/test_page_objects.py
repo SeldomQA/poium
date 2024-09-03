@@ -1,18 +1,15 @@
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+from unittest.mock import Mock
 import pytest
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
-from selenium.common.exceptions import NoSuchElementException
-
+from selenium.webdriver.remote.webdriver import WebDriver
 from poium import Page, Element, Elements
 
-@pytest.fixture()
+
+@pytest.fixture
 def webdriver():
-    return mock.Mock(spec=WebDriver)
+    return Mock(spec=WebDriver)
 
 
 class TestConstructor:
@@ -26,14 +23,14 @@ class TestConstructor:
         elem_partial_link_text = Element(partial_link_text='is_link')
         elem_xpath = Element(xpath='//*[@id="kk"]')
         elem_css = Element(css='#id')
-        assert elem_id.k == 'id_'
-        assert elem_name.k == "name"
-        assert elem_class.k == "class_name"
-        assert elem_tag.k == "tag"
-        assert elem_link_text.k == "link_text"
-        assert elem_partial_link_text.k == "partial_link_text"
-        assert elem_xpath.k == "xpath"
-        assert elem_css.k == "css"
+        assert elem_id.by == 'id'
+        assert elem_name.by == "name"
+        assert elem_class.by == "class name"
+        assert elem_tag.by == "tag name"
+        assert elem_link_text.by == "link text"
+        assert elem_partial_link_text.by == "partial link text"
+        assert elem_xpath.by == "xpath"
+        assert elem_css.by == "css selector"
 
     def test_page_element_bad_args(self):
         with pytest.raises(ValueError):
@@ -55,11 +52,11 @@ class TestSet:
             test_elems = Elements(css='foo')
 
         page = TestPage(webdriver)
-        elem1 = mock.Mock(spec=WebElement)
-        elem2 = mock.Mock(spec=WebElement)
+        elem1 = Mock(spec=WebElement)
+        elem2 = Mock(spec=WebElement)
         webdriver.find_elements.return_value = [elem1, elem2]
         page.test_elems = "XXX"
-        assert webdriver.find_elements.called_once_with(By.CSS_SELECTOR, 'foo')
+        webdriver.find_elements.assert_called_once_with(By.CSS_SELECTOR, 'foo')
         elem1.send_keys.assert_called_once_with('XXX')
         elem2.send_keys.assert_called_once_with('XXX')
 
@@ -76,38 +73,42 @@ class TestRootURI:
     def test_from_webdriver(self):
         class TestPage(Page):
             pass
-        webdriver = mock.Mock(spec=WebDriver, url="http://example.com/foo")
+
+        webdriver = Mock(spec=WebDriver, url="http://example.com/foo")
         page = TestPage(webdriver)
         assert page.root_uri == 'http://example.com/foo'
 
     def test_get(self, webdriver):
         class TestPage(Page):
             pass
+
         page = TestPage(webdriver, url="http://example.com")
-        page.get('/foo/bar')
-        assert webdriver.get.called_once_with("http://example.com/foo/bar")
+        page.open('/foo/bar')
+        webdriver.get.assert_called_once_with("http://example.com/foo/bar")
+
+    def test_get1(self, webdriver):
+        class TestPage(Page):
+            pass
+
+        page = TestPage(webdriver, "http://example.com")
+        page.open('/foo/bar')
+        webdriver.get.assert_called_once_with("http://example.com/foo/bar")
 
     def test_get_no_root(self, webdriver):
         class TestPage(Page):
             pass
+
         page = TestPage(webdriver)
-        page.get('/foo/bar')
-        assert webdriver.get.called_once_with("/foo/bar")
+        page.driver.get('/foo/bar')
+        webdriver.get.assert_called_once_with("/foo/bar")
 
 
-class TestTimeOut:
+class TestElementOther:
 
-    def test_setting_time_out(self):
+    def test_setting_timeout(self):
         elem = Element(css='foo', timeout=10)
-        assert elem.k == "css"
-
-
-class TestDescribe:
+        assert elem.times == 10
 
     def test_setting_describe(self):
         elem = Element(name='wd', describe="this is search input")
-        assert elem.k == "name"
-
-
-if __name__ == '__main__':
-    pytest.main(["-v", "-s", "test_page_objects.py"])
+        assert elem.desc == "this is search input"
