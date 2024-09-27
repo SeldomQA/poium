@@ -4,9 +4,6 @@ import threading
 current_path = os.path.abspath(__file__)
 BASE_DIR = os.path.abspath(os.path.dirname(current_path) + os.path.sep)
 
-# 开启print打印
-printLog = False
-
 
 class Browser:
     """

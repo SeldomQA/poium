@@ -72,11 +72,10 @@ class BasePage:
     Page Object pattern base class.
     """
 
-    def __init__(self, driver=None, url: str = None, print_log: bool = False):
+    def __init__(self, driver=None, url: str = None):
         """
         :param driver: `selenium.webdriver.WebDriver` Selenium webdriver instance
         :param url: `str`
-        :param print_log: `bool` Need to be turned on when used with the seldom framework
         """
         self.driver = None
         if driver is not None:
@@ -94,7 +93,6 @@ class BasePage:
         if self.driver is None:
             raise DriverNoneException("driver is None, Please set selenium/appium driver.")
         self.root_uri = url if url else getattr(self.driver, 'url', None)
-        config.printLog = print_log
 
     def open(self, uri: str) -> None:
         """
