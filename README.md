@@ -81,10 +81,10 @@ from poium import Page, Element
 
 # page
 class CalculatorPage(Page):
-    number_1 = Element(id_="com.android.calculator2:id/digit_1")
-    number_2 = Element(id_="com.android.calculator2:id/digit_2")
-    add = Element(id_="com.android.calculator2:id/op_add")
-    eq = Element(id_="com.android.calculator2:id/eq")
+    number_1 = Element("id=com.android.calculator2:id/digit_1")
+    number_2 = Element("id=com.android.calculator2:id/digit_2")
+    add = Element("id=com.android.calculator2:id/op_add")
+    eq = Element("id=com.android.calculator2:id/eq")
 
 
 # appium
@@ -197,8 +197,8 @@ from poium import Page, Element
 
 class BaiduPage(Page):
     """baidu page"""
-    input = Element(id_="kw", describe="搜索输入框")
-    button = Element(id_="su", describe="搜索按钮")
+    input = Element("id=kw", describe="搜索输入框")
+    button = Element("id=su", describe="搜索按钮")
 
 
 class BaiduTest(seldom.TestCase):
@@ -206,7 +206,7 @@ class BaiduTest(seldom.TestCase):
 
     def test_case(self):
         """A simple test"""
-        page = BaiduPage(self.driver, print_log=True)
+        page = BaiduPage()
         page.open("https://www.baidu.com")
         page.input.send_keys("seldom")
         page.button.click()
