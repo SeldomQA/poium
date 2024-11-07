@@ -1,3 +1,10 @@
+#### 1.6.3
+
+* 移除`printLog`参数，已经不需要了。
+* `playwright`相关API增加日志。
+* `selection_checker()` 元素定位检查器支持`appium`。
+* 移除`set_text()` 和 `set_value()`，因为`appium>=3`版本不再支持。
+
 #### 1.6.2
 
 * playwright 增加api:
