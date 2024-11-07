@@ -223,7 +223,7 @@ class Element(object):
         elem = self.get_element_object()
         elem.clear()
 
-    def send_keys(self, value, clear=False, click=False) -> None:
+    def send_keys(self, value: str, clear: bool = False, click: bool = False) -> None:
         """
         Simulates typing into the element.
         If clear_before is True, it will clear the content before typing.
@@ -520,16 +520,6 @@ class Element(object):
         Select(select_elem).select_by_visible_text(text)
         logging.info(f"✅ select_by_visible_text('{text}').")
 
-    def set_text(self, keys):
-        """
-        appium API
-        Sends text to the element.
-        """
-        elem = self.get_element_object()
-        elem.set_text(keys)
-        logging.info(f"✅ set_text('{keys}').")
-        return self
-
     @property
     def location_in_view(self):
         """
@@ -542,16 +532,6 @@ class Element(object):
         location = elem.location_in_view
         logging.info(f"✅ location_in_view -> {location}.")
         return location
-
-    def set_value(self, value: str):
-        """
-        appium API
-        Set the value on this element in the application
-        """
-        elem = self.get_element_object()
-        elem.set_value(value)
-        logging.info(f"✅ set_value('{value}').")
-        return self
 
     def input(self, text="") -> None:
         """
