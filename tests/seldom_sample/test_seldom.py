@@ -5,8 +5,8 @@ from poium import Page, Element
 
 class BaiduPage(Page):
     """baidu page"""
-    input = Element(id_="kw", describe="搜索输入框")
-    button = Element(id_="su", describe="搜索按钮")
+    input = Element("#kw", describe="搜索输入框")
+    button = Element("#su", describe="搜索按钮")
 
 
 class BaiduTest(seldom.TestCase):
@@ -16,7 +16,7 @@ class BaiduTest(seldom.TestCase):
         """
         A simple test
         """
-        page = BaiduPage(self.driver, print_log=True)
+        page = BaiduPage()
         page.open("https://www.baidu.com")
         page.input.send_keys("seldom")
         page.button.click()
