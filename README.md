@@ -1,5 +1,7 @@
 ![](logo.png)
 
+[![PyPI version](https://badge.fury.io/py/poium.svg)](https://badge.fury.io/py/poium) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/poium)
+
 > Page Objects design pattern test library; support selenium、appium、playwright, etc
 
 Page Objects 设计模式测试库；支持 selenium、appium、playwright 等。
@@ -24,12 +26,12 @@ pip install:
 
 ```shell
 > pip install poium
-> pip install playwright [可选]
-> pip install uiautomator2 [可选]
-> pip install facebook-wda [可选]
+> pip install playwright [optional]
+> pip install uiautomator2 [optional]
+> pip install facebook-wda [optional]
 ```
 
-If you want to keep up with the latest version, you can install with github repository url:
+If you want to keep up with the latest version, you can install with GitHub repository url:
 
 ```shell
 > pip install -U git+https://github.com/SeldomQA/poium.git@master
