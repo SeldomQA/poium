@@ -13,6 +13,7 @@ def selection_checker(selector: str) -> (str, str):
     locators = {
         "text=": (By.LINK_TEXT, 5),
         "text~=": (By.PARTIAL_LINK_TEXT, 6),
+        "text*=": (By.PARTIAL_LINK_TEXT, 6),
         "id=": (By.ID, 3),
         "name=": (By.NAME, 5),
         "class=": (By.CLASS_NAME, 6),
