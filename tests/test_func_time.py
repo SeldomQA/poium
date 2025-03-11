@@ -1,7 +1,5 @@
 import time
 
-from setuptools import setup, find_packages
-
 from poium.common.exceptions import FuncTimeoutException
 from poium.libs.func_timeout import func_timeout
 
