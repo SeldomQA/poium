@@ -47,7 +47,37 @@ def test_playwright(page):
     expect(page).to_have_title(re.compile("playwright"))
 ```
 
-* `Locator` 是 playwright 定位元素发方法，这里于原方法保持一致。
+支持定位一组元素，通过下表筛选
+
+```python
+from poium.playwright import Page, Locator
+
+
+class xxxPage(Page):
+    more_elems = Locator('id=sb_form_q', describe="bing搜索框")
+
+
+def test_playwright(page):
+    # 获得元素
+    page.goto("https://cn.bing.com")
+    xp = xxxPage(page)
+
+    # 统计元素数量
+    count = xp.more_elems.count()
+    print(count)
+    # 通过下标指定第几个
+    xp.more_elems.nth(1).fill("xxx")
+
+    # 针对一组元素进行操作
+    checkboxes = xp.more_elems.all()
+    for i in range(3):
+        checkboxes[i].check()
+
+    #  结合 filter()进一步筛选
+    active_tabs = xp.more_elems.filter(has_text="Active")
+
+```
+
+* `Locator` 是 playwright 定位元素发方法，这里与其保持一致。
 * `Locator` 支持的定位，参考：https://playwright.dev/python/docs/selectors
 * 基于元素定位可以实现哪些操作，参考：https://playwright.dev/python/docs/api/class-locator
-
