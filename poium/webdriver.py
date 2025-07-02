@@ -1,6 +1,5 @@
 import os
 import time
-from time import sleep
 
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.webdriver.common.action_chains import ActionChains
@@ -101,7 +100,7 @@ class Page(BasePage):
         selenium API
         Saves a screenshots of the current window to a PNG image file
         :param path: The path to save the file
-        :param filename: The file name
+        :param filename: name
         """
         if path is None:
             path = os.getcwd()
@@ -276,10 +275,10 @@ class Page(BasePage):
         """
         ActionChains(self.driver).release().perform()
 
-    def top(self, elem, x, y, count):
+    def top(self, x, y, sec=1):
         """
         appium API
-        Perform a tap action on the element
+        Tap on the coordinates
         """
         actions = ActionChains(self.driver)
         actions.w3c_actions = ActionBuilder(self.driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
@@ -288,7 +287,7 @@ class Page(BasePage):
         actions.w3c_actions.pointer_action.pause(0.1)
         actions.w3c_actions.pointer_action.release()
         actions.perform()
-        sleep(2)
+        self.sleep(sec)
 
     def swipe(self, start_x, start_y, end_x, end_y, duration=None):
         """
