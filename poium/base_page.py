@@ -86,7 +86,6 @@ class BasePage:
                 from seldom import Seldom
                 if Seldom.driver is not None:
                     self.driver = Seldom.driver
-                    print_log = True
             except ImportError:
                 ...
 

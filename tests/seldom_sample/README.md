@@ -31,7 +31,7 @@ class BaiduTest(seldom.TestCase):
         """
         A simple test
         """
-        page = BaiduPage(self.driver, print_log=True)
+        page = BaiduPage(self.driver)
         page.open("https://www.baidu.com")
         page.input.send_keys("seldom")
         page.button.click()
